@@ -330,33 +330,33 @@
         </div>
         <div class="card">
             
-            <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="/css/my-gitalk.css">
 
-<div class="card gitalk-card" data-aos="fade-up">
+            
+            <link rel="stylesheet" href="/libs/gitment/gitment-default.css">
+<link rel="stylesheet" href="/css/gitment.css">
+
+<div class="gitment-card card" data-aos="fade-up">
     <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
         <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
         <span>评论</span>
     </div>
-    <div id="gitalk-container" class="card-content"></div>
+    <div id="gitment-content" class="card-content"></div>
 </div>
 
-<script src="/libs/gitalk/gitalk.min.js"></script>
+<script src="/libs/gitment/gitment.js"></script>
 <script>
-    let gitalk = new Gitalk({
-        clientID: '2604d12206b25f25dea4',
-        clientSecret: '92d03f10ae4c98d1069ea34d808a98dc25b7f592',
-        repo: 'muwfm.github.io',
-        owner: 'muwfm',
-        admin: "muwfm",
-        id: '2020-02-16T16-58-45',
-        distractionFreeMode: false  // Facebook-like distraction free mode
-    });
+var gitment = new Gitment({
+    id: 'Sun Feb 16 2020 16:58:45 GMT+0800',
+    owner: 'muwfm',
+    repo: 'muwfm.github.io',
+    oauth: {
+        client_id: '2604d12206b25f25dea4',
+        client_secret: '92d03f10ae4c98d1069ea34d808a98dc25b7f592'
+    }
+});
 
-    gitalk.render('gitalk-container');
+gitment.render('gitment-content');
 </script>
-            
-
             
 
             
