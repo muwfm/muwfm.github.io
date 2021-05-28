@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Wow</title>
-    <url>/2021/05/28/wow/</url>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
@@ -186,11 +186,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Hadoop</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
