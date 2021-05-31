@@ -183,6 +183,17 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
+    <title>大数据总结Hadoop篇</title>
+    <url>/2020/02/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
+    <content><![CDATA[<h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1>]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大数据总结Linux篇章</title>
     <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
     <content><![CDATA[<ul>
@@ -228,8 +239,8 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 <li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
 <thead>
 <tr>
-<th></th>
-<th></th>
+<th>指令代码</th>
+<th>指令输出</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -261,17 +272,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Hadoop篇</title>
-    <url>/2020/02/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
-    <content><![CDATA[<h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1>]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
