@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    110
+                    215
                 </div>
                 
 
@@ -380,7 +380,10 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2><table>
+                <ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
+<table>
 <thead>
 <tr>
 <th align="left">指令代码</th>
@@ -408,7 +411,19 @@
 <td align="left">查看进程</td>
 </tr>
 </tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><pre><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &apos;{print $2}&apos; | xargs kill&quot;</code></pre>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li><p>ps -ef ：是linux里查看所有进程的命令。</p>
+</li>
+<li><p>grep -v grep ：是列出的进程中去除含有关键字grep的进程</p>
+</li>
+<li><p>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</p>
+</li>
+<li><p>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</p>
+<p><code>ps -ef|grep spark|grep -v grep|cut -c 9-15|xargs kill -9</code></p>
+</li>
+</ol>
+
             </div>
             <hr/>
 
