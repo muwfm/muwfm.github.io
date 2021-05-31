@@ -183,6 +183,22 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>大数据总结Hadoop篇</title>
+    <url>/2020/02/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
+    <content><![CDATA[<h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1>]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大数据总结Linux篇章</title>
     <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
     <content><![CDATA[<h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2><table>
@@ -213,10 +229,8 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 <td align="left">查看进程</td>
 </tr>
 </tbody></table>
-<h4 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h4><figure class="highlight nginx"><table><tr><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> <span class="hljs-variable">$i</span> <span class="hljs-string">"ps -ef | grep XXX | grep -v grep |awk '&#123;print <span class="hljs-variable">$2</span>&#125;' | xargs kill"</span><br></code></pre></td></tr></table></figure>
-
+<h4 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h4><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
 <ul>
-<li></li>
 <li></li>
 <li></li>
 </ul>
@@ -226,17 +240,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Hadoop篇</title>
-    <url>/2020/02/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
-    <content><![CDATA[<h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1>]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
       </tags>
   </entry>
   <entry>
@@ -258,11 +261,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Markdown语法</title>
