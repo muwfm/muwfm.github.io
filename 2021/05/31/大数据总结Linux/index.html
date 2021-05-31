@@ -408,8 +408,13 @@
 <td align="left">查看进程</td>
 </tr>
 </tbody></table>
-<h4 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">ssh $i <span class="hljs-string">"ps -ef | grep XXX | grep -v grep |awk '&#123;print $2&#125;' | xargs kill"</span><br></code></pre></td></tr></table></figure>
+<h4 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">ssh</span> <span class="hljs-variable">$i</span> <span class="hljs-string">"ps -ef | grep XXX | grep -v grep |awk '&#123;print <span class="hljs-variable">$2</span>&#125;' | xargs kill"</span><br></code></pre></td></tr></table></figure>
 
+<ul>
+<li></li>
+<li></li>
+<li></li>
+</ul>
 
             </div>
             <hr/>
