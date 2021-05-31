@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    42
+                    108
                 </div>
                 
 
@@ -400,18 +400,16 @@
 <td align="left">查看端口占用情况</td>
 </tr>
 <tr>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
 </tr>
 <tr>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
 </tr>
 </tbody></table>
+<h2 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh $i "ps -ef | grep XXX | grep -v grep |awk '&#123;print $2&#125;' | xargs kill"<br></code></pre></td></tr></table></figure>
+
 
             </div>
             <hr/>
