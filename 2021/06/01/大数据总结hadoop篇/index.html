@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    50
+                    184
                 </div>
                 
 
@@ -393,12 +393,18 @@
 </li>
 </ol>
 </li>
-<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2><h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ol>
+<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2><h6 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h6></li>
+</ul>
+<ol>
+<li>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</li>
+<li>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</li>
+<li>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</li>
+</ol>
+<h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ol>
 <li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5></li>
 </ol>
-</li>
-<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><p>####### 影响</p>
-</li>
+<ul>
+<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2>####### 影响</li>
 </ul>
 <p>1. </p>
 
