@@ -198,7 +198,11 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 </li>
 </ol>
 </li>
-<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622455363078.png" alt><br> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622455471692.png" alt></p>
+<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2><h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ol>
+<li>客户端访问NameNode，查询元数据信息，获得这个文件的数据块位置列表。</li>
+<li>就近选一台datenode，创建文件传输流。</li>
+<li>关闭<h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5></li>
+</ol>
 </li>
 <li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><p>####### 影响</p>
 </li>
@@ -211,6 +215,11 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Hadoop</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>大数据总结Linux篇章</title>
@@ -318,11 +327,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Markdown语法</title>
