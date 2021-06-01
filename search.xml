@@ -183,6 +183,11 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>大数据总结Linux篇章</title>
     <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
     <content><![CDATA[<hr>
@@ -303,7 +308,16 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 <li>完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</li>
 </ol>
 </li>
-<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5></li>
+<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5><ol>
+<li>客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方法。</li>
+<li>NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。</li>
+<li>客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。</li>
+<li>客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。</li>
+<li>客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。</li>
+<li>一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！</li>
+<li>客户端关闭输入流。</li>
+</ol>
+</li>
 <li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2></li>
 <li><h5 id="影响"><a href="#影响" class="headerlink" title="影响"></a>影响</h5></li>
 </ul>
@@ -335,11 +349,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Markdown语法</title>
