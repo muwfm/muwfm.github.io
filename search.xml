@@ -183,78 +183,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
-    <title>大数据总结Hadoop篇</title>
-    <url>/2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="简单的集群搭建过程："><a href="#简单的集群搭建过程：" class="headerlink" title="简单的集群搭建过程："></a>简单的集群搭建过程：</h2><ol>
-<li><p>JDK安装</p>
-</li>
-<li><p>配置SSH免密登陆</p>
-</li>
-<li><p>配置hadoop核心文件</p>
-</li>
-<li><p>格式化namenode</p>
-</li>
-</ol>
-</li>
-<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2></li>
-<li><h5 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h5></li>
-</ul>
-<ol>
-<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
-</li>
-<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
-</li>
-<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622691520793.png" alt=""></p>
-</li>
-</ol>
-<ul>
-<li><h5 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h5><p> 1、 打开分布式文件：调用DFS.open()方法<br> 2、 从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。<br> 3、链接到DataNode：使用输入流read()方法，从而链接到DataNode。<br> 4、读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。<br> 5、读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。<br> 6、完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
-</li>
-<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5><p> 1、客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方法。<br> 2、NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。<br> 3、客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。<br> 4、客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。<br> 5、客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。<br> 6、一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！<br> 7、客户端关闭输入流。</p>
-</li>
-<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><ol>
-<li><p>开启jvm重用。</p>
-<ol>
-<li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p>
-</li>
-<li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p>
-</li>
-<li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p>
-<p>注：会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p>
-<p>👉mapred.job.reuse.jvm.num.tasks=10 或者 set mapred.job.reuse.jvm.num.tasks=10</p>
-</li>
-</ol>
-</li>
-<li><p>har归档（Hadoop Archive）</p>
-<ol>
-<li>hadoop archive -archiveName 20131101.har /user/hadoop/login/201301/01 /user/hadoop/login/201301/01</li>
-</ol>
-</li>
-<li><p>hadoop fs -rmr /user/hadoop/login/201301/01/<em>.</em>.*</p>
-<ol start="3">
-<li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
-</ol>
-</li>
-<li><p>CombineTe</p>
-<ol>
-<li></li>
-</ol>
-</li>
-</ol>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux</title>
     <url>/2020/08/19/linux/</url>
     <content><![CDATA[]]></content>
@@ -278,43 +206,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
   </entry>
   <entry>
     <title>大数据总结Linux篇章</title>
@@ -402,5 +293,114 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Linux</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>大数据总结Hadoop篇</title>
+    <url>/2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="简单的集群搭建过程："><a href="#简单的集群搭建过程：" class="headerlink" title="简单的集群搭建过程："></a>简单的集群搭建过程：</h2><ol>
+<li><p>JDK安装</p>
+</li>
+<li><p>配置SSH免密登陆</p>
+</li>
+<li><p>配置hadoop核心文件</p>
+</li>
+<li><p>格式化namenode</p>
+</li>
+</ol>
+</li>
+<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2></li>
+<li><h5 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h5></li>
+</ul>
+<ol>
+<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
+</li>
+<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
+</li>
+<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622691520793.png" alt=""></p>
+</li>
+</ol>
+<ul>
+<li><h5 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h5><p> 1、 打开分布式文件：调用DFS.open()方法<br> 2、 从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。<br> 3、链接到DataNode：使用输入流read()方法，从而链接到DataNode。<br> 4、读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。<br> 5、读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。<br> 6、完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
+</li>
+<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5><p> 1、客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方法。<br> 2、NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。<br> 3、客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。<br> 4、客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。<br> 5、客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。<br> 6、一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！<br> 7、客户端关闭输入流。</p>
+</li>
+<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><ol>
+<li><p>开启jvm重用。</p>
+<ol>
+<li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p>
+</li>
+<li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p>
+</li>
+<li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p>
+<p>注：会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p>
+<p>👉mapred.job.reuse.jvm.num.tasks=10 或者 set mapred.job.reuse.jvm.num.tasks=10</p>
+</li>
+</ol>
+</li>
+<li><p>har归档（Hadoop Archive）</p>
+<ol>
+<li>hadoop archive -archiveName 20131101.har /user/hadoop/login/201301/01 /user/hadoop/login/201301/01</li>
+</ol>
+</li>
+<li><p>hadoop fs -rmr /user/hadoop/login/201301/01/<em>.</em>.*</p>
+<ol start="3">
+<li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
+</ol>
+</li>
+<li><p>CombineTe</p>
+<ol>
+<li></li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
   </entry>
 </search>
