@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    4 分
                 </div>
                 
 
@@ -440,17 +440,33 @@
 </li>
 </ul>
 <ul>
-<li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
+<li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><h4 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h4><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
 </li>
 </ul>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p>
 <ul>
-<li>流程说明如下：<ol>
+<li><p>流程说明如下：</p>
+<ol>
 <li>输入文件分片split，每一片都由一个MapTask来处理</li>
 <li>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</li>
 <li>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</li>
 <li>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</li>
 <li>最后，reduce输出。</li>
+</ol>
+</li>
+<li><h2 id="shuffle优化"><a href="#shuffle优化" class="headerlink" title="shuffle优化"></a>shuffle优化</h2></li>
+<li><p>Map阶段</p>
+<ol>
+<li>增大环形缓冲区大小，由100M扩大到200M</li>
+<li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
+<li>减少对溢写文件的merge次数</li>
+<li>不影响业务的前提下，采用Combiner提前合并，减少I/O<ul>
+<li>Reduce阶段<ol>
+<li></li>
+</ol>
+</li>
+</ul>
+</li>
 </ol>
 </li>
 </ul>
