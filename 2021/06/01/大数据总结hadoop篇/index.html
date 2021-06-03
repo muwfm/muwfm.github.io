@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    6 分
                 </div>
                 
 
@@ -434,11 +434,12 @@
 </ol>
 </li>
 <li><p>CombineTextInputFormat</p>
-<hr>
 </li>
 </ol>
 </li>
 </ul>
+<hr>
+<p>​      </p>
 <ul>
 <li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><h4 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h4><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
 </li>
@@ -447,13 +448,21 @@
 <ul>
 <li><p>流程说明如下：</p>
 <ol>
-<li>输入文件分片split，每一片都由一个MapTask来处理</li>
-<li>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</li>
-<li>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</li>
-<li>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</li>
-<li>最后，reduce输出。</li>
+<li><p>输入文件分片split，每一片都由一个MapTask来处理</p>
+</li>
+<li><p>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</p>
+</li>
+<li><p>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</p>
+</li>
+<li><p>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</p>
+</li>
+<li><p>最后，reduce输出。</p>
+</li>
 </ol>
 </li>
+</ul>
+<hr>
+<ul>
 <li><h2 id="shuffle优化"><a href="#shuffle优化" class="headerlink" title="shuffle优化"></a>shuffle优化</h2></li>
 <li><p>Map阶段</p>
 <ol>
@@ -469,6 +478,16 @@
 3. 规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。
 4. 增大reduce端存储数据的内存的大小。</code></pre></li>
 <li><p>IO传输阶段</p>
+<ol>
+<li>采用数据压缩的方式，减少网络IO的时间</li>
+</ol>
+</li>
+<li><p>整体<br>（1）NodeManager默认内存8G，需要根据服务器实际配置灵活调整，例如128G内存，配置为100G内存左右，yarn.nodemanager.resource.memory-mb。<br>（2）单任务默认内存8G，需要根据该任务的数据量灵活调整，例如128m数据，配置1G内存，yarn.scheduler.maximum-allocation-mb。<br>（3）mapreduce.map.memory.mb ：控制分配给MapTask内存上限，如果超过会kill掉进程（报：Container is running beyond physical memory limits. Current usage:565MB of512MB physical memory used；Killing Container）。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加MapTask内存，最大可以增加到4-5g。<br>（4）mapreduce.reduce.memory.mb：控制分配给ReduceTask内存上限。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加ReduceTask内存大小为4-5g。<br>（5）mapreduce.map.java.opts：控制MapTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（6）mapreduce.reduce.java.opts：控制ReduceTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（7）可以增加MapTask的CPU核数，增加ReduceTask的CPU核数<br>（8）增加每个Container的CPU核数和内存大小<br>（9）在hdfs-site.xml文件中配置多目录<br>（10）NameNode有一个工作线程池，用来处理不同DataNode的并发心跳以及客户端并发的元数据操作。dfs.namenode.handler.count=20 * log2(Cluster Size)，比如集群规模为10台时，此参数设置为60。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h2 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h2><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
 </li>
 </ul>
 
