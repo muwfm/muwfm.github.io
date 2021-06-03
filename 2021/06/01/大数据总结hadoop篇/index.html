@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    839
+                    1.1k
                 </div>
                 
 
@@ -433,11 +433,24 @@
 <li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
 </ol>
 </li>
-<li><p>CombineTe</p>
-<ol>
-<li></li>
+<li><p>CombineTextInputFormat</p>
+<hr>
+</li>
 </ol>
 </li>
+</ul>
+<ul>
+<li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
+</li>
+</ul>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p>
+<ul>
+<li>流程说明如下：<ol>
+<li>输入文件分片split，每一片都由一个MapTask来处理</li>
+<li>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</li>
+<li>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</li>
+<li>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</li>
+<li>最后，reduce输出。</li>
 </ol>
 </li>
 </ul>
