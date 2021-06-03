@@ -473,10 +473,13 @@
 </ol>
 </li>
 <li><p>Reduce阶段</p>
-<pre><code>1. 合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。
-2. 设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。
-3. 规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。
-4. 增大reduce端存储数据的内存的大小。</code></pre></li>
+<ol>
+<li>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</li>
+<li>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</li>
+<li>规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。</li>
+<li>增大reduce端存储数据的内存的大小。</li>
+</ol>
+</li>
 <li><p>IO传输阶段</p>
 <ol>
 <li>采用数据压缩的方式，减少网络IO的时间</li>
