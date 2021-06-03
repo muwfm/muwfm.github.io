@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.2k
+                    1.3k
                 </div>
                 
 
@@ -460,16 +460,15 @@
 <li>增大环形缓冲区大小，由100M扩大到200M</li>
 <li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
 <li>减少对溢写文件的merge次数</li>
-<li>不影响业务的前提下，采用Combiner提前合并，减少I/O<ul>
-<li>Reduce阶段<ol>
-<li>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</li>
-<li>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</li>
-<li></li>
+<li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li>
 </ol>
 </li>
-</ul>
-</li>
-</ol>
+<li><p>Reduce阶段</p>
+<pre><code>1. 合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。
+2. 设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。
+3. 规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。
+4. 增大reduce端存储数据的内存的大小。</code></pre></li>
+<li><p>IO传输阶段</p>
 </li>
 </ul>
 
