@@ -183,11 +183,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
     <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
     <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
@@ -206,6 +201,11 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>大数据总结Hadoop篇</title>
@@ -324,27 +324,27 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 </li>
 <li><p>Mr程序提交到客户端所在的节点</p>
 </li>
-<li><p>申请一个application</p>
+<li><p>申请一个application——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>application资源提交路径</p>
+<li><p>application资源提交路径——————————–&gt;Resourcemanager</p>
 </li>
 <li><p>提交作业运行所需资源</p>
 </li>
-<li><p>资源提交完毕，申请运行mr Appmaster</p>
+<li><p>资源提交完毕，申请运行mapreduce的 Appmaster——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>将用户的请求初始化成一个task</p>
+<li><p>将用户的请求初始化成一个task——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>Appmaster领取到task任务创建容器Container</p>
+<li><p>领取到task任务创建容器Container——————————–&gt;Node manager</p>
 </li>
-<li><p>下载作业资源到本地</p>
+<li><p>下载作业资源到本地——————————–&gt;Node manager</p>
 </li>
-<li><p>申请运行maptast容器</p>
+<li><p>申请运行map tast容器——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>领取到任务，创建容器</p>
+<li><p>领取到任务，创建容器——————————–&gt;Node manager</p>
 </li>
 <li><p>发送程序启动脚本</p>
 </li>
-<li><p>申请运行reduce task的容器</p>
+<li><p>申请运行reduce task的容器——————————–&gt;Resourcemanager</p>
 </li>
 <li><p>reduce向map获取相应分区的数据</p>
 </li>
@@ -358,6 +358,43 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Hadoop</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
   </entry>
   <entry>
     <title>大数据总结Linux篇章</title>
@@ -445,42 +482,5 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Linux</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
   </entry>
 </search>

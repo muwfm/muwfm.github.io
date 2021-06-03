@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    7 分
                 </div>
                 
 
@@ -494,27 +494,27 @@
 </li>
 <li><p>Mr程序提交到客户端所在的节点</p>
 </li>
-<li><p>申请一个application</p>
+<li><p>申请一个application——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>application资源提交路径</p>
+<li><p>application资源提交路径——————————–&gt;Resourcemanager</p>
 </li>
 <li><p>提交作业运行所需资源</p>
 </li>
-<li><p>资源提交完毕，申请运行mr Appmaster</p>
+<li><p>资源提交完毕，申请运行mapreduce的 Appmaster——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>将用户的请求初始化成一个task</p>
+<li><p>将用户的请求初始化成一个task——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>Appmaster领取到task任务创建容器Container</p>
+<li><p>领取到task任务创建容器Container——————————–&gt;Node manager</p>
 </li>
-<li><p>下载作业资源到本地</p>
+<li><p>下载作业资源到本地——————————–&gt;Node manager</p>
 </li>
-<li><p>申请运行maptast容器</p>
+<li><p>申请运行map tast容器——————————–&gt;Resourcemanager</p>
 </li>
-<li><p>领取到任务，创建容器</p>
+<li><p>领取到任务，创建容器——————————–&gt;Node manager</p>
 </li>
 <li><p>发送程序启动脚本</p>
 </li>
-<li><p>申请运行reduce task的容器</p>
+<li><p>申请运行reduce task的容器——————————–&gt;Resourcemanager</p>
 </li>
 <li><p>reduce向map获取相应分区的数据</p>
 </li>
