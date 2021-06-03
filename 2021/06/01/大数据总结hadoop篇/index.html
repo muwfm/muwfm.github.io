@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    1.8k
                 </div>
                 
 
@@ -490,7 +490,35 @@
 </ul>
 <hr>
 <ul>
-<li><h2 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h2><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
+<li><h2 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h2><h4 id="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"><a href="#一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。" class="headerlink" title="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"></a>一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
+</li>
+<li><p>Mr程序提交到客户端所在的节点</p>
+</li>
+<li><p>申请一个application</p>
+</li>
+<li><p>application资源提交路径</p>
+</li>
+<li><p>提交作业运行所需资源</p>
+</li>
+<li><p>资源提交完毕，申请运行mr Appmaster</p>
+</li>
+<li><p>将用户的请求初始化成一个task</p>
+</li>
+<li><p>Appmaster领取到task任务创建容器Container</p>
+</li>
+<li><p>下载作业资源到本地</p>
+</li>
+<li><p>申请运行maptast容器</p>
+</li>
+<li><p>领取到任务，创建容器</p>
+</li>
+<li><p>发送程序启动脚本</p>
+</li>
+<li><p>申请运行reduce task的容器</p>
+</li>
+<li><p>reduce向map获取相应分区的数据</p>
+</li>
+<li><p>程序运行完后，MR会向RsourceManager注销自己</p>
 </li>
 </ul>
 
