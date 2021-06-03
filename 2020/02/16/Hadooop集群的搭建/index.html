@@ -389,52 +389,52 @@ ntpdate cn.pool.ntp.org</code></pre><p>手动设置时间 </p>
 <p>2.1:配置网络：</p>
 <pre><code>cd /etc/sysconfig/network-scripts
 ls
-vim ifcfg-eth0</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218182817198.jpg" alt><br>将    ONBOOT设置为yes,</p>
+vim ifcfg-eth0</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218182817198.jpg" alt=""><br>将    ONBOOT设置为yes,</p>
 <p>然后输入:wq 保存退出</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194657854.png" alt><br>重启网络服务，输入以下命令</p>
-<pre><code>service network restart</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195624674.png" alt><br>查询虚拟机IP地址<br>ifconfig</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194759425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194657854.png" alt=""><br>重启网络服务，输入以下命令</p>
+<pre><code>service network restart</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195624674.png" alt=""><br>查询虚拟机IP地址<br>ifconfig</p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194759425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <hr>
 <p>3：使用Xshell 远程连接新建的linux系统</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194813845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194829640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194813845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194829640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>然后接受秘钥，连接成功</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194841690.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194841690.png" alt=""></p>
 <hr>
 <p>4:给GentOS系统安装jdk并配置环境变量(使用Xsheel和XFtp操作)</p>
 <p>4.1:创建一个soft目录</p>
 <pre><code>cd /usr/local/
 ls
 mkdir soft
-ls</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218194856414.png" alt></p>
+ls</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218194856414.png" alt=""></p>
 <p>4.2:使用Xftp上传jdk-8u192-linux-x64.tar.gz和hadoop-2.6.0.tar.gz压缩包到soft目录下<br>先在Xshell中点击下图1方框打开Xftp,然后拖拽需要的文件到linux系统否soft目录下<br>如下图</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819491340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/2020021819491340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>4.3对jdk-8u192-linux-x64.tar.gz以及hadoop-2.6.0.tar.gz压缩包进行解压（解压缩即是安装）</p>
 <pre><code>tar -zxvf  jdk-8u192-linux-x64.tar.gz
-tar -zxvf  hadoop-2.6.0.tar.gz</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181949327.png" alt></p>
+tar -zxvf  hadoop-2.6.0.tar.gz</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181949327.png" alt=""></p>
 <p>为节省存储空间解压后删除压缩包</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194952581.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218194952581.png" alt=""></p>
 <p>4.4配置jdk的环境变量<br>配置前可以查看一下（GentOS 默认安装了1.7版本低jdk）</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195003799.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195003799.png" alt=""></p>
 <p>开始配置（解压的是1.8版本，配置成功后输入java -version测试一下）</p>
 <pre><code>vim /etc/profile
 export JAVA_HOME=/usr/local/soft/jdk......     
-export PATH=.:$JAVA_HOME/bin:$PATH</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819501512.png" alt></p>
+export PATH=.:$JAVA_HOME/bin:$PATH</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819501512.png" alt=""></p>
 <p>保存退出 :wq</p>
 <p>source /etc/ profile  (刷新)<br>echo $JAVA_HOME (此命令配置好环境变量后可以查看jdk版本信息)</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195029307.png" alt></p>
-<p>使用Java –version测试配置（发现已经变成1.8版本，配置成功）<br><img src="https://img-blog.csdnimg.cn/20200218195043544.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195029307.png" alt=""></p>
+<p>使用Java –version测试配置（发现已经变成1.8版本，配置成功）<br><img src="https://img-blog.csdnimg.cn/20200218195043544.png" alt=""></p>
 <hr>
 <p>5.克隆虚拟机</p>
 <p>*在vmware设置-克隆（虚拟机要关机，jdk要配置好）</p>
 <p>*选择克隆当前状态的虚拟机</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819505624.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/2020021819505624.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>选择创建完整克隆</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819510776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/2020021819510776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>将另外两个虚拟机克隆好。</p>
 <p>关机状态下配置mac地址</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195120185.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195135175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195120185.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195135175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>记录下生成的mac地址<br>（后续修改vim /etc/sysconfig /network-scripts/ifcfg-eth0 配置文件时需要）第六大步（配置好另外两台虚拟机，并在XShell上建立连接，具体步骤如下）（亲历：开启node1,node2虚拟机前需要将master虚拟机打开，防止争抢IP）</p>
 <hr>
 <p>6.1 进入/etc/sysconfig/network/ 打开ifconfig-eth0文件 </p>
@@ -450,28 +450,28 @@ export PATH=.:$JAVA_HOME/bin:$PATH</code></pre><p><img src="https://img-blog.csd
 <p>7.3关闭防火墙的自动启动，使用命令chkconfig iptables off</p>
 <p>7.4设置主机名，修改配置文件vi /etc/sysconfig/network</p>
 <p>*修改主机名 vi /etc/sysconfig/network</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195150829.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195150829.png" alt=""></p>
 <p>7.5设置主机名与ip的映射，修改配置文件vi /etc/hosts</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195209932.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195209932.png" alt=""></p>
 <p>7.6将修改后的hosts文件从主节点拷贝到node1和node2节点<br>命令：</p>
 <pre><code>scp /etc/hosts node1:/etc/hosts
 scp /etc/hosts node2:/etc/hosts</code></pre><hr>
 <p>8.设置ssh免密码登录<br>  8.1主节点执行命令ssh-keygen -t rsa 产生密钥 一直回车</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195221363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195221363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>将密钥拷贝到其他两个子节点，命令如下：</p>
 <pre><code>ssh-copy-id -i node1 
 ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验证命令，在主节点 通过命令： ssh node1<br>第一次需要输入密码，后面可以不需要输入密码登录<br>退出 命令 exit</p>
 <p>8.2实现主节点master本地免密码登录（子节点不需要执行，仅在主节点执行）</p>
 <p>首先进入到/root<br>cd  /root<br>再进入进入到 ./.ssh目录下<br>cd ./.ssh/</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195236351.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195236351.png" alt=""></p>
 <p>然后将公钥写入本地执行命令</p>
-<pre><code>cat ./id_rsa.pub &gt;&gt; ./authorized_keys</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195251245.png" alt></p>
+<pre><code>cat ./id_rsa.pub &gt;&gt; ./authorized_keys</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195251245.png" alt=""></p>
 <hr>
 <p>9.修改hadoop的几个组件的配置文件 进入/usr/local/soft/hadoop-2.6.0/etc/hadoop 目录下(请一定要注意配置文件内容的格式，可以直接复制过去黏贴。不要随意改)</p>
 <p>9.1修改master中hadoop的一个配置文件/usr/local/soft/etc/hadoop/slaves,删除原来的所有内容，修改为如下<br>node1<br>node2</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195302591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195302591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>9.2 修改hadoop-env.sh文件<br>加上一句</p>
-<pre><code>export JAVA_HOME=/usr/local/soft/jdk1.8.0_171</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195316167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<pre><code>export JAVA_HOME=/usr/local/soft/jdk1.8.0_171</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195316167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>9.3修改 core-site.xml<br>将下面的配置参数加入进去修改成对应自己的</p>
 <pre><code>&lt;configuration&gt;
 &lt;property&gt;
@@ -486,7 +486,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 &lt;name&gt;fs.trash.interval&lt;/name&gt;
 &lt;value&gt;1440&lt;/value&gt;
 &lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195331926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195331926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>9.4修改 hdfs-site.xml 将dfs.replication设置为1</p>
 <pre><code>&lt;configuration&gt;
 &lt;property&gt;
@@ -497,7 +497,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 &lt;name&gt;dfs.permissions&lt;/name&gt;
 &lt;value&gt;false&lt;/value&gt;
 &lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195345157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195345157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>9.5修改文件yarn-site.xml</p>
 <pre><code>&lt;configuration&gt;
 &lt;property&gt;
@@ -516,8 +516,8 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 &lt;name&gt;yarn.log-aggregation.retain-seconds&lt;/name&gt;
 &lt;value&gt;604800&lt;/value&gt;
 &lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181954004.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
-<p>9.6修改 mapred-site.xml（将mapred-site.xml.template 复制一份为 mapred-site.xml)（cp <src> <target>     复制&amp;粘贴文件 cp -r <src> <target>     复制&amp;粘贴文件或目录）</target></src></target></src></p>
+&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181954004.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
+<p>9.6修改 mapred-site.xml（将mapred-site.xml.template 复制一份为 mapred-site.xml)（cp <src> <target>     复制&amp;粘贴文件 cp -r <src> <target>     复制&amp;粘贴文件或目录）</p>
 <pre><code>&lt;configuration&gt;
 &lt;property&gt;
 &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
@@ -531,7 +531,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;  
 &lt;value&gt;master:19888&lt;/value&gt;  
 &lt;/property&gt; 
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195412708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195412708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <hr>
 <p>10.将hadoop的安装目录分别拷贝到其他子节点</p>
 <pre><code>scp -r /usr/local/soft/hadoop-2.6.0  node1:/usr/local/soft/
@@ -541,15 +541,15 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 <p>12.<br>首先看下主节点hadoop-2.6.0目录下有没有tmp文件夹。<br>如果没有 执行一次格式化命令：</p>
 <pre><code>./bin/hdfs namenode -format</code></pre><p>会生成tmp文件。然后<br>/usr/local/soft/hadoop-2.6.0目录下<br>启动执行</p>
 <pre><code>./sbin/start-all.sh</code></pre><p>启动完成后验证进程<br>主节点进程：namenode/ secondarnamenode/resourcemanager</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195426906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195426906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>子节点进程 datanode /nodenodemanager</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195438576.png" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195438576.png" alt=""></p>
 <p>验证hdfs：<br>可以登录浏览器地址：192.168.3.128:50070 (自己的IP地址加上50070端口 还有一个8088端口也可以查看)</p>
 <p>看到下面页面证明 hdfs装好了<br>下图是已经创建了一个hdfs上的目录，刚装好的hadoop应该是空的什么都没有</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195451614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200218195451614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>如果第一次启动失败了，请重新检查配置文件或者哪里步骤少了。<br>再次重启的时候<br>需要手动将每个节点的tmp目录删除<br>/usr/local/soft/hadoop-2.6.0/tmp</p>
 <p>然后执行将namenode格式化<br>在主节点执行命令</p>
-<pre><code>./bin/hdfs namenode -format</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819550584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt></p>
+<pre><code>./bin/hdfs namenode -format</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819550584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>2020/2/18 20:54:23 </p>
 
             </div>
