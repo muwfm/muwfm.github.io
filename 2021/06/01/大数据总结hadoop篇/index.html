@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    798
+                    839
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    3 分
                 </div>
                 
 
@@ -397,9 +397,13 @@
 <li><h5 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h5></li>
 </ul>
 <ol>
-<li>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</li>
-<li>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</li>
-<li>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</li>
+<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
+</li>
+<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
+</li>
+<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622691520793.png" alt=""></p>
+</li>
 </ol>
 <ul>
 <li><h5 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h5><p> 1、 打开分布式文件：调用DFS.open()方法<br> 2、 从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。<br> 3、链接到DataNode：使用输入流read()方法，从而链接到DataNode。<br> 4、读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。<br> 5、读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。<br> 6、完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
@@ -419,7 +423,17 @@
 </li>
 </ol>
 </li>
-<li><p>har归档</p>
+<li><p>har归档（Hadoop Archive）</p>
+<ol>
+<li>hadoop archive -archiveName 20131101.har /user/hadoop/login/201301/01 /user/hadoop/login/201301/01</li>
+</ol>
+</li>
+<li><p>hadoop fs -rmr /user/hadoop/login/201301/01/<em>.</em>.*</p>
+<ol start="3">
+<li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
+</ol>
+</li>
+<li><p>CombineTe</p>
 <ol>
 <li></li>
 </ol>
