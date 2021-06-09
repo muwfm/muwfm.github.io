@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    420
+                    446
                 </div>
                 
 
@@ -377,7 +377,7 @@
             <div id="articleContent">
                 <hr>
 <ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h4 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h4></li>
+<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
 </ul>
 <h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
 <li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
@@ -404,14 +404,15 @@
 <li><h5 id="通过Case-Class创建DataFrames"><a href="#通过Case-Class创建DataFrames" class="headerlink" title="通过Case Class创建DataFrames"></a>通过Case Class创建DataFrames</h5></li>
 </ul>
 <ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6></li>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><p> case class     Emp(empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int)</p>
+</li>
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><p> val lines = sc.textFile(“hdfs://hadoop111:9000/scott/emp.csv”).map(_.split(“,”))<br>val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))</p>
+</li>
+<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><p> val allEmpDF = allEmp.toDF</p>
+</li>
 </ol>
-<p><code>case class Emp(empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int)</code></p>
-<ol start="2">
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6></li>
-</ol>
-<p><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code>  </p>
-
+<hr>
+<h5 id="使用SparkSession"><a href="#使用SparkSession" class="headerlink" title="使用SparkSession"></a>使用SparkSession</h5><h6 id="什么是"><a href="#什么是" class="headerlink" title="什么是"></a>什么是</h6>
             </div>
             <hr/>
 
