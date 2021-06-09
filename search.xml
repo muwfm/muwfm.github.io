@@ -216,7 +216,7 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
 <ol>
 <li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6></li>
 </ol>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">case</span> <span class="hljs-keyword">class</span>     <span class="hljs-symbol">Emp</span>(<span class="hljs-symbol">empno:<span class="hljs-symbol">Int</span>,<span class="hljs-symbol">ename</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">job</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">mgr</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">hiredate</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">sal</span>:<span class="hljs-symbol">int</span>,<span class="hljs-symbol">comm</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">deptno</span>:<span class="hljs-symbol">Int</span></span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">case</span> <span class="hljs-keyword">class</span> <span class="hljs-symbol">Emp</span>(<span class="hljs-symbol">empno:<span class="hljs-symbol">Int</span>,<span class="hljs-symbol">ename</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">job</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">mgr</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">hiredate</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">sal</span>:<span class="hljs-symbol">int</span>,<span class="hljs-symbol">comm</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">deptno</span>:<span class="hljs-symbol">Int</span></span>)<br></code></pre></td></tr></table></figure>
 
 
 
@@ -234,6 +234,135 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Spark Sql</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>大数据总结Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">查看内存</td>
+</tr>
+<tr>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<hr>
+<ul>
+<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+</tr>
+</tbody></table>
+<hr>
+<ul>
+<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
   </entry>
   <entry>
     <title>大数据总结Hadoop篇</title>
@@ -371,48 +500,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
     <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
     <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
@@ -430,93 +517,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>chrome</tag>
         <tag>makedown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-<hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
       </tags>
   </entry>
 </search>
