@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    842
+                    852
                 </div>
                 
 
@@ -401,7 +401,7 @@
 <li><h5 id="其API支持Scala和Java。Python不支持DataSet-API"><a href="#其API支持Scala和Java。Python不支持DataSet-API" class="headerlink" title="其API支持Scala和Java。Python不支持DataSet API"></a>其API支持Scala和Java。Python不支持DataSet API</h5><h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4></li>
 </ol>
 <ul>
-<li><h5 id="通过Case-Class创建DataFrames"><a href="#通过Case-Class创建DataFrames" class="headerlink" title="通过Case Class创建DataFrames"></a>通过Case Class创建DataFrames</h5></li>
+<li><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5></li>
 </ul>
 <ol>
 <li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><p> <code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int）</code></p>
@@ -415,9 +415,9 @@
 </ol>
 <hr>
 <ul>
-<li><h5 id="使用SparkSession"><a href="#使用SparkSession" class="headerlink" title="使用SparkSession"></a>使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6>####### 创建StructType，来定义Schema结构信息<br>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""><br>####### 读入数据并且切分数据<br><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code><br>####### 将RDD中的数据映射成Row<br><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code><br>####### 创建DataFrames<br><code>val df = spark.createDataFrame(rowRDD,myschema)</code><h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5></li>
+<li><h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6>####### 创建StructType，来定义Schema结构信息<br>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""><br>####### 读入数据并且切分数据<br><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code><br>####### 将RDD中的数据映射成Row<br><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code><br>####### 创建DataFrames<br><code>val df = spark.createDataFrame(rowRDD,myschema)</code></li>
 </ul>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
