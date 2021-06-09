@@ -396,7 +396,7 @@
 </ol>
 <hr>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
-<h5 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h5><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
+<h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
 <li><h5 id="是数据的分布式集合"><a href="#是数据的分布式集合" class="headerlink" title="是数据的分布式集合"></a>是数据的分布式集合</h5></li>
 <li><h5 id="其API支持Scala和Java。Python不支持DataSet-API"><a href="#其API支持Scala和Java。Python不支持DataSet-API" class="headerlink" title="其API支持Scala和Java。Python不支持DataSet API"></a>其API支持Scala和Java。Python不支持DataSet API</h5><h3 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h3></li>
 </ol>
@@ -404,8 +404,13 @@
 <li><h5 id="通过Case-Class创建DataFrames"><a href="#通过Case-Class创建DataFrames" class="headerlink" title="通过Case Class创建DataFrames"></a>通过Case Class创建DataFrames</h5></li>
 </ul>
 <ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><p> case class     Emp(empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int)</p>
-</li>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6></li>
+</ol>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">case</span> <span class="hljs-keyword">class</span>     <span class="hljs-symbol">Emp</span>(<span class="hljs-symbol">empno:<span class="hljs-symbol">Int</span>,<span class="hljs-symbol">ename</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">job</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">mgr</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">hiredate</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">sal</span>:<span class="hljs-symbol">int</span>,<span class="hljs-symbol">comm</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">deptno</span>:<span class="hljs-symbol">Int</span></span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
 <li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><p> val lines = sc.textFile(“hdfs://hadoop111:9000/scott/emp.csv”).map(_.split(“,”))<br>val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))</p>
 </li>
 <li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><p> val allEmpDF = allEmp.toDF</p>
