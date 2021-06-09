@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Spark-Sql学习记录, 小夕のblog">
-    <meta name="description" content="Spark-Sql学习记录 | 小夕のblog">
+    <meta name="description" content="Spark Sql">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -316,12 +316,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="../../../../tags/Spark-Sql/">
+                                <span class="chip bg-color">Spark Sql</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="../../../../categories/Spark-Sql/" class="post-category">
+                                Spark Sql
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -344,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    420
                 </div>
                 
 
@@ -362,7 +375,43 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <hr>
+<ul>
+<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h4 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h4></li>
+</ul>
+<h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
+<li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
+</li>
+<li><h4 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h4><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
+</li>
+<li><h4 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h4><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
+</li>
+<li><h4 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h4><p>通过JDBC或ODBC连接</p>
+</li>
+</ul>
+<h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
+<li><h5 id="是组织成命名列的数据集。"><a href="#是组织成命名列的数据集。" class="headerlink" title="是组织成命名列的数据集。"></a>是组织成命名列的数据集。</h5></li>
+<li><h5 id="可以从各种来源创建（结构化数据文件，hive表，外部数据库）"><a href="#可以从各种来源创建（结构化数据文件，hive表，外部数据库）" class="headerlink" title="可以从各种来源创建（结构化数据文件，hive表，外部数据库）"></a>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</h5></li>
+<li><h5 id="支持的语言有Scala，Java，Python和R"><a href="#支持的语言有Scala，Java，Python和R" class="headerlink" title="支持的语言有Scala，Java，Python和R"></a>支持的语言有Scala，Java，Python和R</h5></li>
+</ol>
+<hr>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
+<h5 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h5><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
+<li><h5 id="是数据的分布式集合"><a href="#是数据的分布式集合" class="headerlink" title="是数据的分布式集合"></a>是数据的分布式集合</h5></li>
+<li><h5 id="其API支持Scala和Java。Python不支持DataSet-API"><a href="#其API支持Scala和Java。Python不支持DataSet-API" class="headerlink" title="其API支持Scala和Java。Python不支持DataSet API"></a>其API支持Scala和Java。Python不支持DataSet API</h5><h3 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h3></li>
+</ol>
+<ul>
+<li><h5 id="通过Case-Class创建DataFrames"><a href="#通过Case-Class创建DataFrames" class="headerlink" title="通过Case Class创建DataFrames"></a>通过Case Class创建DataFrames</h5></li>
+</ul>
+<ol>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6></li>
+</ol>
+<p><code>case class Emp(empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int)</code></p>
+<ol start="2">
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6></li>
+</ol>
+<p><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code>  </p>
+
             </div>
             <hr/>
 
@@ -374,7 +423,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="../../../../tags/Spark-Sql/">
+                                    <span class="chip bg-color">Spark Sql</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -430,7 +483,7 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            Spark Sql
                         
                     </div>
                     <div class="publish-info">
@@ -439,13 +492,25 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            小夕
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="../../../../categories/Spark-Sql/" class="post-category">
+                                    Spark Sql
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="../../../../tags/Spark-Sql/">
+                        <span class="chip bg-color">Spark Sql</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -628,6 +693,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
 
 
     <footer class="page-footer bg-color">
