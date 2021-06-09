@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    446
+                    448
                 </div>
                 
 
@@ -404,16 +404,12 @@
 <li><h5 id="通过Case-Class创建DataFrames"><a href="#通过Case-Class创建DataFrames" class="headerlink" title="通过Case Class创建DataFrames"></a>通过Case Class创建DataFrames</h5></li>
 </ul>
 <ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6></li>
-</ol>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">case</span> <span class="hljs-keyword">class</span> <span class="hljs-symbol">Emp</span>(<span class="hljs-symbol">empno:<span class="hljs-symbol">Int</span>,<span class="hljs-symbol">ename</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">job</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">mgr</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">hiredate</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">sal</span>:<span class="hljs-symbol">int</span>,<span class="hljs-symbol">comm</span>:<span class="hljs-symbol">String</span>,<span class="hljs-symbol">deptno</span>:<span class="hljs-symbol">Int</span></span>)<br></code></pre></td></tr></table></figure>
-
-
-
-<ol start="2">
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><p> val lines = sc.textFile(“hdfs://hadoop111:9000/scott/emp.csv”).map(_.split(“,”))<br>val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))</p>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><p><code>case class Emp(empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int)</code></p>
 </li>
-<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><p> val allEmpDF = allEmp.toDF</p>
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><p><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></p>
+<p><code>val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))</code>    </p>
+</li>
+<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><p><code>val allEmpDF = allEmp.toDF</code></p>
 </li>
 </ol>
 <hr>
