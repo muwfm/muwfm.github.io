@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    813
+                    842
                 </div>
                 
 
@@ -424,21 +424,21 @@
 <h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
 <li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
 <li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
-<p>case class MyData(a:Int,b:String)</p>
+<p><code>case class MyData(a:Int,b:String)</code></p>
 <p>2.生成序列，并创建DataSet</p>
-<p>val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
+<p><code>val ds = Seq(MyData(1,&quot;tom&quot;),MyData(2,&quot;Mary)).toDS</code></p>
 <p>3.查看结果</p>
-<p>ds.show     ds.collect</p>
+<p><code>ds.show     ds.collect</code></p>
 </li>
 <li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
-<p>case class Person(name:String, gender:String)</p>
+<p><code>case class Person(name:String, gender:String)</code></p>
 <p>2.通过JSON数据生成DataFrame</p>
-<p>val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
+<p><code>val df = spark.read.json(sc.parallelize(&quot;&quot;&quot;{&quot;nam&quot;:&quot;tom&quot;,&quot;gender&quot;:&quot;male&quot;}&quot;&quot;&quot;::Nil))</code></p>
 <p>3.将DataFrame转为DataSet</p>
-<p>df.as[Person].show</p>
-<p>df.as[Person].collect</p>
+<p><code>df.as[Person].show</code></p>
+<p><code>df.as[Person].collect</code></p>
 </li>
-<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet<br>  val linesDS = spark.read.text(“hdfs://hadoop111:9000/data/data.txt”).as[String]<br>  2.对DataSet进行操作：分词后，查询长度大于3的单词<br>  val words = linesDS.flatMap(<em>.split(“”)).filter(</em>.length&gt;3)<br>  words.show<br>  words.collect<br>  3.执行WordCount程序<br>  val result = linesDS.flatMap(<em>.split(“”).map(</em>,1)).groupByKey(x = &gt; x._1).count<br>  result.show<br>  排序：result.orderBy($”value”).show</p>
+<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet<br>  <code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code><br>  2.对DataSet进行操作：分词后，查询长度大于3的单词<br>  <code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)</code><br>  <code>words.show</code><br>  <code>words.collect</code><br>  3.执行WordCount程序<br>  <code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count</code><br>  <code>result.show</code><br>  排序：<code>result.orderBy($&quot;value&quot;).show</code></p>
 </li>
 </ul>
 
