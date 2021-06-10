@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    853
+                    950
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    4 分
                 </div>
                 
 
@@ -415,8 +415,9 @@
 </ol>
 <hr>
 <ul>
-<li><h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6>####### 创建StructType，来定义Schema结构信息<br>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""><br>####### 读入数据并且切分数据<br><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code><br>####### 将RDD中的数据映射成Row<br><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code><br>####### 创建DataFrames<br><code>val df = spark.createDataFrame(rowRDD,myschema)</code></li>
+<li><h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6></li>
 </ul>
+<h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""><br>####### 读入数据并且切分数据<br><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code><br>####### 将RDD中的数据映射成Row<br><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code><br>####### 创建DataFrames<br><code>val df = spark.createDataFrame(rowRDD,myschema)</code></p>
 <h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
@@ -439,6 +440,18 @@
 <p><code>df.as[Person].collect</code></p>
 </li>
 <li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet<br>  <code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code><br>  2.对DataSet进行操作：分词后，查询长度大于3的单词<br>  <code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)</code><br>  <code>words.show</code><br>  <code>words.collect</code><br>  3.执行WordCount程序<br>  <code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count</code><br>  <code>result.show</code><br>  排序：<code>result.orderBy($&quot;value&quot;).show</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
+<ul>
+<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><p>val empDF = spark.read.json(“/root/resources/emp.json”)<br>查询工资大于3000的员工<br>empDF.whre($”sal”&gt;3000).show</p>
+</li>
+<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><p>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</p>
+</li>
+<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><p>val empDS = empDF.as[Emp]<br>查询工资大于3000的员工<br>empDS.filter(<em>.sal&gt;3000).show<br>查看10号部门的员工<br>empDS.filter(</em>.deptno == 10).show</p>
+</li>
+<li><h5 id=""><a href="#" class="headerlink" title=""></a></h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt=""><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287735264.png" alt=""></p>
 </li>
 </ul>
 
