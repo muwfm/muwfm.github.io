@@ -1,375 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Spark-Sql学习记录</title>
-    <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
-</ul>
-<h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
-<li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
-</li>
-<li><h4 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h4><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
-</li>
-<li><h4 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h4><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
-</li>
-<li><h4 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h4><p>通过JDBC或ODBC连接</p>
-</li>
-</ul>
-<h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
-<li>是组织成命名列的数据集。</li>
-<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
-<li>支持的语言有Scala，Java，Python和R</li>
-</ol>
-<hr>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
-<h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
-<li>是数据的分布式集合</li>
-<li>其API支持Scala和Java。Python不支持DataSet API</li>
-</ol>
-<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5><ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
-
-val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
-<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
-</ol>
-<hr>
-<h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
-<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
-<h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
-<li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
-<li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
-<p>  case class MyData(a:Int,b:String)</p>
-<p>2.生成序列，并创建DataSet</p>
-<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
-<p>3.查看结果</p>
-<p>   ds.show     ds.collect</p>
-</li>
-<li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
-<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
-<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
-<p>3.将DataFrame转为DataSet</p>
-<p>   df.as[Person].show<br>   df.as[Person].collect</p>
-</li>
-<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet</p>
-<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
-<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
-words.show
-words.collect</code></pre><p>  3.执行WordCount程序</p>
-<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
-result.show</code></pre><p>  排序：</p>
-<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
-</ul>
-<hr>
-<h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
-<ul>
-<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
-<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
-<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
-<pre><code>empDS.filter(_.deptno == 10).show</code></pre></li>
-<li><h5 id=""><a href="#" class="headerlink" title=""></a></h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询"><br>注：查看执行计划：reslut.explain</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Spark Sql</category>
-      </categories>
-      <tags>
-        <tag>Spark Sql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
-    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
-<h3 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h3><p>直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
-<h3 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h3><p>如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
-<h3 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h3><p>由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
-<h3 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h3><p>tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
-<h3 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h3><p>一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
-<h3 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h3><p>bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
-<h3 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h3><p>谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
-]]></content>
-      <categories>
-        <category>谷歌</category>
-      </categories>
-      <tags>
-        <tag>chrome</tag>
-        <tag>makedown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Hadoop篇</title>
-    <url>/2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="简单的集群搭建过程："><a href="#简单的集群搭建过程：" class="headerlink" title="简单的集群搭建过程："></a>简单的集群搭建过程：</h2><ol>
-<li><p>JDK安装</p>
-</li>
-<li><p>配置SSH免密登陆</p>
-</li>
-<li><p>配置hadoop核心文件</p>
-</li>
-<li><p>格式化namenode</p>
-</li>
-</ol>
-</li>
-<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2></li>
-<li><h5 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h5></li>
-</ul>
-<ol>
-<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
-</li>
-<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
-</li>
-<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622706277088.png" alt=""></p>
-</li>
-</ol>
-<ul>
-<li><h5 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h5><p> 1、 打开分布式文件：调用DFS.open()方法<br> 2、 从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。<br> 3、链接到DataNode：使用输入流read()方法，从而链接到DataNode。<br> 4、读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。<br> 5、读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。<br> 6、完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
-</li>
-<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5><p> 1、客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方法。<br> 2、NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。<br> 3、客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。<br> 4、客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。<br> 5、客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。<br> 6、一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！<br> 7、客户端关闭输入流。</p>
-</li>
-<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><ol>
-<li><p>开启jvm重用。</p>
-<ol>
-<li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p>
-</li>
-<li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p>
-</li>
-<li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p>
-<p>注：会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p>
-<p>👉mapred.job.reuse.jvm.num.tasks=10 或者 set mapred.job.reuse.jvm.num.tasks=10</p>
-</li>
-</ol>
-</li>
-<li><p>har归档（Hadoop Archive）</p>
-<ol>
-<li>hadoop archive -archiveName 20131101.har /user/hadoop/login/201301/01 /user/hadoop/login/201301/01</li>
-</ol>
-</li>
-<li><p>hadoop fs -rmr /user/hadoop/login/201301/01/<em>.</em>.*</p>
-<ol start="3">
-<li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
-</ol>
-</li>
-<li><p>CombineTextInputFormat</p>
-</li>
-</ol>
-</li>
-</ul>
-<hr>
-<p>​      </p>
-<ul>
-<li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><h4 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h4><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
-</li>
-</ul>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p>
-<ul>
-<li><p>流程说明如下：</p>
-<ol>
-<li><p>输入文件分片split，每一片都由一个MapTask来处理</p>
-</li>
-<li><p>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</p>
-</li>
-<li><p>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</p>
-</li>
-<li><p>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</p>
-</li>
-<li><p>最后，reduce输出。</p>
-</li>
-</ol>
-</li>
-</ul>
-<hr>
-<ul>
-<li><h2 id="shuffle优化"><a href="#shuffle优化" class="headerlink" title="shuffle优化"></a>shuffle优化</h2></li>
-<li><p>Map阶段</p>
-<ol>
-<li>增大环形缓冲区大小，由100M扩大到200M</li>
-<li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
-<li>减少对溢写文件的merge次数</li>
-<li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li>
-</ol>
-</li>
-<li><p>Reduce阶段</p>
-<ol>
-<li>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</li>
-<li>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</li>
-<li>规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。</li>
-<li>增大reduce端存储数据的内存的大小。</li>
-</ol>
-</li>
-<li><p>IO传输阶段</p>
-<ol>
-<li>采用数据压缩的方式，减少网络IO的时间</li>
-</ol>
-</li>
-<li><p>整体<br>（1）NodeManager默认内存8G，需要根据服务器实际配置灵活调整，例如128G内存，配置为100G内存左右，yarn.nodemanager.resource.memory-mb。<br>（2）单任务默认内存8G，需要根据该任务的数据量灵活调整，例如128m数据，配置1G内存，yarn.scheduler.maximum-allocation-mb。<br>（3）mapreduce.map.memory.mb ：控制分配给MapTask内存上限，如果超过会kill掉进程（报：Container is running beyond physical memory limits. Current usage:565MB of512MB physical memory used；Killing Container）。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加MapTask内存，最大可以增加到4-5g。<br>（4）mapreduce.reduce.memory.mb：控制分配给ReduceTask内存上限。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加ReduceTask内存大小为4-5g。<br>（5）mapreduce.map.java.opts：控制MapTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（6）mapreduce.reduce.java.opts：控制ReduceTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（7）可以增加MapTask的CPU核数，增加ReduceTask的CPU核数<br>（8）增加每个Container的CPU核数和内存大小<br>（9）在hdfs-site.xml文件中配置多目录<br>（10）NameNode有一个工作线程池，用来处理不同DataNode的并发心跳以及客户端并发的元数据操作。dfs.namenode.handler.count=20 * log2(Cluster Size)，比如集群规模为10台时，此参数设置为60。</p>
-</li>
-</ul>
-<hr>
-<ul>
-<li><h2 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h2><h4 id="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"><a href="#一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。" class="headerlink" title="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"></a>一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
-</li>
-<li><h4 id="Yarn调度器：FIFO、容量调度器、公平调度器"><a href="#Yarn调度器：FIFO、容量调度器、公平调度器" class="headerlink" title="Yarn调度器：FIFO、容量调度器、公平调度器"></a>Yarn调度器：FIFO、容量调度器、公平调度器</h4><ol>
-<li><p>FIFO：支持单队列、先进先出、生产环境不会用</p>
-</li>
-<li><p>容量调度器：支持多队列、保证先进入的任务先执行     针对中小公司   Apache</p>
-</li>
-<li><p>公平调度器：支持多队列、保证每个任务公平享有队列资源     针对大厂     CDH</p>
-</li>
-</ol>
-</li>
-<li><h4 id="Hadoop宕机"><a href="#Hadoop宕机" class="headerlink" title="Hadoop宕机"></a>Hadoop宕机</h4><h5 id="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"><a href="#如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。" class="headerlink" title="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"></a>如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。</h5><h5 id="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"><a href="#如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。" class="headerlink" title="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"></a>如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。</h5></li>
-<li><h2 id="Hadoop解决数据倾斜方法"><a href="#Hadoop解决数据倾斜方法" class="headerlink" title="Hadoop解决数据倾斜方法"></a>Hadoop解决数据倾斜方法</h2></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-<hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hadoop集群的搭建</title>
     <url>/2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h2><p>1:安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p>
@@ -549,6 +180,386 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </categories>
       <tags>
         <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Spark-Sql学习记录</title>
+    <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
+</ul>
+<hr>
+<h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
+<li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
+</li>
+<li><h4 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h4><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
+</li>
+<li><h4 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h4><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
+</li>
+<li><h4 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h4><p>通过JDBC或ODBC连接</p>
+</li>
+</ul>
+<h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
+<li>是组织成命名列的数据集。</li>
+<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
+<li>支持的语言有Scala，Java，Python和R</li>
+</ol>
+<hr>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
+<h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
+<li>是数据的分布式集合</li>
+<li>其API支持Scala和Java。Python不支持DataSet API</li>
+</ol>
+<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5><ol>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
+
+val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
+<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
+</ol>
+<h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
+<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><hr>
+<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
+<hr>
+<h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
+<li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
+<li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
+<p>  case class MyData(a:Int,b:String)</p>
+<p>2.生成序列，并创建DataSet</p>
+<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
+<p>3.查看结果</p>
+<p>   ds.show     ds.collect</p>
+</li>
+<li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
+<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
+<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
+<p>3.将DataFrame转为DataSet</p>
+<p>   df.as[Person].show<br>   df.as[Person].collect</p>
+</li>
+<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet</p>
+<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
+<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
+words.show
+words.collect</code></pre><p>  3.执行WordCount程序</p>
+<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
+result.show</code></pre><p>  排序：</p>
+<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
+</ul>
+<hr>
+<h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
+<ul>
+<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
+<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
+<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
+<pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
+<hr>
+</li>
+</ul>
+<h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
+<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><pre><code>val url: String = args(0)  
+val user: String = args(1)  
+val password: String = args(2)
+//导入oracle中的数据表 
+val jdbcDf = spark.read.format(&quot;jdbc&quot;).option(&quot;url&quot;, s&quot;${url}&quot;).option(&quot;driver&quot;, &quot;oracle.jdbc.driver.OracleDriver&quot;).option(&quot;dbtable&quot;, &quot;DM_GY_SWJG&quot;).option(&quot;user&quot;,s&quot;${user}&quot; ).option(&quot;password&quot;, s&quot;${password}&quot;).load()  
+jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-shell \<br>  –master spark://spark81:7077<br>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc.jar</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Spark Sql</category>
+      </categories>
+      <tags>
+        <tag>Spark Sql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大数据总结Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">查看内存</td>
+</tr>
+<tr>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<hr>
+<ul>
+<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+</tr>
+</tbody></table>
+<hr>
+<ul>
+<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>大数据总结Hadoop篇</title>
+    <url>/2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="简单的集群搭建过程："><a href="#简单的集群搭建过程：" class="headerlink" title="简单的集群搭建过程："></a>简单的集群搭建过程：</h2><ol>
+<li><p>JDK安装</p>
+</li>
+<li><p>配置SSH免密登陆</p>
+</li>
+<li><p>配置hadoop核心文件</p>
+</li>
+<li><p>格式化namenode</p>
+</li>
+</ol>
+</li>
+<li><h2 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h2></li>
+<li><h5 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h5></li>
+</ul>
+<ol>
+<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
+</li>
+<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
+</li>
+<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622706277088.png" alt=""></p>
+</li>
+</ol>
+<ul>
+<li><h5 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h5><p> 1、 打开分布式文件：调用DFS.open()方法<br> 2、 从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。<br> 3、链接到DataNode：使用输入流read()方法，从而链接到DataNode。<br> 4、读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。<br> 5、读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。<br> 6、完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
+</li>
+<li><h5 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h5><p> 1、客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方法。<br> 2、NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。<br> 3、客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。<br> 4、客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。<br> 5、客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。<br> 6、一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！<br> 7、客户端关闭输入流。</p>
+</li>
+<li><h2 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h2><ol>
+<li><p>开启jvm重用。</p>
+<ol>
+<li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p>
+</li>
+<li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p>
+</li>
+<li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p>
+<p>注：会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p>
+<p>👉mapred.job.reuse.jvm.num.tasks=10 或者 set mapred.job.reuse.jvm.num.tasks=10</p>
+</li>
+</ol>
+</li>
+<li><p>har归档（Hadoop Archive）</p>
+<ol>
+<li>hadoop archive -archiveName 20131101.har /user/hadoop/login/201301/01 /user/hadoop/login/201301/01</li>
+</ol>
+</li>
+<li><p>hadoop fs -rmr /user/hadoop/login/201301/01/<em>.</em>.*</p>
+<ol start="3">
+<li>hadoop fs -cp /user/hadoop/login/201301/01/20130101.har/*  /user/hadoop/login/201301/01/   </li>
+</ol>
+</li>
+<li><p>CombineTextInputFormat</p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p>​      </p>
+<ul>
+<li><h2 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h2><h4 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h4><p> <img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""></p>
+</li>
+</ul>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p>
+<ul>
+<li><p>流程说明如下：</p>
+<ol>
+<li><p>输入文件分片split，每一片都由一个MapTask来处理</p>
+</li>
+<li><p>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</p>
+</li>
+<li><p>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</p>
+</li>
+<li><p>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</p>
+</li>
+<li><p>最后，reduce输出。</p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h2 id="shuffle优化"><a href="#shuffle优化" class="headerlink" title="shuffle优化"></a>shuffle优化</h2></li>
+<li><p>Map阶段</p>
+<ol>
+<li>增大环形缓冲区大小，由100M扩大到200M</li>
+<li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
+<li>减少对溢写文件的merge次数</li>
+<li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li>
+</ol>
+</li>
+<li><p>Reduce阶段</p>
+<ol>
+<li>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</li>
+<li>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</li>
+<li>规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。</li>
+<li>增大reduce端存储数据的内存的大小。</li>
+</ol>
+</li>
+<li><p>IO传输阶段</p>
+<ol>
+<li>采用数据压缩的方式，减少网络IO的时间</li>
+</ol>
+</li>
+<li><p>整体<br>（1）NodeManager默认内存8G，需要根据服务器实际配置灵活调整，例如128G内存，配置为100G内存左右，yarn.nodemanager.resource.memory-mb。<br>（2）单任务默认内存8G，需要根据该任务的数据量灵活调整，例如128m数据，配置1G内存，yarn.scheduler.maximum-allocation-mb。<br>（3）mapreduce.map.memory.mb ：控制分配给MapTask内存上限，如果超过会kill掉进程（报：Container is running beyond physical memory limits. Current usage:565MB of512MB physical memory used；Killing Container）。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加MapTask内存，最大可以增加到4-5g。<br>（4）mapreduce.reduce.memory.mb：控制分配给ReduceTask内存上限。默认内存大小为1G，如果数据量是128m，正常不需要调整内存；如果数据量大于128m，可以增加ReduceTask内存大小为4-5g。<br>（5）mapreduce.map.java.opts：控制MapTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（6）mapreduce.reduce.java.opts：控制ReduceTask堆内存大小。（如果内存不够，报：java.lang.OutOfMemoryError）<br>（7）可以增加MapTask的CPU核数，增加ReduceTask的CPU核数<br>（8）增加每个Container的CPU核数和内存大小<br>（9）在hdfs-site.xml文件中配置多目录<br>（10）NameNode有一个工作线程池，用来处理不同DataNode的并发心跳以及客户端并发的元数据操作。dfs.namenode.handler.count=20 * log2(Cluster Size)，比如集群规模为10台时，此参数设置为60。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><h2 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h2><h4 id="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"><a href="#一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。" class="headerlink" title="一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。"></a>一个资源调度平台，负责为运算程序提供服务器资源。其上可运行各类分布式运算程序。</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
+</li>
+<li><h4 id="Yarn调度器：FIFO、容量调度器、公平调度器"><a href="#Yarn调度器：FIFO、容量调度器、公平调度器" class="headerlink" title="Yarn调度器：FIFO、容量调度器、公平调度器"></a>Yarn调度器：FIFO、容量调度器、公平调度器</h4><ol>
+<li><p>FIFO：支持单队列、先进先出、生产环境不会用</p>
+</li>
+<li><p>容量调度器：支持多队列、保证先进入的任务先执行     针对中小公司   Apache</p>
+</li>
+<li><p>公平调度器：支持多队列、保证每个任务公平享有队列资源     针对大厂     CDH</p>
+</li>
+</ol>
+</li>
+<li><h4 id="Hadoop宕机"><a href="#Hadoop宕机" class="headerlink" title="Hadoop宕机"></a>Hadoop宕机</h4><h5 id="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"><a href="#如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。" class="headerlink" title="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"></a>如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。</h5><h5 id="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"><a href="#如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。" class="headerlink" title="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"></a>如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。</h5></li>
+<li><h2 id="Hadoop解决数据倾斜方法"><a href="#Hadoop解决数据倾斜方法" class="headerlink" title="Hadoop解决数据倾斜方法"></a>Hadoop解决数据倾斜方法</h2></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
+    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
+<h3 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h3><p>直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
+<h3 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h3><p>如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
+<h3 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h3><p>由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
+<h3 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h3><p>tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
+<h3 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h3><p>一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
+<h3 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h3><p>bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
+<h3 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h3><p>谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
+]]></content>
+      <categories>
+        <category>谷歌</category>
+      </categories>
+      <tags>
+        <tag>chrome</tag>
+        <tag>makedown</tag>
       </tags>
   </entry>
 </search>

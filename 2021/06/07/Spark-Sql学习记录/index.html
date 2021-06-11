@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    949
+                    1.1k
                 </div>
                 
 
@@ -379,6 +379,7 @@
 <ul>
 <li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
 </ul>
+<hr>
 <h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
 <li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
 </li>
@@ -407,12 +408,13 @@
 val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
 <li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
 </ol>
-<hr>
 <h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
-<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><hr>
+<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
+<hr>
 <h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
 <li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
 <li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
@@ -445,8 +447,17 @@ result.show</code></pre><p>  排序：</p>
 <li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
 <li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
 <pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
-<pre><code>empDS.filter(_.deptno == 10).show</code></pre></li>
-<li><h5 id=""><a href="#" class="headerlink" title=""></a></h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询"><br>注：查看执行计划：reslut.explain</p>
+<pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
+<hr>
+</li>
+</ul>
+<h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
+<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><pre><code>val url: String = args(0)  
+val user: String = args(1)  
+val password: String = args(2)
+//导入oracle中的数据表 
+val jdbcDf = spark.read.format(&quot;jdbc&quot;).option(&quot;url&quot;, s&quot;${url}&quot;).option(&quot;driver&quot;, &quot;oracle.jdbc.driver.OracleDriver&quot;).option(&quot;dbtable&quot;, &quot;DM_GY_SWJG&quot;).option(&quot;user&quot;,s&quot;${user}&quot; ).option(&quot;password&quot;, s&quot;${password}&quot;).load()  
+jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-shell \<br>  –master spark://spark81:7077<br>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc.jar</p>
 </li>
 </ul>
 
