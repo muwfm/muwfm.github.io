@@ -18,74 +18,64 @@
 </li>
 </ul>
 <h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
-<li><h5 id="是组织成命名列的数据集。"><a href="#是组织成命名列的数据集。" class="headerlink" title="是组织成命名列的数据集。"></a>是组织成命名列的数据集。</h5></li>
-<li><h5 id="可以从各种来源创建（结构化数据文件，hive表，外部数据库）"><a href="#可以从各种来源创建（结构化数据文件，hive表，外部数据库）" class="headerlink" title="可以从各种来源创建（结构化数据文件，hive表，外部数据库）"></a>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</h5></li>
-<li><h5 id="支持的语言有Scala，Java，Python和R"><a href="#支持的语言有Scala，Java，Python和R" class="headerlink" title="支持的语言有Scala，Java，Python和R"></a>支持的语言有Scala，Java，Python和R</h5></li>
+<li>是组织成命名列的数据集。</li>
+<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
+<li>支持的语言有Scala，Java，Python和R</li>
 </ol>
 <hr>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
 <h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
-<li><h5 id="是数据的分布式集合"><a href="#是数据的分布式集合" class="headerlink" title="是数据的分布式集合"></a>是数据的分布式集合</h5></li>
-<li><h5 id="其API支持Scala和Java。Python不支持DataSet-API"><a href="#其API支持Scala和Java。Python不支持DataSet-API" class="headerlink" title="其API支持Scala和Java。Python不支持DataSet API"></a>其API支持Scala和Java。Python不支持DataSet API</h5></li>
+<li>是数据的分布式集合</li>
+<li>其API支持Scala和Java。Python不支持DataSet API</li>
 </ol>
-<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><ul>
-<li><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5></li>
-</ul>
-<ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><p> <code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,comm:String,deptno:Int）</code></p>
-</li>
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><p> <code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></p>
-</li>
-</ol>
-<p><code>val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))</code>    </p>
-<ol start="3">
-<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><code>val allEmpDF = allEmp.toDF</code></li>
+<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5><ol>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
+
+val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
+<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
 </ol>
 <hr>
-<ul>
-<li><h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6></li>
-</ul>
-<h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""><br>####### 读入数据并且切分数据<br><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code><br>####### 将RDD中的数据映射成Row<br><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code><br>####### 创建DataFrames<br><code>val df = spark.createDataFrame(rowRDD,myschema)</code></p>
-<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
+<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
 <h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
 <li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
 <li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
-<p><code>case class MyData(a:Int,b:String)</code></p>
+<p>  case class MyData(a:Int,b:String)</p>
 <p>2.生成序列，并创建DataSet</p>
-<p><code>val ds = Seq(MyData(1,&quot;tom&quot;),MyData(2,&quot;Mary)).toDS</code></p>
+<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
 <p>3.查看结果</p>
-<p><code>ds.show     ds.collect</code></p>
+<p>   ds.show     ds.collect</p>
 </li>
 <li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
-<p><code>case class Person(name:String, gender:String)</code></p>
-<p>2.通过JSON数据生成DataFrame</p>
-<p><code>val df = spark.read.json(sc.parallelize(&quot;&quot;&quot;{&quot;nam&quot;:&quot;tom&quot;,&quot;gender&quot;:&quot;male&quot;}&quot;&quot;&quot;::Nil))</code></p>
+<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
+<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
 <p>3.将DataFrame转为DataSet</p>
-<p><code>df.as[Person].show</code></p>
-<p><code>df.as[Person].collect</code></p>
+<p>   df.as[Person].show<br>   df.as[Person].collect</p>
 </li>
-<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet<br>  <code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code><br>  2.对DataSet进行操作：分词后，查询长度大于3的单词<br>  <code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)</code><br>  <code>words.show</code><br>  <code>words.collect</code><br>  3.执行WordCount程序<br>  <code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count</code><br>  <code>result.show</code><br>  排序：<code>result.orderBy($&quot;value&quot;).show</code></p>
-</li>
+<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet</p>
+<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
+<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
+words.show
+words.collect</code></pre><p>  3.执行WordCount程序</p>
+<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
+result.show</code></pre><p>  排序：</p>
+<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
 </ul>
 <hr>
 <h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
 <ul>
-<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><p>val empDF = spark.read.json(“/root/resources/emp.json”)<br>查询工资大于3000的员工<br>empDF.whre($”sal”&gt;3000).show</p>
-</li>
-<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><p>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</p>
-</li>
-<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><p>val empDS = empDF.as[Emp]<br>查询工资大于3000的员工<br>empDS.filter(<em>.sal&gt;3000).show<br>查看10号部门的员工<br>empDS.filter(</em>.deptno == 10).show</p>
-</li>
+<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
+<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
+<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
+<pre><code>empDS.filter(_.deptno == 10).show</code></pre></li>
 <li><h5 id=""><a href="#" class="headerlink" title=""></a></h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询"><br>注：查看执行计划：reslut.explain</p>
 </li>
-<li><p>######</p>
-<blockquote>
-<p>fafa<br>fafa</p>
-</blockquote>
-  <figure class="highlight plain"><figcaption><span>install ntp ntpupdate</span></figcaption><table><tr><td class="code"><pre><code class="hljs yum"> <br></code></pre></td></tr></table></figure></li>
 </ul>
 ]]></content>
       <categories>
@@ -93,93 +83,6 @@
       </categories>
       <tags>
         <tag>Spark Sql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-<hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -365,43 +268,6 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Linux</title>
     <url>/2020/08/19/linux/</url>
     <content><![CDATA[]]></content>
@@ -560,5 +426,129 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       <tags>
         <tag>Hadoop</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>大数据总结Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">查看内存</td>
+</tr>
+<tr>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<hr>
+<ul>
+<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+</tr>
+</tbody></table>
+<hr>
+<ul>
+<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
   </entry>
 </search>
