@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Spark-Sql学习记录, 小夕のblog">
-    <meta name="description" content="Spark Sql">
+    <meta name="description" content="Spark SQL">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -318,8 +318,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="../../../../tags/Spark-Sql/">
-                                <span class="chip bg-color">Spark Sql</span>
+                            <a href="../../../../tags/Spark-SQL/">
+                                <span class="chip bg-color">Spark SQL</span>
                             </a>
                         
                     </div>
@@ -330,8 +330,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="../../../../categories/Spark-Sql/" class="post-category">
-                                Spark Sql
+                            <a href="../../../../categories/Spark-SQL/" class="post-category">
+                                Spark SQL
                             </a>
                         
                     </div>
@@ -377,7 +377,8 @@
             <div id="articleContent">
                 <hr>
 <ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
+<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
+</li>
 </ul>
 <hr>
 <h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
@@ -452,12 +453,17 @@ result.show</code></pre><p>  排序：</p>
 </li>
 </ul>
 <h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
-<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><pre><code>val url: String = args(0)  
-val user: String = args(1)  
-val password: String = args(2)
-//导入oracle中的数据表 
-val jdbcDf = spark.read.format(&quot;jdbc&quot;).option(&quot;url&quot;, s&quot;${url}&quot;).option(&quot;driver&quot;, &quot;oracle.jdbc.driver.OracleDriver&quot;).option(&quot;dbtable&quot;, &quot;DM_GY_SWJG&quot;).option(&quot;user&quot;,s&quot;${user}&quot; ).option(&quot;password&quot;, s&quot;${password}&quot;).load()  
-jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-shell \<br>  –master spark://spark81:7077<br>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc.jar</p>
+<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
+</li>
+<li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
+</li>
+</ul>
+<h3 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h3><p>首先，搭建好Hive的环境（需要Hadoop）</p>
+<p>配置Spark SQL支持Hive</p>
+<p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
+<p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><ul>
+<li><h5 id="在内存中缓存数据"><a href="#在内存中缓存数据" class="headerlink" title="在内存中缓存数据"></a>在内存中缓存数据</h5><p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
 </li>
 </ul>
 
@@ -473,8 +479,8 @@ jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-
                     
                         <div class="article-tag">
                             
-                                <a href="../../../../tags/Spark-Sql/">
-                                    <span class="chip bg-color">Spark Sql</span>
+                                <a href="../../../../tags/Spark-SQL/">
+                                    <span class="chip bg-color">Spark SQL</span>
                                 </a>
                             
                         </div>
@@ -515,48 +521,43 @@ jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="">
+                <a href="../../../07/09/Python/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Spark-Sql学习记录">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Python">
                         
-                        <span class="card-title">Spark-Sql学习记录</span>
+                        <span class="card-title">Python</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Spark Sql
+                            
+
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-07
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-09
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="../../../../categories/Spark-Sql/" class="post-category">
-                                    Spark Sql
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            小夕
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/Spark-Sql/">
-                        <span class="chip bg-color">Spark Sql</span>
+                    <a href="../../../../tags/Spark-Python/">
+                        <span class="chip bg-color">Spark Python</span>
                     </a>
                     
                 </div>

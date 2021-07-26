@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Python</title>
+    <url>/2021/07/09/Python/</url>
+    <content><![CDATA[<hr>
+]]></content>
+      <tags>
+        <tag>Spark Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hadoop集群的搭建</title>
     <url>/2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h2><p>1:安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p>
 <pre><code>yum install ntp ntpupdate
 ntpdate cn.pool.ntp.org</code></pre><p>手动设置时间 </p>
 <pre><code>date -s &quot;2019-07-15 14:42:50&quot;</code></pre><hr>
+<hr>
 <p>2:虚拟机配置</p>
 <p>安装时选择简单服务器版本（不需要桌面）</p>
 <p>2.1:配置网络：</p>
@@ -192,7 +202,8 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
     <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<hr>
 <ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><h5 id="学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！"><a href="#学习过Hive，将Hive-Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark-Sql应运而生，它是将Spark-Sql转换成RDD，然后提交到集群上执行，同时Spark-Sql也支持从Hive中Hive中读取数据！" class="headerlink" title="学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！"></a>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</h5></li>
+<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
+</li>
 </ul>
 <hr>
 <h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
@@ -267,145 +278,26 @@ result.show</code></pre><p>  排序：</p>
 </li>
 </ul>
 <h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
-<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><pre><code>val url: String = args(0)  
-val user: String = args(1)  
-val password: String = args(2)
-//导入oracle中的数据表 
-val jdbcDf = spark.read.format(&quot;jdbc&quot;).option(&quot;url&quot;, s&quot;${url}&quot;).option(&quot;driver&quot;, &quot;oracle.jdbc.driver.OracleDriver&quot;).option(&quot;dbtable&quot;, &quot;DM_GY_SWJG&quot;).option(&quot;user&quot;,s&quot;${user}&quot; ).option(&quot;password&quot;, s&quot;${password}&quot;).load()  
-jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-shell \<br>  –master spark://spark81:7077<br>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc.jar</p>
+<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
+</li>
+<li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
+</li>
+</ul>
+<h3 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h3><p>首先，搭建好Hive的环境（需要Hadoop）</p>
+<p>配置Spark SQL支持Hive</p>
+<p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
+<p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><ul>
+<li><h5 id="在内存中缓存数据"><a href="#在内存中缓存数据" class="headerlink" title="在内存中缓存数据"></a>在内存中缓存数据</h5><p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
 </li>
 </ul>
 ]]></content>
       <categories>
-        <category>Spark Sql</category>
+        <category>Spark SQL</category>
       </categories>
       <tags>
-        <tag>Spark Sql</tag>
+        <tag>Spark SQL</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-<hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
   </entry>
   <entry>
     <title>大数据总结Hadoop篇</title>
@@ -534,6 +426,7 @@ jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-
 <li><h4 id="Hadoop宕机"><a href="#Hadoop宕机" class="headerlink" title="Hadoop宕机"></a>Hadoop宕机</h4><h5 id="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"><a href="#如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。" class="headerlink" title="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"></a>如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。</h5><h5 id="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"><a href="#如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。" class="headerlink" title="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"></a>如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。</h5></li>
 <li><h2 id="Hadoop解决数据倾斜方法"><a href="#Hadoop解决数据倾斜方法" class="headerlink" title="Hadoop解决数据倾斜方法"></a>Hadoop解决数据倾斜方法</h2></li>
 </ul>
+<p><img src="/Users/muwfm/Library/Application%20Support/marktext/images/2021-07-26-15-53-29-image.png" alt=""></p>
 ]]></content>
       <categories>
         <category>Hadoop</category>
@@ -561,5 +454,129 @@ jdbcDf.createOrReplaceTempView(&quot;DM_GY_SWJG&quot;)  </code></pre><p>  spark-
         <tag>chrome</tag>
         <tag>makedown</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>大数据总结Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">查看内存</td>
+</tr>
+<tr>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<hr>
+<ul>
+<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+</tr>
+</tbody></table>
+<hr>
+<ul>
+<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<p>$$</p>
+<p>$$</p>
+]]></content>
   </entry>
 </search>
