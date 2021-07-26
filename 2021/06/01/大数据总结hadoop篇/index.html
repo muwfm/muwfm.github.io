@@ -499,7 +499,6 @@
 <li><h4 id="Hadoop宕机"><a href="#Hadoop宕机" class="headerlink" title="Hadoop宕机"></a>Hadoop宕机</h4><h5 id="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"><a href="#如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。" class="headerlink" title="如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。"></a>如果MR造成系统宕机，此时要控制Yarn同时运行的任务数，和每个任务申请的最大内存。</h5><h5 id="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"><a href="#如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。" class="headerlink" title="如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。"></a>如果写入文件过快造成NameNode宕机，那么调高Kafka的存储大小，控制从Kafka到Hdfs的写入速度。</h5></li>
 <li><h2 id="Hadoop解决数据倾斜方法"><a href="#Hadoop解决数据倾斜方法" class="headerlink" title="Hadoop解决数据倾斜方法"></a>Hadoop解决数据倾斜方法</h2></li>
 </ul>
-<p><img src="/Users/muwfm/Library/Application%20Support/marktext/images/2021-07-26-15-53-29-image.png" alt=""></p>
 
             </div>
             <hr/>
@@ -708,7 +707,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             contentSelector: '#articleContent',
             headingsOffset: -($(window).height() * 0.4 - 45),
             collapseDepth: Number('0'),
-            headingSelector: 'h2'
+            headingSelector: 'h5'
         });
 
         // modify the toc link href to support Chinese.
@@ -720,7 +719,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
         // modify the heading title id to support Chinese.
         i = 0;
-        $('#articleContent').children('h2').each(function () {
+        $('#articleContent').children('h5').each(function () {
             $(this).attr('id', tocHeading + (++i));
         });
 
