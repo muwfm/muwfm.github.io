@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Python</title>
+    <url>/2021/07/09/Python/</url>
+    <content><![CDATA[<hr>
+<p><a href="https://note.youdao.com/s/O8Yu55Wj" target="_blank" rel="noopener">有道云笔记</a></p>
+<h5 id="1、Hadoop常用端口号："><a href="#1、Hadoop常用端口号：" class="headerlink" title="1、Hadoop常用端口号："></a>1、Hadoop常用端口号：</h5><table>
+<thead>
+<tr>
+<th>常用页面</th>
+<th>端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问HDFS</td>
+<td>50070/9870</td>
+</tr>
+<tr>
+<td>访问MR</td>
+<td>8088</td>
+</tr>
+<tr>
+<td>访问CDH</td>
+<td>7180</td>
+</tr>
+</tbody></table>
+<h5 id="2、HDFS"><a href="#2、HDFS" class="headerlink" title="2、HDFS"></a>2、HDFS</h5><p><strong>节点介绍</strong></p>
+<p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
+<p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
+<p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
+<h5 id="3、HDFS读写流程："><a href="#3、HDFS读写流程：" class="headerlink" title="3、HDFS读写流程："></a>3、HDFS读写流程：</h5><p> <strong>读流程：</strong></p>
+<p>客户端发送请求给namenode，如果文件不存在，返回错误信息，否则将该文件对应的block块位置等信息发送给客户端。</p>
+<h6 id="写流程："><a href="#写流程：" class="headerlink" title="写流程："></a><strong>写流程：</strong></h6><p>客户端向namenode发送请求，请求上传文件，namenode处理该请求，检查是否有权限上传及路径是否合法。客户端上传block块，namenode根据客户端</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux</title>
+    <url>/2020/08/19/linux/</url>
+    <content><![CDATA[<h5 id="Linux指令："><a href="#Linux指令：" class="headerlink" title="Linux指令："></a>Linux指令：</h5><p><a href="https://www.cnblogs.com/findbetterme/p/10705133.html" target="_blank" rel="noopener">linux命令ps aux|grep xxx详解</a></p>
+<blockquote>
+<p>方式</p>
+</blockquote>
+<hr>
+<p>linux命令ps aux|grep xxx详解<br>fs</p>
+<hr>
+<pre><code>fsfs
+fsfsd
+fsdfs</code></pre><figure class="highlight ebnf"><table><tr><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">fsfds</span><br></code></pre></td></tr></table></figure>
+
+<p>fds</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Hadoop集群的搭建</title>
     <url>/2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h2><p>1:安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p>
@@ -184,97 +241,90 @@ scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
       </tags>
   </entry>
   <entry>
-    <title>Linux</title>
-    <url>/2020/08/19/linux/</url>
-    <content><![CDATA[<h5 id="Linux指令："><a href="#Linux指令：" class="headerlink" title="Linux指令："></a>Linux指令：</h5><p><a href="https://www.cnblogs.com/findbetterme/p/10705133.html" target="_blank" rel="noopener">linux命令ps aux|grep xxx详解</a></p>
-<blockquote>
-<p>方式</p>
-</blockquote>
-<hr>
-<p>linux命令ps aux|grep xxx详解<br>fs</p>
-<hr>
-<pre><code>fsfs
-fsfsd
-fsdfs</code></pre><figure class="highlight ebnf"><table><tr><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">fsfds</span><br></code></pre></td></tr></table></figure>
-
-<p>fds</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Markdown语法</title>
-    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
-
-<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
-<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
-<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
+    <title>大数据总结Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<hr>
+<ul>
+<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
+</ul>
 <table>
 <thead>
 <tr>
-<th></th>
-<th></th>
-<th></th>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
 </tr>
 </thead>
 <tbody><tr>
-<td></td>
-<td></td>
-<td></td>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td align="left">top</td>
+<td align="left">查看内存</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<hr>
+<ul>
+<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
 </tr>
 </tbody></table>
 <hr>
-<p>$$</p>
-<p>$$</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Python</title>
-    <url>/2021/07/09/Python/</url>
-    <content><![CDATA[<hr>
-<p><a href="https://note.youdao.com/s/O8Yu55Wj" target="_blank" rel="noopener">有道云笔记</a></p>
-<h5 id="1、Hadoop常用端口号："><a href="#1、Hadoop常用端口号：" class="headerlink" title="1、Hadoop常用端口号："></a>1、Hadoop常用端口号：</h5><table>
-<thead>
-<tr>
-<th>常用页面</th>
-<th>端口号</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>访问HDFS</td>
-<td>50070/9870</td>
-</tr>
-<tr>
-<td>访问MR</td>
-<td>8088</td>
-</tr>
-<tr>
-<td>访问CDH</td>
-<td>7180</td>
-</tr>
-</tbody></table>
-<h5 id="2、HDFS"><a href="#2、HDFS" class="headerlink" title="2、HDFS"></a>2、HDFS</h5><p><strong>节点介绍</strong></p>
-<p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
-<p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
-<p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
-<h5 id="3、HDFS读写流程："><a href="#3、HDFS读写流程：" class="headerlink" title="3、HDFS读写流程："></a>3、HDFS读写流程：</h5><p> <strong>读流程：</strong></p>
-<p>客户端发送请求给namenode，如果文件不存在，返回错误信息，否则将该文件对应的block块位置等信息发送给客户端。</p>
-<h6 id="写流程："><a href="#写流程：" class="headerlink" title="写流程："></a><strong>写流程：</strong></h6><p>客户端向namenode发送请求，请求上传文件，namenode处理该请求，检查是否有权限上传及路径是否合法。客户端上传block块，namenode根据客户端</p>
+<ul>
+<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>Python</category>
+        <category>Hadoop</category>
       </categories>
       <tags>
-        <tag>Python</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -380,111 +430,41 @@ result.show</code></pre><p>  排序：</p>
       </tags>
   </entry>
   <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
+    <title>Markdown语法</title>
+    <url>/2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure>
+
+<h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr>
+<h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr>
+<h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr>
 <table>
 <thead>
 <tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
+<th></th>
+<th></th>
+<th></th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
+<p>$$</p>
+<p>$$</p>
 ]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
-    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
-<h3 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h3><p>直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
-<h3 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h3><p>如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
-<h3 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h3><p>由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
-<h3 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h3><p>tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
-<h3 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h3><p>一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
-<h3 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h3><p>bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
-<h3 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h3><p>谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
-]]></content>
-      <categories>
-        <category>谷歌</category>
-      </categories>
-      <tags>
-        <tag>chrome</tag>
-        <tag>makedown</tag>
-      </tags>
   </entry>
   <entry>
     <title>大数据总结Hadoop篇</title>
@@ -619,6 +599,26 @@ result.show</code></pre><p>  排序：</p>
       </categories>
       <tags>
         <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谷歌浏览器Chhrome必装的几款神级实用插件</title>
+    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chhrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件。</p>
+<h3 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h3><p>直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
+<h3 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h3><p>如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
+<h3 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h3><p>由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
+<h3 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h3><p>tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
+<h3 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h3><p>一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
+<h3 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h3><p>bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
+<h3 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h3><p>谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
+]]></content>
+      <categories>
+        <category>谷歌</category>
+      </categories>
+      <tags>
+        <tag>chrome</tag>
+        <tag>makedown</tag>
       </tags>
   </entry>
 </search>
