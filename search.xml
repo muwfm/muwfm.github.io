@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>大数据总结Spark篇</title>
+      <link href="2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/"/>
+      <url>2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<hr><h5 id="Spark执行流程："><a href="#Spark执行流程：" class="headerlink" title="Spark执行流程："></a>Spark执行流程：</h5><p>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Spark </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> -Spark </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Python</title>
       <link href="2021/07/09/Python/"/>
       <url>2021/07/09/Python/</url>
