@@ -29,31 +29,6 @@
     
     
     <entry>
-      <title>Python</title>
-      <link href="2021/07/09/Python/"/>
-      <url>2021/07/09/Python/</url>
-      
-        <content type="html"><![CDATA[<hr><p><a href="https://note.youdao.com/s/O8Yu55Wj" target="_blank" rel="noopener">有道云笔记</a></p><h5 id="1、Hadoop常用端口号："><a href="#1、Hadoop常用端口号：" class="headerlink" title="1、Hadoop常用端口号："></a>1、Hadoop常用端口号：</h5><table><thead><tr><th>常用页面</th><th>端口号</th></tr></thead><tbody><tr><td>访问HDFS</td><td>50070/9870</td></tr><tr><td>访问MR</td><td>8088</td></tr><tr><td>访问CDH</td><td>7180</td></tr></tbody></table><h5 id="2、HDFS"><a href="#2、HDFS" class="headerlink" title="2、HDFS"></a>2、HDFS</h5><p><strong>节点介绍</strong></p><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p><h5 id="3、HDFS读写流程："><a href="#3、HDFS读写流程：" class="headerlink" title="3、HDFS读写流程："></a>3、HDFS读写流程：</h5><p> <strong>读流程：</strong></p><p>客户端发送请求给namenode，如果文件不存在，返回错误信息，否则将该文件对应的block块位置等信息发送给客户端。</p><h6 id="写流程："><a href="#写流程：" class="headerlink" title="写流程："></a><strong>写流程：</strong></h6><p>客户端向namenode发送请求，请求上传文件，namenode处理该请求，检查是否有权限上传及路径是否合法。客户端上传block块，namenode根据客户端</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Python </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Python </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Spark-Sql学习记录</title>
       <link href="2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/"/>
       <url>2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
@@ -123,32 +98,6 @@
             <tag> Linux </tag>
             
         </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Markdown语法</title>
-      <link href="2021/05/28/markdown%E8%AF%AD%E6%B3%95/"/>
-      <url>2021/05/28/markdown%E8%AF%AD%E6%B3%95/</url>
-      
-        <content type="html"><![CDATA[<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">yum install ntp ntpupdate<br></code></pre></td></tr></table></figure><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><hr><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><hr><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><hr><table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><hr><p>$$</p><p>$$</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Linux</title>
-      <link href="2020/08/19/linux/"/>
-      <url>2020/08/19/linux/</url>
-      
-        <content type="html"><![CDATA[<h5 id="Linux指令："><a href="#Linux指令：" class="headerlink" title="Linux指令："></a>Linux指令：</h5><p><a href="https://www.cnblogs.com/findbetterme/p/10705133.html" target="_blank" rel="noopener">linux命令ps aux|grep xxx详解</a></p><blockquote><p>方式</p></blockquote><hr><p>linux命令ps aux|grep xxx详解<br>fs</p><hr><pre><code>fsfsfsfsdfsdfs</code></pre><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">fsfds</span><br></code></pre></td></tr></table></figure><p>fds</p>]]></content>
-      
-      
       
     </entry>
     
