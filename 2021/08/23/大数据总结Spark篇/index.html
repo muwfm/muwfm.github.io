@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    1.5k
                 </div>
                 
 
@@ -404,8 +404,7 @@
 <li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li>
 <li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li>
 </ul>
-<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=black size=3>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。</font></p>
-<p><font color=red size=4>注意：</font>数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
+<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
 <ul>
 <li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p>
 </li>
@@ -415,7 +414,9 @@
 </li>
 </ul>
 <hr>
-<h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5><ul>
+<h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><hr>
+<ul>
+<li><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5></li>
 <li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p>
 </li>
 <li><p>独立任务，HDFS READ，HDFS WRITE</p>
@@ -433,6 +434,23 @@
 </li>
 <li><p>最佳计算位置</p>
 </li>
+</ul>
+<hr>
+<h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><ul>
+<li><p>local</p>
+</li>
+<li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p>
+</li>
+<li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p>
+</li>
+<li><p>Mesos</p>
+</li>
+</ul>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p>
+<hr>
+<h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><ul>
+<li>Stage：spark根据宽依赖将job划分成一个个stage。</li>
+<li>task：一个stage是一个taskset，根据分区划分task。</li>
 </ul>
 <hr>
 <h5 id=""><a href="#" class="headerlink" title=""></a></h5>
