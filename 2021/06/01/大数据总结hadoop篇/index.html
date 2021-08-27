@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.3k
+                    1.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    5 分
                 </div>
                 
 
@@ -383,6 +383,22 @@
 <li><p>配置hadoop核心文件</p>
 </li>
 <li><p>格式化namenode</p>
+</li>
+</ul>
+<hr>
+<h5 id="Hadoop工作流程（安全模式）"><a href="#Hadoop工作流程（安全模式）" class="headerlink" title="Hadoop工作流程（安全模式）"></a>Hadoop工作流程（安全模式）</h5><ul>
+<li><p>启动namenode，加载fsimage到内存，根据edits log日志文件执行其中的事务</p>
+</li>
+<li><p>文件系统元数据内存镜像加载完毕，合并fsimage和edits log日志文件，并生成新的fsimage文件和一个空的edits log日志文件。</p>
+</li>
+<li><p>NameNode等待DataNode上传block列表信息，直到副本数满足最小副本条件。（文件系统中99.9%的block块达到最小副本数，默认为1），30秒之后，退出安全模式。</p>
+</li>
+</ul>
+<hr>
+<h5 id="NameNode安全模式"><a href="#NameNode安全模式" class="headerlink" title="NameNode安全模式"></a>NameNode安全模式</h5><ul>
+<li><p>文件系统元数据只读操作</p>
+</li>
+<li><p>不允许对文件修改（写，删除，重命名操作）</p>
 </li>
 </ul>
 <hr>
@@ -457,7 +473,7 @@
 <ul>
 <li><p>Map阶段</p>
 <ul>
-<li>增大环形缓冲区大小，由100M扩大到200M</li>
+<li>增大环形缓冲区大小，由100M扩大详细流程到200M</li>
 <li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
 <li>减少对溢写文件的merge次数</li>
 <li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li>
