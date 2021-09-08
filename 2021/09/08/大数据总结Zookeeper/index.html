@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="大数据总结Spark篇, 小夕のblog">
-    <meta name="description" content="Spark">
+    <meta name="keywords" content="大数据总结ZooKeeper篇.md, 小夕のblog">
+    <meta name="description" content="Zookeeper">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>大数据总结Spark篇 | 小夕のblog</title>
+    <title>大数据总结ZooKeeper篇.md | 小夕のblog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -196,12 +196,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">大数据总结Spark篇</h1>
+                    <h1 class="description center-align post-title">大数据总结ZooKeeper篇.md</h1>
                 </div>
             </div>
         </div>
@@ -318,8 +318,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="../../../../tags/Spark/">
-                                <span class="chip bg-color">Spark</span>
+                            <a href="../../../../tags/Zookeeper/">
+                                <span class="chip bg-color">Zookeeper</span>
                             </a>
                         
                     </div>
@@ -330,8 +330,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="../../../../categories/Spark/" class="post-category">
-                                Spark
+                            <a href="../../../../categories/Zookeeper/" class="post-category">
+                                Zookeeper
                             </a>
                         
                     </div>
@@ -343,28 +343,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-23
+                    2021-09-08
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-08-23
+                    2021-09-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    72
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    1 分
                 </div>
                 
 
@@ -375,85 +375,12 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="Spark执行流程"><a href="#Spark执行流程" class="headerlink" title="Spark执行流程"></a>Spark执行流程</h5><ul>
-<li>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</li>
-<li>在申请到了作业执行所需的资源之后，Driver进程就会开始调度和执行我们编写的作业代码了。Driver进程会将我们编写的Spark作业代码分拆为多个stage，每个stage执行一部分代码片段，并为每个stage创建一批task，然后将这些task分配到各个Executor进程中执行。task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。如此循环往复，直到将我们自己编写的代码逻辑全部执行完，并且计算完所有的数据，得到我们想要的结果为止。</li>
+                <h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><ul>
+<li><p>ZooKeeper是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件。（可以基于ZooKeepr实现分布式协调/通知、集群管理、Master选举、分布式锁和分布式队列等功能。）</p>
+</li>
+<li></li>
 </ul>
-<h5 id="Spark-Shuffle过程"><a href="#Spark-Shuffle过程" class="headerlink" title="Spark Shuffle过程"></a>Spark Shuffle过程</h5><ul>
-<li>Spark是根据shuffle类算子来进行stage的划分。如果我们的代码中执行了某个shuffle类算子（比如reduceByKey、join等），那么就会在该算子处，划分出一个stage界限来。可以大致理解为，shuffle算子执行之前的代码会被划分为一个stage，shuffle算子执行以及之后的代码会被划分为下一个stage。因此一个stage刚开始执行的时候，它的每个task可能都会从上一个stage的task所在的节点，去通过网络传输拉取需要自己处理的所有key，然后对拉取到的所有相同的key使用我们自己编写的算子函数执行聚合操作（比如reduceByKey()算子接收的函数）。这个过程就是shuffle。</li>
-</ul>
-<h5 id="Spark-Executor"><a href="#Spark-Executor" class="headerlink" title="Spark Executor"></a>Spark Executor</h5><ul>
-<li>Executor的内存分为三块：第一块是让task执行我们自己编写的代码（20%），第二块让shuffle过程拉取上一个stage的task输出后，进行聚合等操作（20%），第三块让RDD持久化使用（60%）</li>
-<li>task的执行速度是跟每个Executor进程的CPU core数量有直接关系的。一个CPU core同一时间只能执行一个线程。而每个Executor进程上分配到的多个task，都是以每个task一条线程的方式，多线程并发运行的。如果CPU core数量比较充足，而且分配到的task数量比较合理，那么通常来说，可以比较快速和高效地执行完这些task线程。</li>
-</ul>
-<hr>
-<h5 id="Spark调优"><a href="#Spark调优" class="headerlink" title="Spark调优:"></a>Spark调优:</h5><h5 id="开发调优"><a href="#开发调优" class="headerlink" title="开发调优"></a>开发调优</h5><ul>
-<li>避免创建重复的RDD</li>
-<li>尽可能复用同一个RDD</li>
-<li>对于多次使用的RDD进行持久化（.cache()/.persist(StorageLevel.memory_and_disk_ser)）</li>
-<li>尽量避免使用shuffle算子</li>
-<li>使用高性能算子（使用reduceByKey/aggregateByKey替代groupByKey/使用mapPartitions替代普通map/使用foreachPartitions替代foreach/使用filter之后进行coalesce操作/使用repartitionAndSortWithinPartitions替代repartition与sort类操作）</li>
-<li>广播大变量</li>
-</ul>
-<h5 id="资源调优"><a href="#资源调优" class="headerlink" title="资源调优"></a>资源调优</h5><ul>
-<li>num-executors（建议50～100）</li>
-<li>executor-memory(4~8G)</li>
-<li>executor-cores(2~4)</li>
-<li>driver-memory(1G/不设置，使用collect算子将RDD数据全部拉到Driver上执行时需要保证内存比较大)</li>
-<li>spark.default.parallelism每个stage默认task数量（cpu核数的3倍）</li>
-<li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li>
-<li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li>
-</ul>
-<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
-<ul>
-<li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p>
-</li>
-<li><p>过滤少数导致数据倾斜的key，个别对计算不影响的可以通过where或者RDD的filter过滤。</p>
-</li>
-<li><p>提高Shuffle操作的并行度，设置Shuffle算子执行时Shuffle read task 数量reduceByKey(100),设置spark.sql.shuffle.partitions(group by、join…)</p>
-</li>
-</ul>
-<hr>
-<h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><hr>
-<ul>
-<li><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5></li>
-<li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p>
-</li>
-<li><p>独立任务，HDFS READ，HDFS WRITE</p>
-</li>
-</ul>
-<hr>
-<h5 id="RDD特性"><a href="#RDD特性" class="headerlink" title="RDD特性"></a>RDD特性</h5><ul>
-<li><p>一系列依赖关系</p>
-</li>
-<li><p>函数作用在每一个partition或者分片上（计算移动，数据不移动）</p>
-</li>
-<li><p>一系列partition</p>
-</li>
-<li><p>分区器作用在k v格式的RDD上</p>
-</li>
-<li><p>最佳计算位置</p>
-</li>
-</ul>
-<hr>
-<h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><ul>
-<li><p>local</p>
-</li>
-<li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p>
-</li>
-<li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p>
-</li>
-<li><p>Mesos</p>
-</li>
-</ul>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p>
-<hr>
-<h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><ul>
-<li>Stage：spark根据宽依赖将job划分成一个个stage。</li>
-<li>task：一个stage是一个taskset，根据分区划分task。</li>
-</ul>
-<hr>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5>
+
             </div>
             <hr/>
 
@@ -466,8 +393,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="../../../../tags/Spark/">
-                                    <span class="chip bg-color">Spark</span>
+                                <a href="../../../../tags/Zookeeper/">
+                                    <span class="chip bg-color">Zookeeper</span>
                                 </a>
                             
                         </div>
@@ -508,11 +435,12 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="../../../09/08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/">
+                <a href="">
                     <div class="card-image">
                         
                         <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="大数据总结ZooKeeper篇.md">
@@ -527,9 +455,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -542,6 +470,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -560,31 +489,31 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="../../../06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
+                <a href="../../../08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Spark-Sql学习记录">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="大数据总结Spark篇">
                         
-                        <span class="card-title">Spark-Sql学习记录</span>
+                        <span class="card-title">大数据总结Spark篇</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Spark SQL
+                            Spark
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-23
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="../../../../categories/Spark-SQL/" class="post-category">
-                                    Spark SQL
+                            <a href="../../../../categories/Spark/" class="post-category">
+                                    Spark
                                 </a>
                             
                             
@@ -594,8 +523,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/Spark-SQL/">
-                        <span class="chip bg-color">Spark SQL</span>
+                    <a href="../../../../tags/Spark/">
+                        <span class="chip bg-color">Spark</span>
                     </a>
                     
                 </div>
