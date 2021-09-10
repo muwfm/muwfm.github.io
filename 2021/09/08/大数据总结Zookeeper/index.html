@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    72
+                    480
                 </div>
                 
 
@@ -378,8 +378,66 @@
                 <h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><ul>
 <li><p>ZooKeeper是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件。（可以基于ZooKeepr实现分布式协调/通知、集群管理、Master选举、分布式锁和分布式队列等功能。）</p>
 </li>
-<li></li>
+<li><p>ZooKeeper的目标是封装复杂且易出错的关键服务，将简单易用的接口和性能搞笑，功能稳定的系统提供给用户。</p>
+</li>
 </ul>
+<hr>
+<h5 id="ZooKeeper保证了分布式一致性特效"><a href="#ZooKeeper保证了分布式一致性特效" class="headerlink" title="ZooKeeper保证了分布式一致性特效"></a>ZooKeeper保证了分布式一致性特效</h5><ul>
+<li><p>顺序一致性</p>
+</li>
+<li><p>原子性</p>
+</li>
+<li><p>可靠性</p>
+</li>
+<li><p>实时性</p>
+</li>
+</ul>
+<hr>
+<h5 id="服务器角色"><a href="#服务器角色" class="headerlink" title="服务器角色"></a>服务器角色</h5><ul>
+<li><p>Leader</p>
+<ul>
+<li><p>事务请求的唯一调度和处理者，保证集群事务处理的顺序性</p>
+</li>
+<li><p>集群内部各服务的调度者</p>
+</li>
+</ul>
+</li>
+<li><p>Follower</p>
+<ul>
+<li><p>处理客户端的非事务请求，转发事务请求给Leader服务器</p>
+</li>
+<li><p>参与事务请求Proposal的投票</p>
+</li>
+<li><p>参与Leader的选举投票</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h5 id="ZooKeeper是如何保证事务的顺序一致性的"><a href="#ZooKeeper是如何保证事务的顺序一致性的" class="headerlink" title="ZooKeeper是如何保证事务的顺序一致性的"></a>ZooKeeper是如何保证事务的顺序一致性的</h5><ul>
+<li>ZooKeeper采用了全局递增的事务id来标识，所有的proposal（提议）都在被提出的时候加上了zxid。</li>
+</ul>
+<hr>
+<h5 id="Zookeeper有哪几种部署模式？"><a href="#Zookeeper有哪几种部署模式？" class="headerlink" title="Zookeeper有哪几种部署模式？"></a>Zookeeper有哪几种部署模式？</h5><ul>
+<li><p>单机部署</p>
+</li>
+<li><p>集群部署</p>
+</li>
+<li><p>伪集群部署：一台集群启动多个Zookeeper实例运行。</p>
+</li>
+</ul>
+<hr>
+<h5 id="分布式集群中为什么会有Master主节点"><a href="#分布式集群中为什么会有Master主节点" class="headerlink" title="分布式集群中为什么会有Master主节点"></a>分布式集群中为什么会有Master主节点</h5><ul>
+<li>在分布式环境中，有些事务逻辑只需要集群中的某一台机器进行执行，其他的机器可以共享这个结果，这样可以大大减少重复</li>
+</ul>
+<hr>
+<h5 id="zk节点宕机如何处理？"><a href="#zk节点宕机如何处理？" class="headerlink" title="zk节点宕机如何处理？"></a>zk节点宕机如何处理？</h5><ul>
+<li><p>ZooKeeper本身也是集群，推荐配置不少于3个服务器（2n+1原则）。如果是一个Follow宕机，还有两台服务器访问，多副本机制可以保证数据不会丢失；如果是一个Leader宕机，Zookeeper会选举出新的Leader。</p>
+</li>
+<li><p>ZK集群的机制是只要超过半数的节点正常，集群就能正常提供服务。</p>
+</li>
+</ul>
+<hr>
 
             </div>
             <hr/>
