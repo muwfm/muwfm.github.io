@@ -1,708 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Spark-Sql学习记录</title>
-    <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
-</li>
-</ul>
-<hr>
-<h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
-<li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
-</li>
-<li><h4 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h4><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
-</li>
-<li><h4 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h4><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
-</li>
-<li><h4 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h4><p>通过JDBC或ODBC连接</p>
-</li>
-</ul>
-<h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
-<li>是组织成命名列的数据集。</li>
-<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
-<li>支持的语言有Scala，Java，Python和R</li>
-</ol>
-<hr>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
-<h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
-<li>是数据的分布式集合</li>
-<li>其API支持Scala和Java。Python不支持DataSet API</li>
-</ol>
-<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5><ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
-
-val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
-<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
-</ol>
-<h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
-<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><hr>
-<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
-<hr>
-<h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
-<li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
-<li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
-<p>  case class MyData(a:Int,b:String)</p>
-<p>2.生成序列，并创建DataSet</p>
-<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
-<p>3.查看结果</p>
-<p>   ds.show     ds.collect</p>
-</li>
-<li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
-<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
-<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
-<p>3.将DataFrame转为DataSet</p>
-<p>   df.as[Person].show<br>   df.as[Person].collect</p>
-</li>
-<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet</p>
-<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
-<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
-words.show
-words.collect</code></pre><p>  3.执行WordCount程序</p>
-<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
-result.show</code></pre><p>  排序：</p>
-<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
-</ul>
-<hr>
-<h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
-<ul>
-<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
-<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
-<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
-<pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
-<hr>
-</li>
-</ul>
-<h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
-<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
-</li>
-<li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
-</li>
-</ul>
-<h3 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h3><p>首先，搭建好Hive的环境（需要Hadoop）</p>
-<p>配置Spark SQL支持Hive</p>
-<p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
-<p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
-<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><ul>
-<li><h5 id="在内存中缓存数据"><a href="#在内存中缓存数据" class="headerlink" title="在内存中缓存数据"></a>在内存中缓存数据</h5><p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
-</li>
-</ul>
-]]></content>
+<search> 
+  
+  
+    
+    <entry>
+      <title>大数据总结ZooKeeper篇</title>
+      <link href="2021/09/08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/"/>
+      <url>2021/09/08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/</url>
+      
+        <content type="html"><![CDATA[<h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><hr><ul><li><p>ZooKeeper是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件。（可以基于ZooKeepr实现分布式协调/通知、集群管理、Master选举、分布式锁和分布式队列等功能。）</p></li><li><p>ZooKeeper的目标是封装复杂且易出错的关键服务，将简单易用的接口和性能搞笑，功能稳定的系统提供给用户。</p></li></ul><h5 id="ZooKeeper保证了分布式一致性特效"><a href="#ZooKeeper保证了分布式一致性特效" class="headerlink" title="ZooKeeper保证了分布式一致性特效"></a>ZooKeeper保证了分布式一致性特效</h5><hr><ul><li><p>顺序一致性</p></li><li><p>原子性</p></li><li><p>可靠性</p></li><li><p>实时性</p></li></ul><h5 id="服务器角色"><a href="#服务器角色" class="headerlink" title="服务器角色"></a>服务器角色</h5><hr><ul><li><p>Leader</p><ul><li><p>事务请求的唯一调度和处理者，保证集群事务处理的顺序性</p></li><li><p>集群内部各服务的调度者</p></li></ul></li><li><p>Follower</p><ul><li><p>处理客户端的非事务请求，转发事务请求给Leader服务器</p></li><li><p>参与事务请求Proposal的投票</p></li><li><p>参与Leader的选举投票</p></li></ul></li></ul><h5 id="ZooKeeper是如何保证事务的顺序一致性的"><a href="#ZooKeeper是如何保证事务的顺序一致性的" class="headerlink" title="ZooKeeper是如何保证事务的顺序一致性的"></a>ZooKeeper是如何保证事务的顺序一致性的</h5><hr><ul><li>ZooKeeper采用了全局递增的事务id来标识，所有的proposal（提议）都在被提出的时候加上了zxid。</li></ul><h5 id="Zookeeper有哪几种部署模式？"><a href="#Zookeeper有哪几种部署模式？" class="headerlink" title="Zookeeper有哪几种部署模式？"></a>Zookeeper有哪几种部署模式？</h5><hr><ul><li><p>单机部署</p></li><li><p>集群部署</p></li><li><p>伪集群部署：一台集群启动多个Zookeeper实例运行。</p></li></ul><h5 id="分布式集群中为什么会有Master主节点"><a href="#分布式集群中为什么会有Master主节点" class="headerlink" title="分布式集群中为什么会有Master主节点"></a>分布式集群中为什么会有Master主节点</h5><hr><ul><li>在分布式环境中，有些事务逻辑只需要集群中的某一台机器进行执行，其他的机器可以共享这个结果，这样可以大大减少重复</li></ul><h5 id="zk节点宕机如何处理？"><a href="#zk节点宕机如何处理？" class="headerlink" title="zk节点宕机如何处理？"></a>zk节点宕机如何处理？</h5><hr><ul><li><p>ZooKeeper本身也是集群，推荐配置不少于3个服务器（2n+1原则）。如果是一个Follow宕机，还有两台服务器访问，多副本机制可以保证数据不会丢失；如果是一个Leader宕机，Zookeeper会选举出新的Leader。</p></li><li><p>ZK集群的机制是只要超过半数的节点正常，集群就能正常提供服务。</p></li></ul>]]></content>
+      
+      
       <categories>
-        <category>Spark SQL</category>
+          
+          <category> Zookeeper </category>
+          
       </categories>
-      <tags>
-        <tag>Spark SQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hadoop集群的搭建</title>
-    <url>/2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h2 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h2><p>1:安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p>
-<pre><code>yum install ntp ntpupdate
-ntpdate cn.pool.ntp.org</code></pre><p>手动设置时间 </p>
-<pre><code>date -s &quot;2019-07-15 14:42:50&quot;</code></pre><hr>
-<hr>
-<p>2:虚拟机配置</p>
-<p>安装时选择简单服务器版本（不需要桌面）</p>
-<p>2.1:配置网络：</p>
-<pre><code>cd /etc/sysconfig/network-scripts
-ls
-vim ifcfg-eth0</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218182817198.jpg" alt=""><br>将    ONBOOT设置为yes,</p>
-<p>然后输入:wq 保存退出</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194657854.png" alt=""><br>重启网络服务，输入以下命令</p>
-<pre><code>service network restart</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195624674.png" alt=""><br>查询虚拟机IP地址<br>ifconfig</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194759425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<hr>
-<p>3：使用Xshell 远程连接新建的linux系统</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194813845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194829640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>然后接受秘钥，连接成功</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194841690.png" alt=""></p>
-<hr>
-<p>4:给GentOS系统安装jdk并配置环境变量(使用Xsheel和XFtp操作)</p>
-<p>4.1:创建一个soft目录</p>
-<pre><code>cd /usr/local/Í
-ls
-mkdir soft
-ls</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218194856414.png" alt=""></p>
-<p>4.2:使用Xftp上传jdk-8u192-linux-x64.tar.gz和hadoop-2.6.0.tar.gz压缩包到soft目录下<br>先在Xshell中点击下图1方框打开Xftp,然后拖拽需要的文件到linux系统否soft目录下<br>如下图</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819491340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>4.3对jdk-8u192-linux-x64.tar.gz以及hadoop-2.6.0.tar.gz压缩包进行解压（解压缩即是安装）</p>
-<pre><code>tar -zxvf  jdk-8u192-linux-x64.tar.gz
-tar -zxvf  hadoop-2.6.0.tar.gz</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181949327.png" alt=""></p>
-<p>为节省存储空间解压后删除压缩包</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218194952581.png" alt=""></p>
-<p>4.4配置jdk的环境变量<br>配置前可以查看一下（GentOS 默认安装了1.7版本低jdk）</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195003799.png" alt=""></p>
-<p>开始配置（解压的是1.8版本，配置成功后输入java -version测试一下）</p>
-<pre><code>vim /etc/profile
-export JAVA_HOME=/usr/local/soft/jdk......     
-export PATH=.:$JAVA_HOME/bin:$PATH</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819501512.png" alt=""></p>
-<p>保存退出 :wq</p>
-<p>source /etc/ profile  (刷新)<br>echo $JAVA_HOME (此命令配置好环境变量后可以查看jdk版本信息)</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195029307.png" alt=""></p>
-<p>使用Java –version测试配置（发现已经变成1.8版本，配置成功）<br><img src="https://img-blog.csdnimg.cn/20200218195043544.png" alt=""></p>
-<hr>
-<p>5.克隆虚拟机</p>
-<p>*在vmware设置-克隆（虚拟机要关机，jdk要配置好）</p>
-<p>*选择克隆当前状态的虚拟机</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819505624.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>选择创建完整克隆</p>
-<p><img src="https://img-blog.csdnimg.cn/2020021819510776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>将另外两个虚拟机克隆好。</p>
-<p>关机状态下配置mac地址</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195120185.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195135175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>记录下生成的mac地址<br>（后续修改vim /etc/sysconfig /network-scripts/ifcfg-eth0 配置文件时需要）第六大步（配置好另外两台虚拟机，并在XShell上建立连接，具体步骤如下）（亲历：开启node1,node2虚拟机前需要将master虚拟机打开，防止争抢IP）</p>
-<hr>
-<p>6.1 进入/etc/sysconfig/network/ 打开ifconfig-eth0文件 </p>
-<p>6.2修改HWADDR为对应的mac地址（输入自己的，而且对应node1对应<br>node1 node2对应node2）</p>
-<p>6.3删除绑定mac地址文件rm -rf /etc/udev/rules.d/70-persistent-net.rules</p>
-<p>6.4  reboot重启</p>
-<p>6.5获取ip ifconfig</p>
-<p>6.6在xshell建立连接 输入对应ip建立连接</p>
-<hr>
-<p>7设置子节点的IP（以下1,2,3,4,5步骤每个虚拟机都要操作）</p>
-<p>7.1使用命令service network restart 重启网卡</p>
-<p>7.2关闭防火墙，使用命令service iptables stop</p>
-<p>7.3关闭防火墙的自动启动，使用命令chkconfig iptables off</p>
-<p>7.4设置主机名，修改配置文件vi /etc/sysconfig/network</p>
-<p>*修改主机名 vi /etc/sysconfig/network</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195150829.png" alt=""></p>
-<p>7.5设置主机名与ip的映射，修改配置文件vi /etc/hosts</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195209932.png" alt=""></p>
-<p>7.6将修改后的hosts文件从主节点拷贝到node1和node2节点<br>命令：</p>
-<pre><code>scp /etc/hosts node1:/etc/hosts
-scp /etc/hosts node2:/etc/hosts</code></pre><hr>
-<p>8.设置ssh免密码登录<br>  8.1主节点执行命令ssh-keygen -t rsa 产生密钥 一直回车</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195221363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>将密钥拷贝到其他两个子节点，命令如下：</p>
-<pre><code>ssh-copy-id -i node1 
-ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验证命令，在主节点 通过命令： ssh node1<br>第一次需要输入密码，后面可以不需要输入密码登录<br>退出 命令 exit</p>
-<p>8.2实现主节点master本地免密码登录（子节点不需要执行，仅在主节点执行）</p>
-<p>首先进入到/root<br>cd  /root<br>再进入进入到 ./.ssh目录下<br>cd ./.ssh/</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195236351.png" alt=""></p>
-<p>然后将公钥写入本地执行命令</p>
-<pre><code>cat ./id_rsa.pub &gt;&gt; ./authorized_keys</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195251245.png" alt=""></p>
-<hr>
-<p>9.修改hadoop的几个组件的配置文件 进入/usr/local/soft/hadoop-2.6.0/etc/hadoop 目录下(请一定要注意配置文件内容的格式，可以直接复制过去黏贴。不要随意改)</p>
-<p>9.1修改master中hadoop的一个配置文件/usr/local/soft/etc/hadoop/slaves,删除原来的所有内容，修改为如下<br>node1<br>node2</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195302591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>9.2 修改hadoop-env.sh文件<br>加上一句</p>
-<pre><code>export JAVA_HOME=/usr/local/soft/jdk1.8.0_171</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195316167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>9.3修改 core-site.xml<br>将下面的配置参数加入进去修改成对应自己的</p>
-<pre><code>&lt;configuration&gt;
-&lt;property&gt;
-&lt;name&gt;fs.defaultFS&lt;/name&gt;
-&lt;value&gt;hdfs://master:9000&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
-&lt;value&gt;/usr/local/soft/hadoop-2.6.0/tmp&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;fs.trash.interval&lt;/name&gt;
-&lt;value&gt;1440&lt;/value&gt;
-&lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195331926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>9.4修改 hdfs-site.xml 将dfs.replication设置为1</p>
-<pre><code>&lt;configuration&gt;
-&lt;property&gt;
-&lt;name&gt;dfs.replication&lt;/name&gt;
-&lt;value&gt;1&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;dfs.permissions&lt;/name&gt;
-&lt;value&gt;false&lt;/value&gt;
-&lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195345157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>9.5修改文件yarn-site.xml</p>
-<pre><code>&lt;configuration&gt;
-&lt;property&gt;
-&lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
-&lt;value&gt;master&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
-&lt;value&gt;mapreduce_shuffle&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;
-&lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-&lt;name&gt;yarn.log-aggregation.retain-seconds&lt;/name&gt;
-&lt;value&gt;604800&lt;/value&gt;
-&lt;/property&gt;
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181954004.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>9.6修改 mapred-site.xml（将mapred-site.xml.template 复制一份为 mapred-site.xml)（cp <src> <target>     复制&amp;粘贴文件 cp -r <src> <target>     复制&amp;粘贴文件或目录）</p>
-<pre><code>&lt;configuration&gt;
-&lt;property&gt;
-&lt;name&gt;mapreduce.framework.name&lt;/name&gt;
-&lt;value&gt;yarn&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;  
-&lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;  
-&lt;value&gt;master:10020&lt;/value&gt;  
-&lt;/property&gt;  
-&lt;property&gt;  
-&lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;  
-&lt;value&gt;master:19888&lt;/value&gt;  
-&lt;/property&gt; 
-&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195412708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<hr>
-<p>10.将hadoop的安装目录分别拷贝到其他子节点</p>
-<pre><code>scp -r /usr/local/soft/hadoop-2.6.0  node1:/usr/local/soft/
-scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr>
-<p>11.启动hadoop</p>
-<hr>
-<p>12.<br>首先看下主节点hadoop-2.6.0目录下有没有tmp文件夹。<br>如果没有 执行一次格式化命令：</p>
-<pre><code>./bin/hdfs namenode -format</code></pre><p>会生成tmp文件。然后<br>/usr/local/soft/hadoop-2.6.0目录下<br>启动执行</p>
-<pre><code>./sbin/start-all.sh</code></pre><p>启动完成后验证进程<br>主节点进程：namenode/ secondarnamenode/resourcemanager</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195426906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>子节点进程 datanode /nodenodemanager</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195438576.png" alt=""></p>
-<p>验证hdfs：<br>可以登录浏览器地址：192.168.3.128:50070 (自己的IP地址加上50070端口 还有一个8088端口也可以查看)</p>
-<p>看到下面页面证明 hdfs装好了<br>下图是已经创建了一个hdfs上的目录，刚装好的hadoop应该是空的什么都没有</p>
-<p><img src="https://img-blog.csdnimg.cn/20200218195451614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>如果第一次启动失败了，请重新检查配置文件或者哪里步骤少了。<br>再次重启的时候<br>需要手动将每个节点的tmp目录删除<br>/usr/local/soft/hadoop-2.6.0/tmp</p>
-<p>然后执行将namenode格式化<br>在主节点执行命令</p>
-<pre><code>./bin/hdfs namenode -format</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819550584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
-<p>2020/2/18 20:54:23 </p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Zookeeper </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>大数据总结Spark篇</title>
+      <link href="2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/"/>
+      <url>2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h5 id="Spark执行流程"><a href="#Spark执行流程" class="headerlink" title="Spark执行流程"></a>Spark执行流程</h5><hr><ul><li><p>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</p></li><li><p>在申请到了作业执行所需的资源之后，Driver进程就会开始调度和执行我们编写的作业代码了。Driver进程会将我们编写的Spark作业代码分拆为多个stage，每个stage执行一部分代码片段，并为每个stage创建一批task，然后将这些task分配到各个Executor进程中执行。task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地<img src="/Users/muwfm/Library/Application%20Support/marktext/images/2021-09-10-09-27-33-image.png" alt="">的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。如此循环往复，直到将我们自己编写的代码逻辑全部执行完，并且计算完所有的数据，得到我们想要的结果为止。</p></li></ul><h5 id="Spark-Shuffle过程"><a href="#Spark-Shuffle过程" class="headerlink" title="Spark Shuffle过程"></a>Spark Shuffle过程</h5><hr><ul><li>Spark是根据shuffle类算子来进行stage的划分。如果我们的代码中执行了某个shuffle类算子（比如reduceByKey、join等），那么就会在该算子处，划分出一个stage界限来。可以大致理解为，shuffle算子执行之前的代码会被划分为一个stage，shuffle算子执行以及之后的代码会被划分为下一个stage。因此一个stage刚开始执行的时候，它的每个task可能都会从上一个stage的task所在的节点，去通过网络传输拉取需要自己处理的所有key，然后对拉取到的所有相同的key使用我们自己编写的算子函数执行聚合操作（比如reduceByKey()算子接收的函数）。这个过程就是shuffle。</li></ul><h5 id="Spark-Executor"><a href="#Spark-Executor" class="headerlink" title="Spark Executor"></a>Spark Executor</h5><hr><ul><li>Executor的内存分为三块：第一块是让task执行我们自己编写的代码（20%），第二块让shuffle过程拉取上一个stage的task输出后，进行聚合等操作（20%），第三块让RDD持久化使用（60%）</li><li>task的执行速度是跟每个Executor进程的CPU core数量有直接关系的。一个CPU core同一时间只能执行一个线程。而每个Executor进程上分配到的多个task，都是以每个task一条线程的方式，多线程并发运行的。如果CPU core数量比较充足，而且分配到的task数量比较合理，那么通常来说，可以比较快速和高效地执行完这些task线程。</li></ul><h5 id="Spark调优"><a href="#Spark调优" class="headerlink" title="Spark调优:"></a>Spark调优:</h5><hr><h5 id="开发调优"><a href="#开发调优" class="headerlink" title="开发调优"></a>开发调优</h5><ul><li>避免创建重复的RDD</li><li>尽可能复用同一个RDD</li><li>对于多次使用的RDD进行持久化（.cache()/.persist(StorageLevel.memory_and_disk_ser)）</li><li>尽量避免使用shuffle算子</li><li>使用高性能算子（使用reduceByKey/aggregateByKey替代groupByKey/使用mapPartitions替代普通map/使用foreachPartitions替代foreach/使用filter之后进行coalesce操作/使用repartitionAndSortWithinPartitions替代repartition与sort类操作）</li><li>广播大变量</li></ul><h5 id="资源调优"><a href="#资源调优" class="headerlink" title="资源调优"></a>资源调优</h5><ul><li>num-executors（建议50～100）</li><li>executor-memory(4~8G)</li><li>executor-cores(2~4)</li><li>driver-memory(1G/不设置，使用collect算子将RDD数据全部拉到Driver上执行时需要保证内存比较大)</li><li>spark.default.parallelism每个stage默认task数量（cpu核数的3倍）</li><li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li><li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li></ul><h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p><ul><li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p></li><li><p>过滤少数导致数据倾斜的key，个别对计算不影响的可以通过where或者RDD的filter过滤。</p></li><li><p>提高Shuffle操作的并行度，设置Shuffle算子执行时Shuffle read task 数量reduceByKey(100),设置spark.sql.shuffle.partitions(group by、join…)</p></li></ul><h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5><hr><ul><li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p></li><li><p>独立任务，HDFS READ，HDFS WRITE</p></li></ul><h5 id="RDD特性"><a href="#RDD特性" class="headerlink" title="RDD特性"></a>RDD特性</h5><hr><ul><li><p>一系列依赖关系</p></li><li><p>函数作用在每一个partition或者分片上（计算移动，数据不移动）</p></li><li><p>一系列partition</p></li><li><p>分区器作用在k v格式的RDD上</p></li><li><p>最佳计算位置</p></li></ul><h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><hr><ul><li><p>local</p></li><li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p></li><li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p></li><li><p>Mesos</p></li></ul><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p><h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><hr><ul><li><p>Job：根据action算子划分，一个行动算子划分一个Job。</p></li><li><p>Stage：spark根据宽依赖将job划分成一个个stage。</p></li><li><p>task：一个stage是一个taskset，根据分区划分task。</p></li></ul><h5 id="Spark懒加载的意义"><a href="#Spark懒加载的意义" class="headerlink" title="Spark懒加载的意义"></a>Spark懒加载的意义</h5><hr><ul><li>避免了大量的中间计算，避免了大量的中间结果产生即避免了大量的磁盘I/O及网络传输。</li></ul>]]></content>
+      
+      
       <categories>
-        <category>Hadoop</category>
+          
+          <category> Spark </category>
+          
       </categories>
-      <tags>
-        <tag>Hadoop</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<hr>
-<ul>
-<li><h2 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h2></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<hr>
-<ul>
-<li><h2 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h2><table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-<hr>
-<ul>
-<li><h2 id=""><a href="#" class="headerlink" title=""></a></h2></li>
-</ul>
-</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Spark </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Spark-Sql学习记录</title>
+      <link href="2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/"/>
+      <url>2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<h5 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h5><hr><p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p><h5 id="Spark-Sql的特点"><a href="#Spark-Sql的特点" class="headerlink" title="Spark Sql的特点"></a>Spark Sql的特点</h5><hr><ul><li><h6 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h6><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p></li><li><h6 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h6><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p></li><li><h6 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h6><p>Spark SQL可以使用现有的Hive Metastores和UDF</p></li><li><h6 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h6><p>通过JDBC或ODBC连接</p></li></ul><h5 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h5><hr><h6 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h6><ol><li>是组织成命名列的数据集。</li><li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li><li>支持的语言有Scala，Java，Python和R</li></ol><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p><p><em>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</em></p><h6 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h6><ol><li>是数据的分布式集合</li><li>其API支持Scala和Java。Python不支持DataSet API</li></ol><h5 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><hr><h6 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h6><ol><li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li><li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li><li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li></ol><h6 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h6><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p><h6 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h6><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h6 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h6><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h6 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h6><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h5 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h5><hr><h6 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p><h5 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h5><h6 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h6><ul><li><h6 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h6><p>1.定义case class</p><p>  case class MyData(a:Int,b:String)</p><p>2.生成序列，并创建DataSet</p><p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p><p>3.查看结果</p><p>   ds.show     ds.collect</p></li><li><h6 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h6><p>1.定义case class</p><pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p><p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p><p>3.将DataFrame转为DataSet</p><p>   df.as[Person].show<br>   df.as[Person].collect</p></li><li><h6 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h6><p>  1.读取HDFS数据，并创建DataSet</p><pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p><pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)words.showwords.collect</code></pre><p>  3.执行WordCount程序</p><pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).countresult.show</code></pre><p>  排序：</p><pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li></ul><h5 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h5><hr><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p><ul><li><h6 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h6><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p><pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li><li><h6 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h6><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li><li><h6 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h6><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p><pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p><pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p></li></ul><h5 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h5><hr><ul><li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p></li><li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p></li></ul><h5 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h5><hr><p>首先，搭建好Hive的环境（需要Hadoop）</p><p>配置Spark SQL支持Hive</p><p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p><p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p><h5 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h5><hr><ul><li><h5 id="在内存中缓存数据"><a href="#在内存中缓存数据" class="headerlink" title="在内存中缓存数据"></a>在内存中缓存数据</h5><p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p></li></ul>]]></content>
+      
+      
       <categories>
-        <category>Hadoop</category>
+          
+          <category> Spark SQL </category>
+          
       </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Spark篇</title>
-    <url>/2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/</url>
-    <content><![CDATA[<h5 id="Spark执行流程"><a href="#Spark执行流程" class="headerlink" title="Spark执行流程"></a>Spark执行流程</h5><ul>
-<li>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</li>
-<li>在申请到了作业执行所需的资源之后，Driver进程就会开始调度和执行我们编写的作业代码了。Driver进程会将我们编写的Spark作业代码分拆为多个stage，每个stage执行一部分代码片段，并为每个stage创建一批task，然后将这些task分配到各个Executor进程中执行。task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。如此循环往复，直到将我们自己编写的代码逻辑全部执行完，并且计算完所有的数据，得到我们想要的结果为止。</li>
-</ul>
-<h5 id="Spark-Shuffle过程"><a href="#Spark-Shuffle过程" class="headerlink" title="Spark Shuffle过程"></a>Spark Shuffle过程</h5><ul>
-<li>Spark是根据shuffle类算子来进行stage的划分。如果我们的代码中执行了某个shuffle类算子（比如reduceByKey、join等），那么就会在该算子处，划分出一个stage界限来。可以大致理解为，shuffle算子执行之前的代码会被划分为一个stage，shuffle算子执行以及之后的代码会被划分为下一个stage。因此一个stage刚开始执行的时候，它的每个task可能都会从上一个stage的task所在的节点，去通过网络传输拉取需要自己处理的所有key，然后对拉取到的所有相同的key使用我们自己编写的算子函数执行聚合操作（比如reduceByKey()算子接收的函数）。这个过程就是shuffle。</li>
-</ul>
-<h5 id="Spark-Executor"><a href="#Spark-Executor" class="headerlink" title="Spark Executor"></a>Spark Executor</h5><ul>
-<li>Executor的内存分为三块：第一块是让task执行我们自己编写的代码（20%），第二块让shuffle过程拉取上一个stage的task输出后，进行聚合等操作（20%），第三块让RDD持久化使用（60%）</li>
-<li>task的执行速度是跟每个Executor进程的CPU core数量有直接关系的。一个CPU core同一时间只能执行一个线程。而每个Executor进程上分配到的多个task，都是以每个task一条线程的方式，多线程并发运行的。如果CPU core数量比较充足，而且分配到的task数量比较合理，那么通常来说，可以比较快速和高效地执行完这些task线程。</li>
-</ul>
-<hr>
-<h5 id="Spark调优"><a href="#Spark调优" class="headerlink" title="Spark调优:"></a>Spark调优:</h5><h5 id="开发调优"><a href="#开发调优" class="headerlink" title="开发调优"></a>开发调优</h5><ul>
-<li>避免创建重复的RDD</li>
-<li>尽可能复用同一个RDD</li>
-<li>对于多次使用的RDD进行持久化（.cache()/.persist(StorageLevel.memory_and_disk_ser)）</li>
-<li>尽量避免使用shuffle算子</li>
-<li>使用高性能算子（使用reduceByKey/aggregateByKey替代groupByKey/使用mapPartitions替代普通map/使用foreachPartitions替代foreach/使用filter之后进行coalesce操作/使用repartitionAndSortWithinPartitions替代repartition与sort类操作）</li>
-<li>广播大变量</li>
-</ul>
-<h5 id="资源调优"><a href="#资源调优" class="headerlink" title="资源调优"></a>资源调优</h5><ul>
-<li>num-executors（建议50～100）</li>
-<li>executor-memory(4~8G)</li>
-<li>executor-cores(2~4)</li>
-<li>driver-memory(1G/不设置，使用collect算子将RDD数据全部拉到Driver上执行时需要保证内存比较大)</li>
-<li>spark.default.parallelism每个stage默认task数量（cpu核数的3倍）</li>
-<li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li>
-<li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li>
-</ul>
-<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
-<ul>
-<li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p>
-</li>
-<li><p>过滤少数导致数据倾斜的key，个别对计算不影响的可以通过where或者RDD的filter过滤。</p>
-</li>
-<li><p>提高Shuffle操作的并行度，设置Shuffle算子执行时Shuffle read task 数量reduceByKey(100),设置spark.sql.shuffle.partitions(group by、join…)</p>
-</li>
-</ul>
-<hr>
-<h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><hr>
-<ul>
-<li><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5></li>
-<li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p>
-</li>
-<li><p>独立任务，HDFS READ，HDFS WRITE</p>
-</li>
-</ul>
-<hr>
-<h5 id="RDD特性"><a href="#RDD特性" class="headerlink" title="RDD特性"></a>RDD特性</h5><ul>
-<li><p>一系列依赖关系</p>
-</li>
-<li><p>函数作用在每一个partition或者分片上（计算移动，数据不移动）</p>
-</li>
-<li><p>一系列partition</p>
-</li>
-<li><p>分区器作用在k v格式的RDD上</p>
-</li>
-<li><p>最佳计算位置</p>
-</li>
-</ul>
-<hr>
-<h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><ul>
-<li><p>local</p>
-</li>
-<li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p>
-</li>
-<li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p>
-</li>
-<li><p>Mesos</p>
-</li>
-</ul>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p>
-<hr>
-<h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><ul>
-<li>Stage：spark根据宽依赖将job划分成一个个stage。</li>
-<li>task：一个stage是一个taskset，根据分区划分task。</li>
-</ul>
-<hr>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Spark SQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>大数据总结Hadoop篇</title>
+      <link href="2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/"/>
+      <url>2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h5 id="简单的集群搭建过程"><a href="#简单的集群搭建过程" class="headerlink" title="简单的集群搭建过程"></a>简单的集群搭建过程</h5><hr><ul><li><p>JDK安装</p></li><li><p>配置SSH免密登陆</p></li><li><p>配置hadoop核心文件</p></li><li><p>格式化namenode</p></li></ul><h5 id="Hadoop特性"><a href="#Hadoop特性" class="headerlink" title="Hadoop特性"></a>Hadoop特性</h5><hr><ul><li><p>高可靠性：多副本模式</p></li><li><p>高效性：采用分布式存储及分布式处理，能够处理pb级别的数据</p></li><li><p>高可扩展性：可以运行在廉价的机器上，可以扩展至数以千计的计算机节点上</p></li><li><p>高容错性：多副本模式</p></li><li><p>成本低：可部署在廉价的机器上</p></li><li><p>运行在linux平台上：hadoop是用基于java语言开发的，可以很好的运行在linux上</p></li><li><p>支持多种编程语言：提供了多种语言的api</p></li></ul><h5 id="Hadoop工作流程（安全模式）"><a href="#Hadoop工作流程（安全模式）" class="headerlink" title="Hadoop工作流程（安全模式）"></a>Hadoop工作流程（安全模式）</h5><hr><ul><li><p>启动namenode，加载fsimage到内存，根据edits log日志文件执行其中的事务</p></li><li><p>文件系统元数据内存镜像加载完毕，合并fsimage和edits log日志文件，并生成新的fsimage文件和一个空的edits log日志文件。</p></li><li><p>NameNode等待DataNode上传block列表信息，直到副本数满足最小副本条件。（文件系统中99.9%的block块达到最小副本数，默认为1），30秒之后，退出安全模式。</p></li></ul><h5 id="NameNode安全模式"><a href="#NameNode安全模式" class="headerlink" title="NameNode安全模式"></a>NameNode安全模式</h5><hr><ul><li><p>文件系统元数据只读操作</p></li><li><p>不允许对文件修改（写，删除，重命名操作）</p></li></ul><h5 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h5><hr><ul><li><h6 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h6><ul><li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p></li><li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p></li><li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p></li></ul></li><li><h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ul><li><p>打开分布式文件：调用DFS.open()方法</p></li><li><p>从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。</p></li><li><p>链接到DataNode：使用输入流read()方法，从而链接到DataNode。</p></li><li><p>读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。</p></li><li><p>读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。</p></li><li><p>完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p></li></ul></li><li><h6 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h6><ul><li><p>客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方</p></li><li><p>NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。</p></li><li><p>客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。</p></li><li><p>客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。</p></li><li><p>客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。</p></li><li><p>一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！</p></li><li><p>客户端关闭输入流。</p></li></ul></li></ul><h5 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h5><hr><ul><li><p>开启jvm重用。</p></li><li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p></li><li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p></li><li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p><p><font color="red">注意：</font>会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p></li></ul><h5 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h5><hr><h6 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p><ul><li><p>详细流程</p><ul><li>输入文件分片split，每一片都由一个MapTask来处理</li><li>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</li><li>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</li><li>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</li><li>最后，reduce输出。</li></ul></li><li><p>Shuffle优化</p><ul><li><p>Map阶段</p><ul><li>增大环形缓冲区大小，由100M扩大详细流程到200M</li><li>增大环形缓冲区溢写的比例，由80%扩大到90%</li><li>减少对溢写文件的merge次数</li><li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li></ul></li><li><p>Reduce阶段</p><ul><li><p>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</p></li><li><p>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</p></li><li><p>规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。</p></li><li><p>增大reduce端存储数据的内存的大小。</p></li></ul></li><li><p>IO传输阶段</p><ul><li>采用数据压缩的方式，减少网络IO的时间</li></ul></li></ul></li></ul><h5 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h5><hr><h6 id="一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。"><a href="#一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。" class="headerlink" title="一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。"></a>一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p><ul><li><p>Yarn调度器：FIFO、容量调度器、公平调度器</p><ul><li><p>FIFO：支持单队列、先进先出、生产环境不会用</p></li><li><p>容量调度器：支持多队列、保证先进入的任务先执行 针对中小公司 Apache</p></li><li><p>公平调度器：支持多队列、保证每个任务公平享有队列资源 针对大厂 CDH</p></li></ul></li></ul>]]></content>
+      
+      
       <categories>
-        <category>Spark</category>
+          
+          <category> Hadoop </category>
+          
       </categories>
-      <tags>
-        <tag>Spark</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结ZooKeeper篇</title>
-    <url>/2021/09/08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/</url>
-    <content><![CDATA[<h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><ul>
-<li><p>ZooKeeper是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件。（可以基于ZooKeepr实现分布式协调/通知、集群管理、Master选举、分布式锁和分布式队列等功能。）</p>
-</li>
-<li><p>ZooKeeper的目标是封装复杂且易出错的关键服务，将简单易用的接口和性能搞笑，功能稳定的系统提供给用户。</p>
-</li>
-</ul>
-<hr>
-<h5 id="ZooKeeper保证了分布式一致性特效"><a href="#ZooKeeper保证了分布式一致性特效" class="headerlink" title="ZooKeeper保证了分布式一致性特效"></a>ZooKeeper保证了分布式一致性特效</h5><ul>
-<li><p>顺序一致性</p>
-</li>
-<li><p>原子性</p>
-</li>
-<li><p>可靠性</p>
-</li>
-<li><p>实时性</p>
-</li>
-</ul>
-<hr>
-<h5 id="服务器角色"><a href="#服务器角色" class="headerlink" title="服务器角色"></a>服务器角色</h5><ul>
-<li><p>Leader</p>
-<ul>
-<li><p>事务请求的唯一调度和处理者，保证集群事务处理的顺序性</p>
-</li>
-<li><p>集群内部各服务的调度者</p>
-</li>
-</ul>
-</li>
-<li><p>Follower</p>
-<ul>
-<li><p>处理客户端的非事务请求，转发事务请求给Leader服务器</p>
-</li>
-<li><p>参与事务请求Proposal的投票</p>
-</li>
-<li><p>参与Leader的选举投票</p>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h5 id="ZooKeeper是如何保证事务的顺序一致性的"><a href="#ZooKeeper是如何保证事务的顺序一致性的" class="headerlink" title="ZooKeeper是如何保证事务的顺序一致性的"></a>ZooKeeper是如何保证事务的顺序一致性的</h5><ul>
-<li>ZooKeeper采用了全局递增的事务id来标识，所有的proposal（提议）都在被提出的时候加上了zxid。</li>
-</ul>
-<hr>
-<h5 id="Zookeeper有哪几种部署模式？"><a href="#Zookeeper有哪几种部署模式？" class="headerlink" title="Zookeeper有哪几种部署模式？"></a>Zookeeper有哪几种部署模式？</h5><ul>
-<li><p>单机部署</p>
-</li>
-<li><p>集群部署</p>
-</li>
-<li><p>伪集群部署：一台集群启动多个Zookeeper实例运行。</p>
-</li>
-</ul>
-<hr>
-<h5 id="分布式集群中为什么会有Master主节点"><a href="#分布式集群中为什么会有Master主节点" class="headerlink" title="分布式集群中为什么会有Master主节点"></a>分布式集群中为什么会有Master主节点</h5><ul>
-<li>在分布式环境中，有些事务逻辑只需要集群中的某一台机器进行执行，其他的机器可以共享这个结果，这样可以大大减少重复</li>
-</ul>
-<hr>
-<h5 id="zk节点宕机如何处理？"><a href="#zk节点宕机如何处理？" class="headerlink" title="zk节点宕机如何处理？"></a>zk节点宕机如何处理？</h5><ul>
-<li><p>ZooKeeper本身也是集群，推荐配置不少于3个服务器（2n+1原则）。如果是一个Follow宕机，还有两台服务器访问，多副本机制可以保证数据不会丢失；如果是一个Leader宕机，Zookeeper会选举出新的Leader。</p>
-</li>
-<li><p>ZK集群的机制是只要超过半数的节点正常，集群就能正常提供服务。</p>
-</li>
-</ul>
-<hr>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Hadoop </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>大数据总结Linux篇章</title>
+      <link href="2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/"/>
+      <url>2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+      
+        <content type="html"><![CDATA[<h5 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h5><hr><table><thead><tr><th align="left">指令代码</th><th align="left">解释</th></tr></thead><tbody><tr><td align="left">df -h</td><td align="left">查看磁盘存储情况</td></tr><tr><td align="left">top</td><td align="left">查看内存</td></tr><tr><td align="left">netstat -tunlp | grep 端口号</td><td align="left">查看端口占用情况</td></tr><tr><td align="left">uptime</td><td align="left">系统运行时长和平均负载</td></tr><tr><td align="left">ps -aux</td><td align="left">查看进程</td></tr></tbody></table><h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><hr><p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p><ol><li>ps -ef ：是linux里查看所有进程的命令。</li><li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li><li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li><li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li></ol><p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p><h5 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h5><hr><table><thead><tr><th>指令代码</th><th>指令输出</th></tr></thead><tbody><tr><td>echo ‘$do_date’</td><td>$do_date</td></tr><tr><td>echo “$do_date”</td><td>2019-02-10</td></tr><tr><td>echo “‘$do_date’”</td><td>‘2019-02-10’</td></tr><tr><td>echo ‘“$do_date”‘</td><td>“$do_date”</td></tr><tr><td>echo <code>date</code></td><td>2019年 05月 02日 星期四 21:02:08 CST</td></tr></tbody></table>]]></content>
+      
+      
       <categories>
-        <category>Zookeeper</category>
+          
+          <category> Hadoop </category>
+          
       </categories>
-      <tags>
-        <tag>Zookeeper</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
-    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p>
-<h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
-<h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
-<h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
-<h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
-<h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
-<h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
-<h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
-<h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><p>&emsp;格式化json</p>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hadoop集群的搭建</title>
+      <link href="2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/"/>
+      <url>2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
+      
+        <content type="html"><![CDATA[<h2 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h2><p>1:安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p><pre><code>yum install ntp ntpupdatentpdate cn.pool.ntp.org</code></pre><p>手动设置时间 </p><pre><code>date -s &quot;2019-07-15 14:42:50&quot;</code></pre><hr><hr><p>2:虚拟机配置</p><p>安装时选择简单服务器版本（不需要桌面）</p><p>2.1:配置网络：</p><pre><code>cd /etc/sysconfig/network-scriptslsvim ifcfg-eth0</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218182817198.jpg" alt=""><br>将    ONBOOT设置为yes,</p><p>然后输入:wq 保存退出</p><p><img src="https://img-blog.csdnimg.cn/20200218194657854.png" alt=""><br>重启网络服务，输入以下命令</p><pre><code>service network restart</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195624674.png" alt=""><br>查询虚拟机IP地址<br>ifconfig</p><p><img src="https://img-blog.csdnimg.cn/20200218194759425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><hr><p>3：使用Xshell 远程连接新建的linux系统</p><p><img src="https://img-blog.csdnimg.cn/20200218194813845.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p><img src="https://img-blog.csdnimg.cn/20200218194829640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>然后接受秘钥，连接成功</p><p><img src="https://img-blog.csdnimg.cn/20200218194841690.png" alt=""></p><hr><p>4:给GentOS系统安装jdk并配置环境变量(使用Xsheel和XFtp操作)</p><p>4.1:创建一个soft目录</p><pre><code>cd /usr/local/Ílsmkdir softls</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218194856414.png" alt=""></p><p>4.2:使用Xftp上传jdk-8u192-linux-x64.tar.gz和hadoop-2.6.0.tar.gz压缩包到soft目录下<br>先在Xshell中点击下图1方框打开Xftp,然后拖拽需要的文件到linux系统否soft目录下<br>如下图</p><p><img src="https://img-blog.csdnimg.cn/2020021819491340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>4.3对jdk-8u192-linux-x64.tar.gz以及hadoop-2.6.0.tar.gz压缩包进行解压（解压缩即是安装）</p><pre><code>tar -zxvf  jdk-8u192-linux-x64.tar.gztar -zxvf  hadoop-2.6.0.tar.gz</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181949327.png" alt=""></p><p>为节省存储空间解压后删除压缩包</p><p><img src="https://img-blog.csdnimg.cn/20200218194952581.png" alt=""></p><p>4.4配置jdk的环境变量<br>配置前可以查看一下（GentOS 默认安装了1.7版本低jdk）</p><p><img src="https://img-blog.csdnimg.cn/20200218195003799.png" alt=""></p><p>开始配置（解压的是1.8版本，配置成功后输入java -version测试一下）</p><pre><code>vim /etc/profileexport JAVA_HOME=/usr/local/soft/jdk......     export PATH=.:$JAVA_HOME/bin:$PATH</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819501512.png" alt=""></p><p>保存退出 :wq</p><p>source /etc/ profile  (刷新)<br>echo $JAVA_HOME (此命令配置好环境变量后可以查看jdk版本信息)</p><p><img src="https://img-blog.csdnimg.cn/20200218195029307.png" alt=""></p><p>使用Java –version测试配置（发现已经变成1.8版本，配置成功）<br><img src="https://img-blog.csdnimg.cn/20200218195043544.png" alt=""></p><hr><p>5.克隆虚拟机</p><p>*在vmware设置-克隆（虚拟机要关机，jdk要配置好）</p><p>*选择克隆当前状态的虚拟机</p><p><img src="https://img-blog.csdnimg.cn/2020021819505624.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>选择创建完整克隆</p><p><img src="https://img-blog.csdnimg.cn/2020021819510776.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>将另外两个虚拟机克隆好。</p><p>关机状态下配置mac地址</p><p><img src="https://img-blog.csdnimg.cn/20200218195120185.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p><img src="https://img-blog.csdnimg.cn/20200218195135175.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>记录下生成的mac地址<br>（后续修改vim /etc/sysconfig /network-scripts/ifcfg-eth0 配置文件时需要）第六大步（配置好另外两台虚拟机，并在XShell上建立连接，具体步骤如下）（亲历：开启node1,node2虚拟机前需要将master虚拟机打开，防止争抢IP）</p><hr><p>6.1 进入/etc/sysconfig/network/ 打开ifconfig-eth0文件 </p><p>6.2修改HWADDR为对应的mac地址（输入自己的，而且对应node1对应<br>node1 node2对应node2）</p><p>6.3删除绑定mac地址文件rm -rf /etc/udev/rules.d/70-persistent-net.rules</p><p>6.4  reboot重启</p><p>6.5获取ip ifconfig</p><p>6.6在xshell建立连接 输入对应ip建立连接</p><hr><p>7设置子节点的IP（以下1,2,3,4,5步骤每个虚拟机都要操作）</p><p>7.1使用命令service network restart 重启网卡</p><p>7.2关闭防火墙，使用命令service iptables stop</p><p>7.3关闭防火墙的自动启动，使用命令chkconfig iptables off</p><p>7.4设置主机名，修改配置文件vi /etc/sysconfig/network</p><p>*修改主机名 vi /etc/sysconfig/network</p><p><img src="https://img-blog.csdnimg.cn/20200218195150829.png" alt=""></p><p>7.5设置主机名与ip的映射，修改配置文件vi /etc/hosts</p><p><img src="https://img-blog.csdnimg.cn/20200218195209932.png" alt=""></p><p>7.6将修改后的hosts文件从主节点拷贝到node1和node2节点<br>命令：</p><pre><code>scp /etc/hosts node1:/etc/hostsscp /etc/hosts node2:/etc/hosts</code></pre><hr><p>8.设置ssh免密码登录<br>  8.1主节点执行命令ssh-keygen -t rsa 产生密钥 一直回车</p><p><img src="https://img-blog.csdnimg.cn/20200218195221363.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>将密钥拷贝到其他两个子节点，命令如下：</p><pre><code>ssh-copy-id -i node1 ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验证命令，在主节点 通过命令： ssh node1<br>第一次需要输入密码，后面可以不需要输入密码登录<br>退出 命令 exit</p><p>8.2实现主节点master本地免密码登录（子节点不需要执行，仅在主节点执行）</p><p>首先进入到/root<br>cd  /root<br>再进入进入到 ./.ssh目录下<br>cd ./.ssh/</p><p><img src="https://img-blog.csdnimg.cn/20200218195236351.png" alt=""></p><p>然后将公钥写入本地执行命令</p><pre><code>cat ./id_rsa.pub &gt;&gt; ./authorized_keys</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195251245.png" alt=""></p><hr><p>9.修改hadoop的几个组件的配置文件 进入/usr/local/soft/hadoop-2.6.0/etc/hadoop 目录下(请一定要注意配置文件内容的格式，可以直接复制过去黏贴。不要随意改)</p><p>9.1修改master中hadoop的一个配置文件/usr/local/soft/etc/hadoop/slaves,删除原来的所有内容，修改为如下<br>node1<br>node2</p><p><img src="https://img-blog.csdnimg.cn/20200218195302591.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>9.2 修改hadoop-env.sh文件<br>加上一句</p><pre><code>export JAVA_HOME=/usr/local/soft/jdk1.8.0_171</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195316167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>9.3修改 core-site.xml<br>将下面的配置参数加入进去修改成对应自己的</p><pre><code>&lt;configuration&gt;&lt;property&gt;&lt;name&gt;fs.defaultFS&lt;/name&gt;&lt;value&gt;hdfs://master:9000&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;&lt;value&gt;/usr/local/soft/hadoop-2.6.0/tmp&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;fs.trash.interval&lt;/name&gt;&lt;value&gt;1440&lt;/value&gt;&lt;/property&gt;&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195331926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>9.4修改 hdfs-site.xml 将dfs.replication设置为1</p><pre><code>&lt;configuration&gt;&lt;property&gt;&lt;name&gt;dfs.replication&lt;/name&gt;&lt;value&gt;1&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;dfs.permissions&lt;/name&gt;&lt;value&gt;false&lt;/value&gt;&lt;/property&gt;&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195345157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>9.5修改文件yarn-site.xml</p><pre><code>&lt;configuration&gt;&lt;property&gt;&lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;&lt;value&gt;master&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;&lt;value&gt;mapreduce_shuffle&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;&lt;value&gt;true&lt;/value&gt;&lt;/property&gt;&lt;property&gt;&lt;name&gt;yarn.log-aggregation.retain-seconds&lt;/name&gt;&lt;value&gt;604800&lt;/value&gt;&lt;/property&gt;&lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/202002181954004.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>9.6修改 mapred-site.xml（将mapred-site.xml.template 复制一份为 mapred-site.xml)（cp <src> <target>     复制&amp;粘贴文件 cp -r <src> <target>     复制&amp;粘贴文件或目录）</p><pre><code>&lt;configuration&gt;&lt;property&gt;&lt;name&gt;mapreduce.framework.name&lt;/name&gt;&lt;value&gt;yarn&lt;/value&gt;&lt;/property&gt;&lt;property&gt;  &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;  &lt;value&gt;master:10020&lt;/value&gt;  &lt;/property&gt;  &lt;property&gt;  &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;  &lt;value&gt;master:19888&lt;/value&gt;  &lt;/property&gt; &lt;/configuration&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195412708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><hr><p>10.将hadoop的安装目录分别拷贝到其他子节点</p><pre><code>scp -r /usr/local/soft/hadoop-2.6.0  node1:/usr/local/soft/scp -r /usr/local/soft/hadoop-2.6.0  node2:/usr/local/soft/</code></pre><hr><p>11.启动hadoop</p><hr><p>12.<br>首先看下主节点hadoop-2.6.0目录下有没有tmp文件夹。<br>如果没有 执行一次格式化命令：</p><pre><code>./bin/hdfs namenode -format</code></pre><p>会生成tmp文件。然后<br>/usr/local/soft/hadoop-2.6.0目录下<br>启动执行</p><pre><code>./sbin/start-all.sh</code></pre><p>启动完成后验证进程<br>主节点进程：namenode/ secondarnamenode/resourcemanager</p><p><img src="https://img-blog.csdnimg.cn/20200218195426906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>子节点进程 datanode /nodenodemanager</p><p><img src="https://img-blog.csdnimg.cn/20200218195438576.png" alt=""></p><p>验证hdfs：<br>可以登录浏览器地址：192.168.3.128:50070 (自己的IP地址加上50070端口 还有一个8088端口也可以查看)</p><p>看到下面页面证明 hdfs装好了<br>下图是已经创建了一个hdfs上的目录，刚装好的hadoop应该是空的什么都没有</p><p><img src="https://img-blog.csdnimg.cn/20200218195451614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>如果第一次启动失败了，请重新检查配置文件或者哪里步骤少了。<br>再次重启的时候<br>需要手动将每个节点的tmp目录删除<br>/usr/local/soft/hadoop-2.6.0/tmp</p><p>然后执行将namenode格式化<br>在主节点执行命令</p><pre><code>./bin/hdfs namenode -format</code></pre><p><img src="https://img-blog.csdnimg.cn/2020021819550584.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p><p>2020/2/18 20:54:23 </p>]]></content>
+      
+      
       <categories>
-        <category>谷歌</category>
+          
+          <category> Hadoop </category>
+          
       </categories>
-      <tags>
-        <tag>chrome</tag>
-        <tag>makedown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据总结Hadoop篇</title>
-    <url>/2021/06/01/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93hadoop%E7%AF%87/</url>
-    <content><![CDATA[<h5 id="简单的集群搭建过程"><a href="#简单的集群搭建过程" class="headerlink" title="简单的集群搭建过程"></a>简单的集群搭建过程</h5><ul>
-<li><p>JDK安装</p>
-</li>
-<li><p>配置SSH免密登陆</p>
-</li>
-<li><p>配置hadoop核心文件</p>
-</li>
-<li><p>格式化namenode</p>
-</li>
-</ul>
-<hr>
-<h5 id="Hadoop工作流程（安全模式）"><a href="#Hadoop工作流程（安全模式）" class="headerlink" title="Hadoop工作流程（安全模式）"></a>Hadoop工作流程（安全模式）</h5><ul>
-<li><p>启动namenode，加载fsimage到内存，根据edits log日志文件执行其中的事务</p>
-</li>
-<li><p>文件系统元数据内存镜像加载完毕，合并fsimage和edits log日志文件，并生成新的fsimage文件和一个空的edits log日志文件。</p>
-</li>
-<li><p>NameNode等待DataNode上传block列表信息，直到副本数满足最小副本条件。（文件系统中99.9%的block块达到最小副本数，默认为1），30秒之后，退出安全模式。</p>
-</li>
-</ul>
-<hr>
-<h5 id="NameNode安全模式"><a href="#NameNode安全模式" class="headerlink" title="NameNode安全模式"></a>NameNode安全模式</h5><ul>
-<li><p>文件系统元数据只读操作</p>
-</li>
-<li><p>不允许对文件修改（写，删除，重命名操作）</p>
-</li>
-</ul>
-<hr>
-<h5 id="HDFS读写流程"><a href="#HDFS读写流程" class="headerlink" title="HDFS读写流程"></a>HDFS读写流程</h5><ul>
-<li><h6 id="节点介绍"><a href="#节点介绍" class="headerlink" title="节点介绍"></a>节点介绍</h6><ul>
-<li><p>NameNode管理文件系统的命名空间，记录每个文件中各个块所在的数据节点信息。维护文件系统树内所有的文件和目录，以命名空间镜像文件fsimage和编辑日志文件edits保存在本地磁盘。</p>
-</li>
-<li><p>datanode是文件系统的工作节点，根据需要存储和检索数据块，并定期向namenode发送它们所存储的块的列表。</p>
-</li>
-<li><p>SecondaryNameNode定期通过编辑日志edits合并命名空间镜像文件fsimage。</p>
-</li>
-</ul>
-</li>
-<li><h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ul>
-<li><p>打开分布式文件：调用DFS.open()方法</p>
-</li>
-<li><p>从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。</p>
-</li>
-<li><p>链接到DataNode：使用输入流read()方法，从而链接到DataNode。</p>
-</li>
-<li><p>读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。</p>
-</li>
-<li><p>读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。</p>
-</li>
-<li><p>完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
-</li>
-</ul>
-</li>
-<li><h6 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h6><ul>
-<li><p>客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方</p>
-</li>
-<li><p>NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。</p>
-</li>
-<li><p>客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。</p>
-</li>
-<li><p>客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。</p>
-</li>
-<li><p>客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。</p>
-</li>
-<li><p>一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！</p>
-</li>
-<li><p>客户端关闭输入流。</p>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h5 id="HDFS小文件处理"><a href="#HDFS小文件处理" class="headerlink" title="HDFS小文件处理"></a>HDFS小文件处理</h5><ul>
-<li><p>开启jvm重用。</p>
-</li>
-<li><p>JVM重用技术不是指同一个Job的两个或两个以上的task可以同时运行在同一个JVM上，而是说这些task按顺序执行。</p>
-</li>
-<li><p>开启后同一个job的顺序执行的task可以共享一个JVM，第二轮的map可以重用前一轮的JVM。</p>
-</li>
-<li><p>为一个task启动一个新的JVM将耗时一秒，对于时间很短的task，会频繁启停JVM产生开销。</p>
-<p><font color="red">注意：</font>会一直占用使用到的task插槽，以便重用，直到任务结束才能释放，如果某个”不平衡的”job中有几个reduce task执行的时间要比其它reduce task消耗的时间多的多的话，那么保留的插槽就会一直空闲着却无法被其它的job使用，直到所有的task都结束才会释放。</p>
-</li>
-</ul>
-<hr>
-<h5 id="MapReduce过程"><a href="#MapReduce过程" class="headerlink" title="MapReduce过程"></a>MapReduce过程</h5><h6 id="输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段"><a href="#输入分片—-gt-map阶段—-gt-combiner阶段-可选-—-gt-shuffle阶段—-gt-reduce阶段" class="headerlink" title="输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段"></a>输入分片—&gt;map阶段—&gt;combiner阶段(可选)—&gt;shuffle阶段—&gt;reduce阶段</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698464176.png" alt=""><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622698953373.png" alt=""></p>
-<ul>
-<li><p>详细流程</p>
-<ul>
-<li>输入文件分片split，每一片都由一个MapTask来处理</li>
-<li>Map输出的中间结果会先放到环形内存缓冲区中，缓冲区刷写到磁盘（如果一个map输出内容没有超过限制，最终也会发生这个写磁盘的操作）</li>
-<li>从缓冲区写到磁盘的时候，会进行分区并排序（分区指的是某个key应该进入到哪个分区，同一分区中的key会进行排序，如果定义了Combiner的话，也会进行combine操作）</li>
-<li>在开始reduce之前，先要从分区中抓取数据，相同分区的数据会进入同一个reduce，这一步会从所有的map输出中抓取同一分区的数据，在抓取的过程中伴随着排序及合并的操作。</li>
-<li>最后，reduce输出。</li>
-</ul>
-</li>
-<li><p>Shuffle优化</p>
-<ul>
-<li><p>Map阶段</p>
-<ul>
-<li>增大环形缓冲区大小，由100M扩大详细流程到200M</li>
-<li>增大环形缓冲区溢写的比例，由80%扩大到90%</li>
-<li>减少对溢写文件的merge次数</li>
-<li>不影响业务的前提下，采用Combiner提前合并，减少I/O</li>
-</ul>
-</li>
-<li><p>Reduce阶段</p>
-<ul>
-<li><p>合理设置Map和Reduce数量，太少会导致Task等待，太多会导致Map，Reduce任务间竞争资源，造成处理超时等错误。</p>
-</li>
-<li><p>设置Map、Reduce共存，在map运行到一定程度时，reduce也开始运行，减少reduce的等待时间。</p>
-</li>
-<li><p>规避使用reduce，因为reduce在用于连接数据集的时候会产生大量的网络消耗。</p>
-</li>
-<li><p>增大reduce端存储数据的内存的大小。</p>
-</li>
-</ul>
-</li>
-<li><p>IO传输阶段</p>
-<ul>
-<li>采用数据压缩的方式，减少网络IO的时间</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h5 id="Yarn工作机制"><a href="#Yarn工作机制" class="headerlink" title="Yarn工作机制"></a>Yarn工作机制</h5><h6 id="一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。"><a href="#一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。" class="headerlink" title="一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。"></a>一个资源调度平台（插槽），负责为运算程序提供服务器资源，其上可运行各类分布式运算程序。</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1622704195849.png" alt=""></p>
-<ul>
-<li><p>Yarn调度器：FIFO、容量调度器、公平调度器</p>
-<ul>
-<li><p>FIFO：支持单队列、先进先出、生产环境不会用</p>
-</li>
-<li><p>容量调度器：支持多队列、保证先进入的任务先执行 针对中小公司 Apache</p>
-</li>
-<li><p>公平调度器：支持多队列、保证每个任务公平享有队列资源 针对大厂 CDH</p>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
+      
+      
+        <tags>
+            
+            <tag> Hadoop </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
+      <link href="2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/"/>
+      <url>2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
+      
+        <content type="html"><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p><h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><hr><p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p><h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><hr><p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p><h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><hr><p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p><h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><hr><p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p><h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><hr><p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p><h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><hr><p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p><h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><hr><p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p><h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><hr><p>&emsp;格式化json</p>]]></content>
+      
+      
       <categories>
-        <category>Hadoop</category>
+          
+          <category> 谷歌 </category>
+          
       </categories>
-      <tags>
-        <tag>Hadoop</tag>
-      </tags>
-  </entry>
+      
+      
+        <tags>
+            
+            <tag> chrome </tag>
+            
+            <tag> makedown </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
 </search>

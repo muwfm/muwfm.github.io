@@ -364,7 +364,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    5 分
                 </div>
                 
 
@@ -375,63 +375,60 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
+                <h5 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h5><hr>
+<p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
+<h5 id="Spark-Sql的特点"><a href="#Spark-Sql的特点" class="headerlink" title="Spark Sql的特点"></a>Spark Sql的特点</h5><hr>
 <ul>
-<li><h2 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h2><p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
+<li><h6 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h6><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
+</li>
+<li><h6 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h6><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
+</li>
+<li><h6 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h6><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
+</li>
+<li><h6 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h6><p>通过JDBC或ODBC连接</p>
 </li>
 </ul>
-<hr>
-<h2 id="Spark-Sql的特点："><a href="#Spark-Sql的特点：" class="headerlink" title="Spark Sql的特点："></a>Spark Sql的特点：</h2><ul>
-<li><h4 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h4><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
-</li>
-<li><h4 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h4><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
-</li>
-<li><h4 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h4><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
-</li>
-<li><h4 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h4><p>通过JDBC或ODBC连接</p>
-</li>
-</ul>
-<h2 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h2><h3 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h3><ol>
+<h5 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h5><hr>
+<h6 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h6><ol>
 <li>是组织成命名列的数据集。</li>
 <li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
 <li>支持的语言有Scala，Java，Python和R</li>
 </ol>
-<hr>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
-<h6 id="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"><a href="#从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。" class="headerlink" title="从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。"></a>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</h6><h3 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h3><ol>
+<p><em>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</em></p>
+<h6 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h6><ol>
 <li>是数据的分布式集合</li>
 <li>其API支持Scala和Java。Python不支持DataSet API</li>
 </ol>
-<h4 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h4><h5 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h5><ol>
+<h5 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><hr>
+<h6 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h6><ol>
 <li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
 <li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
 
 val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
 <li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
 </ol>
-<h5 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h5><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
-<h5 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h5><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h5 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h5><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h5 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><hr>
-<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><h5 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h5><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<h6 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h6><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
+<h6 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h6><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h6 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h6><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h6 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h6><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h5 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h5><hr>
+<h6 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
 <p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
-<hr>
-<h4 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h4><ul>
-<li><h5 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h5></li>
-<li><h5 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h5><p>1.定义case class</p>
+<h5 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h5><h6 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h6><ul>
+<li><h6 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h6><p>1.定义case class</p>
 <p>  case class MyData(a:Int,b:String)</p>
 <p>2.生成序列，并创建DataSet</p>
 <p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
 <p>3.查看结果</p>
 <p>   ds.show     ds.collect</p>
 </li>
-<li><h5 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h5><p>1.定义case class</p>
+<li><h6 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h6><p>1.定义case class</p>
 <pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
 <p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
 <p>3.将DataFrame转为DataSet</p>
 <p>   df.as[Person].show<br>   df.as[Person].collect</p>
 </li>
-<li><h5 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h5><p>  1.读取HDFS数据，并创建DataSet</p>
+<li><h6 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h6><p>  1.读取HDFS数据，并创建DataSet</p>
 <pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
 <pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
 words.show
@@ -440,29 +437,31 @@ words.collect</code></pre><p>  3.执行WordCount程序</p>
 result.show</code></pre><p>  排序：</p>
 <pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
 </ul>
-<hr>
-<h4 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h4><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
+<h5 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h5><hr>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
 <ul>
-<li><h5 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h5><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
+<li><h6 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h6><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
 <pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
-<li><h5 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h5><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
-<li><h5 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h5><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
+<li><h6 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h6><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
+<li><h6 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h6><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
 <pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
 <pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
-<hr>
 </li>
 </ul>
-<h3 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h3><ul>
+<h5 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h5><hr>
+<ul>
 <li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
 </li>
 <li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
 </li>
 </ul>
-<h3 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h3><p>首先，搭建好Hive的环境（需要Hadoop）</p>
+<h5 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h5><hr>
+<p>首先，搭建好Hive的环境（需要Hadoop）</p>
 <p>配置Spark SQL支持Hive</p>
 <p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
 <p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
-<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><ul>
+<h5 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h5><hr>
+<ul>
 <li><h5 id="在内存中缓存数据"><a href="#在内存中缓存数据" class="headerlink" title="在内存中缓存数据"></a>在内存中缓存数据</h5><p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
 </li>
 </ul>
