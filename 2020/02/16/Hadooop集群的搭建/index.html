@@ -375,25 +375,22 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h5><ul>
-<li>安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</li>
-</ul>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">yum install<span class="hljs-built_in"> ntp </span>ntpupdate<br>ntpdate cn.pool.ntp.org<br></code></pre></td></tr></table></figure>
-
+                <h5 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h5><hr>
 <ul>
-<li>手动设置时间</li>
-</ul>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">date</span> -s <span class="hljs-string">"2019-07-15 14:42:50"</span><br></code></pre></td></tr></table></figure>
-
-<hr>
-<ul>
-<li>虚拟机配置</li>
+<li><p>安装VM，在VM中安装三台虚拟机，安装linux系统<br>先安装一台虚拟机，然后克隆其他两台。（三台虚拟机时间相差不能超过一分钟）<br>同步网络时间命令</p>
+<pre><code>yum install ntp ntpupdate
+ntpdate cn.pool.ntp.org  </code></pre></li>
+<li><p>手动设置时间</p>
+<pre><code>date -s &quot;2019-07-15 14:42:50&quot;</code></pre></li>
+<li><p>虚拟机配置</p>
+</li>
 </ul>
 <p>安装时选择简单服务器版本（不需要桌面）</p>
 <ul>
 <li><p>配置网络：</p>
-<p>  cd /etc/sysconfig/network-scripts<br>  ls<br>  vim ifcfg-eth0</p>
-</li>
+<pre><code>cd /etc/sysconfig/network-scripts
+ls
+vim ifcfg-eth0</code></pre></li>
 </ul>
 <p><img src="https://img-blog.csdnimg.cn/20200218182817198.jpg" alt=""><br>将ONBOOT设置为yes,</p>
 <p>然后输入:wq 保存退出</p>
@@ -528,7 +525,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 <pre><code>export JAVA_HOME=/usr/local/soft/jdk1.8.0_171</code></pre><p><img src="https://img-blog.csdnimg.cn/20200218195316167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <ul>
 <li><p>修改 core-site.xml<br>将下面的配置参数加入进去修改成对应自己的</p>
-  <configuration>
+<configuration>
   <property>
   <name>fs.defaultFS</name>
   <value>hdfs://master:9000</value>
@@ -548,7 +545,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 <p><img src="https://img-blog.csdnimg.cn/20200218195331926.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <ul>
 <li><p>修改 hdfs-site.xml 将dfs.replication设置为1</p>
-  <configuration>
+<configuration>
   <property>
   <name>dfs.replication</name>
   <value>1</value>
@@ -564,7 +561,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 <p><img src="https://img-blog.csdnimg.cn/20200218195345157.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <ul>
 <li><p>修改文件yarn-site.xml</p>
-  <configuration>
+<configuration>
   <property>
   <name>yarn.resourcemanager.hostname</name>
   <value>master</value>
@@ -588,7 +585,7 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
 <p><img src="https://img-blog.csdnimg.cn/202002181954004.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDUxMjY2MA==,size_16,color_FFFFFF,t_70" alt=""></p>
 <ul>
 <li><p>修改 mapred-site.xml（将mapred-site.xml.template 复制一份为 mapred-site.xml)（cp <src> <target>     复制&amp;粘贴文件 cp -r <src> <target>     复制&amp;粘贴文件或目录）</p>
-  <configuration>
+<configuration>
   <property>
   <name>mapreduce.framework.name</name>
   <value>yarn</value>
