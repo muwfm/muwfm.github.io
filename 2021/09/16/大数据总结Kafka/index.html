@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="大数据总结ZooKeeper篇, 小夕のblog">
-    <meta name="description" content="Zookeeper">
+    <meta name="keywords" content="大数据总结Kafka, 小夕のblog">
+    <meta name="description" content="Kafka">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>大数据总结ZooKeeper篇 | 小夕のblog</title>
+    <title>大数据总结Kafka | 小夕のblog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -196,12 +196,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">大数据总结ZooKeeper篇</h1>
+                    <h1 class="description center-align post-title">大数据总结Kafka</h1>
                 </div>
             </div>
         </div>
@@ -318,8 +318,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="../../../../tags/Zookeeper/">
-                                <span class="chip bg-color">Zookeeper</span>
+                            <a href="../../../../tags/Kafka/">
+                                <span class="chip bg-color">Kafka</span>
                             </a>
                         
                     </div>
@@ -330,8 +330,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="../../../../categories/Zookeeper/" class="post-category">
-                                Zookeeper
+                            <a href="../../../../categories/Kafka/" class="post-category">
+                                Kafka
                             </a>
                         
                     </div>
@@ -343,21 +343,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-08
+                    2021-09-16
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-09-08
+                    2021-09-16
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    480
+                    329
                 </div>
                 
 
@@ -375,67 +375,31 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><hr>
+                <h5 id="Kafka如何保证生产者及消费者不丢失数据"><a href="#Kafka如何保证生产者及消费者不丢失数据" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据"></a>Kafka如何保证生产者及消费者不丢失数据</h5><ul>
+<li><p>生产者</p>
 <ul>
-<li><p>ZooKeeper是一个开源的分布式协调服务。它是一个为分布式应用提供一致性服务的软件。（可以基于ZooKeepr实现分布式协调/通知、集群管理、Master选举、分布式锁和分布式队列等功能。）</p>
+<li><p>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。</p>
 </li>
-<li><p>ZooKeeper的目标是封装复杂且易出错的关键服务，将简单易用的接口和性能高效，功能稳定的系统提供给用户。</p>
+<li><p>如果是0，不等待Kafka消息确认，认为成功。</p>
 </li>
-</ul>
-<h5 id="ZooKeeper保证了分布式一致性特效"><a href="#ZooKeeper保证了分布式一致性特效" class="headerlink" title="ZooKeeper保证了分布式一致性特效"></a>ZooKeeper保证了分布式一致性特效</h5><hr>
-<ul>
-<li><p>顺序一致性</p>
+<li><p>如果是1，发送过去，等待leader副本确认消息，认为成功首领肯定收到了消息，写入了分区文件（不一定落盘之后）。</p>
 </li>
-<li><p>原子性</p>
-</li>
-<li><p>可靠性</p>
-</li>
-<li><p>实时性</p>
-</li>
-</ul>
-<h5 id="服务器角色"><a href="#服务器角色" class="headerlink" title="服务器角色"></a>服务器角色</h5><hr>
-<ul>
-<li><p>Leader</p>
-<ul>
-<li><p>事务请求的唯一调度和处理者，保证集群事务处理的顺序性</p>
-</li>
-<li><p>集群内部各服务的调度者</p>
+<li><p>如果是all，不会产生数据丢失，消息发送过去，消息写入所有同步副本后，认为成功，并且会不断尝试直至成功。（可靠但是牺牲效率，可以通过增大批和异步模式，提高效率）</p>
 </li>
 </ul>
 </li>
-<li><p>Follower</p>
+<li><p>消费者</p>
 <ul>
-<li><p>处理客户端的非事务请求，转发事务请求给Leader服务器</p>
-</li>
-<li><p>参与事务请求Proposal的投票</p>
-</li>
-<li><p>参与Leader的选举投票</p>
-</li>
+<li>通过offset commit来保证数据不会丢失，Kafka每次记录自己消费的offset数值，下次继续消费的时候，从上次记录的offset位置开始消费。</li>
+<li>关闭自动更新offset，等待数据被处理后手动更新offset。</li>
+<li>在消费前先验证拿取的数据是否是接着上回消费的数据。</li>
 </ul>
 </li>
-</ul>
-<h5 id="ZooKeeper是如何保证事务的顺序一致性的"><a href="#ZooKeeper是如何保证事务的顺序一致性的" class="headerlink" title="ZooKeeper是如何保证事务的顺序一致性的"></a>ZooKeeper是如何保证事务的顺序一致性的</h5><hr>
+<li><p>*Broker端</p>
 <ul>
-<li>ZooKeeper采用了全局递增的事务id来标识，所有的proposal（提议）都在被提出的时候加上了zxid。</li>
+<li>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。</li>
+<li>设置ack= all，等待数据写入所有同步副本才算成功。</li>
 </ul>
-<h5 id="Zookeeper有哪几种部署模式？"><a href="#Zookeeper有哪几种部署模式？" class="headerlink" title="Zookeeper有哪几种部署模式？"></a>Zookeeper有哪几种部署模式？</h5><hr>
-<ul>
-<li><p>单机部署</p>
-</li>
-<li><p>集群部署</p>
-</li>
-<li><p>伪集群部署：一台集群启动多个Zookeeper实例运行。</p>
-</li>
-</ul>
-<h5 id="分布式集群中为什么会有Master主节点"><a href="#分布式集群中为什么会有Master主节点" class="headerlink" title="分布式集群中为什么会有Master主节点"></a>分布式集群中为什么会有Master主节点</h5><hr>
-<ul>
-<li>在分布式环境中，有些事务逻辑只需要集群中的某一台机器进行执行，其他的机器可以共享这个结果，这样可以大大减少重复</li>
-</ul>
-<h5 id="zk节点宕机如何处理？"><a href="#zk节点宕机如何处理？" class="headerlink" title="zk节点宕机如何处理？"></a>zk节点宕机如何处理？</h5><hr>
-<ul>
-<li><p>ZooKeeper本身也是集群，推荐配置不少于3个服务器（2n+1原则）。如果是一个Follow宕机，还有两台服务器访问，多副本机制可以保证数据不会丢失；如果是一个Leader宕机，Zookeeper会选举出新的Leader。</p>
-</li>
-<li><p>ZK集群的机制是只要超过半数的节点正常，集群就能正常提供服务。</p>
 </li>
 </ul>
 
@@ -451,8 +415,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="../../../../tags/Zookeeper/">
-                                    <span class="chip bg-color">Zookeeper</span>
+                                <a href="../../../../tags/Kafka/">
+                                    <span class="chip bg-color">Kafka</span>
                                 </a>
                             
                         </div>
@@ -493,11 +457,12 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="../../16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/">
+                <a href="">
                     <div class="card-image">
                         
                         
@@ -513,9 +478,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-16
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-16
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -528,6 +493,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -546,31 +512,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="../../../08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/">
+                <a href="../../08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/">
                     <div class="card-image">
                         
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="大数据总结ZooKeeper篇">
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="大数据总结Spark篇">
-                        
-                        <span class="card-title">大数据总结Spark篇</span>
+                        <span class="card-title">大数据总结ZooKeeper篇</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Spark
+                            Zookeeper
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-23
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-08
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="../../../../categories/Spark/" class="post-category">
-                                    Spark
+                            <a href="../../../../categories/Zookeeper/" class="post-category">
+                                    Zookeeper
                                 </a>
                             
                             
@@ -580,8 +545,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="../../../../tags/Spark/">
-                        <span class="chip bg-color">Spark</span>
+                    <a href="../../../../tags/Zookeeper/">
+                        <span class="chip bg-color">Zookeeper</span>
                     </a>
                     
                 </div>

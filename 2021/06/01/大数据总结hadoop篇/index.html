@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.6k
+                    1.5k
                 </div>
                 
 
@@ -394,7 +394,7 @@
 </li>
 <li><p>高可扩展性：可以运行在廉价的机器上，可以扩展至数以千计的计算机节点上</p>
 </li>
-<li><p>高容错性：多副本模式</p>
+<li><p>高容错性：冗余的数据存储方式，自动保存数据的多个副本。</p>
 </li>
 <li><p>成本低：可部署在廉价的机器上</p>
 </li>
@@ -431,35 +431,15 @@
 </ul>
 </li>
 <li><h6 id="读流程"><a href="#读流程" class="headerlink" title="读流程"></a>读流程</h6><ul>
-<li><p>打开分布式文件：调用DFS.open()方法</p>
-</li>
-<li><p>从NameNode获得DataNode地址：DFS使用RPC调用NameNode，NameNode返回含有该副本的DataNode地址。返回一个输入流FSDataInputStream对象。</p>
-</li>
-<li><p>链接到DataNode：使用输入流read()方法，从而链接到DataNode。</p>
-</li>
-<li><p>读取DataNode：反复调用read()方法，从而将数据从DataNode传输到客户端。</p>
-</li>
-<li><p>读取其它的DataNode直到完成：到达块的末端的时候，输入流关闭与DataNode的连接，寻找下一个DataNode并继续读取数据。</p>
-</li>
-<li><p>完成读取，关闭连接：即调用数据流FSDataInputStream.close()方法</p>
-</li>
+<li>客户端向namenode请求读取文件，namenode获取文件的元信息（主要包括block存储的位置信息）返回给客户端，客户端根据返回的信息找到最近的datenode逐个获取文件的block块，并在客户端本地进行数据追加合并从而得到整个文件</li>
 </ul>
 </li>
 <li><h6 id="写流程"><a href="#写流程" class="headerlink" title="写流程"></a>写流程</h6><ul>
-<li><p>客户端向NameNode发送请求，请求上传文件。：调用DFS.create()方</p>
-</li>
-<li><p>NameNode处理请求，检查客户端是否有权限上传，路径是否合法等。</p>
-</li>
-<li><p>客户端根据自己设置块的大小，开始上传第一个块，默认0～128M，NameNode根据客户端上传文件的副本数（默认为3），返回指定数量的DataNode节点。</p>
-</li>
-<li><p>客户端根据返回的DataNode节点建立传输通道，节点响应由近及远建立通道。</p>
-</li>
-<li><p>客户端每读取64k的数据，封装为一个packet（数据包，传输的基本单位），并将packet发送到通道的下一个节点，每个节点收到packet并响应。</p>
-</li>
-<li><p>一个块传输完成通道关闭并开始第二个块的传输，直至最后一个块传输完成，NameNode向客户端响应传输完成！</p>
-</li>
-<li><p>客户端关闭输入流。</p>
-</li>
+<li>首先客户端向namenode发送存储文件的请求（主要包括文件名和文件大小）</li>
+<li>namenode给文件响应，如果文件已经存在则报错，不存在则继续进行</li>
+<li>客户端将上传的文件划分为block块并请求上传block块。</li>
+<li>namenode以pipline管道的模式返回可上传文件的datanode的列表</li>
+<li>客户端连接datanode进行block块的上传</li>
 </ul>
 </li>
 </ul>
