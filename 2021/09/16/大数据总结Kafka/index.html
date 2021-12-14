@@ -196,7 +196,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/kafka.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -357,7 +357,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    633
+                    734
                 </div>
                 
 
@@ -381,6 +381,10 @@
 <li>以容错的方式记录消息流，Kafka以文件的方式来存储消息流</li>
 <li>可以在消息发布的时候进行处理</li>
 </ul>
+<h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
+<ul>
+<li><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</li>
+</ul>
 <h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
 <ul>
 <li><p>在系统或应用程序之间构建可靠的用于传输实时数据的管道：消息队列功能。</p>
@@ -389,9 +393,9 @@
 </li>
 </ul>
 <h5 id="消息传输流程"><a href="#消息传输流程" class="headerlink" title="消息传输流程"></a>消息传输流程</h5><hr>
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="left">
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="inline">
 
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="276">
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="393" data-align="inline">
 
 <pre><code>生产者在向kafka集群发送消息的时候，可以通过指定分区将消息发送到指定的分区中。
 1、不指定采用默认的随机均衡策略
@@ -400,8 +404,8 @@
 
 消费者消费消息时候，通过offset来记录消费的位置
 1、可以多个不同的group来同时消费同一个topic下的消息，并且消费记录位置offset不相同。
-2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费多个
-分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据"><a href="#Kafka如何保证生产者及消费者不丢失数据" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据"></a>Kafka如何保证生产者及消费者不丢失数据</h5><hr>
+2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费
+多个分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据（待优化）"><a href="#Kafka如何保证生产者及消费者不丢失数据（待优化）" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据（待优化）"></a>Kafka如何保证生产者及消费者不丢失数据（待优化）</h5><hr>
 <ul>
 <li><p>生产者</p>
 <pre><code>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。
@@ -414,7 +418,14 @@
 <pre><code>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。
 设置ack= all，等待数据写入所有同步副本才算成功。</code></pre></li>
 </ul>
-
+<h5 id="Kafka常用操作指令大全"><a href="#Kafka常用操作指令大全" class="headerlink" title="Kafka常用操作指令大全"></a>Kafka常用操作指令大全</h5><pre><code>创建topics
+  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+查看topic
+  bin/kafka-topics.sh --list --zookeeper localhost:2181
+创建消费者
+  bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+创建生产者
+  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test</code></pre>
             </div>
             <hr/>
 
@@ -477,8 +488,7 @@
                 <a href="">
                     <div class="card-image">
                         
-                        
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="大数据Kafka">
+                        <img src="/medias/featureimages/kafka.jpg" class="responsive-img" alt="大数据Kafka">
                         
                         <span class="card-title">大数据Kafka</span>
                     </div>
