@@ -357,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    734
+                    835
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    3 分
                 </div>
                 
 
@@ -383,7 +383,16 @@
 </ul>
 <h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
 <ul>
-<li><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</li>
+<li><p><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</p>
+</li>
+<li><p><strong>Consumer:</strong>消费者，从Kafka服务器读取消息</p>
+</li>
+<li><p><strong>Consumer Group：</strong>消费者组，每个消费者可以划分为一个特定的群组</p>
+</li>
+<li><p><strong>Topic：</strong>消息的身份标识，消息生产者产生消息时，会给消息贴上一个Topic标签，当消费者需要读取消息时，可以根据这个Topic读取特定的数据</p>
+</li>
+<li><p><strong>Broker：</strong>Kafka及群众包含的服务器</p>
+</li>
 </ul>
 <h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
 <ul>
