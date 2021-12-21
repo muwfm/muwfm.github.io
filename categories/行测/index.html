@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Categories, 小夕のblog">
-    <meta name="description" content="Categories | 小夕のblog">
+    <meta name="keywords" content="分类: 行测, 小夕のblog">
+    <meta name="description" content="分类: 行测 | 小夕のblog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Categories | 小夕のblog</title>
+    <title>分类: 行测 | 小夕のblog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -34,7 +34,7 @@
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
-                <a href="../index.html" class="waves-effect waves-light">
+                <a href="../../index.html" class="waves-effect waves-light">
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
@@ -246,7 +246,7 @@
                 
                 
                 
-                <a href="Kafka/" title="Kafka: 2">
+                <a href="../Kafka/" title="Kafka: 2">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #F9EBEA;">Kafka
@@ -255,7 +255,7 @@
                 </a>
                 
                 
-                <a href="Hadoop/" title="Hadoop: 3">
+                <a href="../Hadoop/" title="Hadoop: 3">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #F5EEF8;">Hadoop
@@ -264,7 +264,7 @@
                 </a>
                 
                 
-                <a href="Spark-SQL/" title="Spark SQL: 1">
+                <a href="../Spark-SQL/" title="Spark SQL: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #D5F5E3;">Spark SQL
@@ -273,7 +273,7 @@
                 </a>
                 
                 
-                <a href="Spark/" title="Spark: 1">
+                <a href="../Spark/" title="Spark: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #E8F8F5;">Spark
@@ -282,7 +282,7 @@
                 </a>
                 
                 
-                <a href="Zookeeper/" title="Zookeeper: 1">
+                <a href="../Zookeeper/" title="Zookeeper: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #FEF9E7;">Zookeeper
@@ -291,16 +291,16 @@
                 </a>
                 
                 
-                <a href="%E8%A1%8C%E6%B5%8B/" title="行测: 1">
+                <a href="" title="行测: 1">
                     <span class="chip center-align waves-effect waves-light
-                             chip-default "
+                             chip-active "
                             style="background-color: #F8F9F9;">行测
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="%E8%B0%B7%E6%AD%8C/" title="谷歌: 1">
+                <a href="../%E8%B0%B7%E6%AD%8C/" title="谷歌: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #82E0AA;">谷歌
@@ -315,64 +315,61 @@
 </div>
 
     
-    <style type="text/css">
-    #category-radar {
-        width: 100%;
-        height: 360px;
-    }
-</style>
 
-<div class="container" data-aos="fade-up">
-    <div class="card">
-        <div id="category-radar" class="card-content"></div>
-    </div>
-</div>
+    <article id="articles" class="container articles">
+        <div class="row tags-posts">
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="../../2021/12/21/%E8%A1%8C%E6%B5%8B%E6%80%9D%E7%BB%B4/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="行测思维">
+                            
+                            <span class="card-title">行测思维</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                行测
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-21
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="" class="post-category">
+                                    行测
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
 
-<script type="text/javascript" src="/libs/echarts/echarts.min.js"></script>
-<script type="text/javascript">
-    let radarChart = echarts.init(document.getElementById('category-radar'));
-
-    
-
-    let option = {
-        title: {
-            left: 'center',
-            text: '文章分类雷达图',
-            textStyle: {
-                fontWeight: 500,
-                fontSize: 22
-            }
-        },
-        tooltip: {},
-        radar: {
-            name: {
-                textStyle: {
-                    color: '#3C4858'
-                }
-            },
-            indicator: [{"name":"Kafka","max":4},{"name":"Hadoop","max":4},{"name":"Spark SQL","max":4},{"name":"Spark","max":4},{"name":"Zookeeper","max":4},{"name":"行测","max":4},{"name":"谷歌","max":4}],
-            nameGap: 5,
-            center: ['50%','55%'],
-            radius: '66%'
-        },
-        series: [{
-            type: 'radar',
-            color: ['#3ecf8e'],
-            itemStyle: {normal: {areaStyle: {type: 'default'}}},
-            data : [
-                {
-                    value : [2,3,1,1,1,1,1],
-                    name : '文章分类数量'
-                }
-            ]
-        }]
-    };
-
-    radarChart.setOption(option);
-</script>
-    
-
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="../../tags/%E8%A1%8C%E6%B5%8B/">
+                            <span class="chip bg-color">行测</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </article>
 </main>
+
+
 
 
     <!-- <footer class="page-footer bg-color"> -->
