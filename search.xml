@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Spark-Sql学习记录</title>
+    <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h5 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h5><hr>
+<p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
+<h5 id="Spark-Sql的特点"><a href="#Spark-Sql的特点" class="headerlink" title="Spark Sql的特点"></a>Spark Sql的特点</h5><hr>
+<ul>
+<li><h6 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h6><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
+</li>
+<li><h6 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h6><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
+</li>
+<li><h6 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h6><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
+</li>
+<li><h6 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h6><p>通过JDBC或ODBC连接</p>
+</li>
+</ul>
+<h5 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h5><hr>
+<h6 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h6><ol>
+<li>是组织成命名列的数据集。</li>
+<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
+<li>支持的语言有Scala，Java，Python和R</li>
+</ol>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
+<p><em>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</em></p>
+<h6 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h6><ol>
+<li>是数据的分布式集合</li>
+<li>其API支持Scala和Java。Python不支持DataSet API</li>
+</ol>
+<h5 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><hr>
+<h6 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h6><ol>
+<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
+<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
+val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
+<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
+</ol>
+<h6 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h6><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
+<h6 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h6><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h6 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h6><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h6 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h6><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h5 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h5><hr>
+<h6 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
+<h5 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h5><h6 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h6><ul>
+<li><h6 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h6><p>1.定义case class</p>
+<p>  case class MyData(a:Int,b:String)</p>
+<p>2.生成序列，并创建DataSet</p>
+<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
+<p>3.查看结果</p>
+<p>   ds.show     ds.collect</p>
+</li>
+<li><h6 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h6><p>1.定义case class</p>
+<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
+<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
+<p>3.将DataFrame转为DataSet</p>
+<p>   df.as[Person].show<br>   df.as[Person].collect</p>
+</li>
+<li><h6 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h6><p>  1.读取HDFS数据，并创建DataSet</p>
+<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
+<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
+words.show
+words.collect</code></pre><p>  3.执行WordCount程序</p>
+<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
+result.show</code></pre><p>  排序：</p>
+<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
+</ul>
+<h5 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h5><hr>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
+<ul>
+<li><h6 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h6><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
+<li><h6 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h6><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
+<li><h6 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h6><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
+<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
+<pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
+</li>
+</ul>
+<h5 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h5><hr>
+<ul>
+<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
+</li>
+<li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
+</li>
+</ul>
+<h5 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h5><hr>
+<p>首先，搭建好Hive的环境（需要Hadoop）</p>
+<p>配置Spark SQL支持Hive</p>
+<p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
+<p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
+<h5 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h5><hr>
+<ul>
+<li>在内存中缓存数据</li>
+</ul>
+<p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
+]]></content>
+      <categories>
+        <category>Spark SQL</category>
+      </categories>
+      <tags>
+        <tag>SparkSQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DataX</title>
     <url>/2021/12/20/DataX/</url>
     <content><![CDATA[<h4 id="DataX底层远离及性能优化"><a href="#DataX底层远离及性能优化" class="headerlink" title="DataX底层远离及性能优化"></a>DataX底层远离及性能优化</h4><hr>
@@ -283,106 +383,6 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
       </tags>
   </entry>
   <entry>
-    <title>Spark-Sql学习记录</title>
-    <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h5 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h5><hr>
-<p>学习过Hive，将Hive Sql转换成MapReduce然后提交到集群上运行，大大简化了编写MapReduce的程序的复杂性，由于MapReduce这种计算模型执行效率比较慢，所以Spark Sql应运而生，它是将Spark Sql转换成RDD，然后提交到集群上执行，同时Spark Sql也支持从Hive中Hive中读取数据！</p>
-<h5 id="Spark-Sql的特点"><a href="#Spark-Sql的特点" class="headerlink" title="Spark Sql的特点"></a>Spark Sql的特点</h5><hr>
-<ul>
-<li><h6 id="容易集成"><a href="#容易集成" class="headerlink" title="容易集成"></a>容易集成</h6><p>Spark Sql允许使用SQL或熟悉的DataFrame API在Spark程序中查询结构化的数据。可用于Java、Scala、Python和R.</p>
-</li>
-<li><h6 id="统一的数据访问方式"><a href="#统一的数据访问方式" class="headerlink" title="统一的数据访问方式"></a>统一的数据访问方式</h6><p>DataFrames和SQL提供了访问各种数据源的常用方法，包括Hive，Parquet，ORC，JSON和JDBC。</p>
-</li>
-<li><h6 id="兼容Hive"><a href="#兼容Hive" class="headerlink" title="兼容Hive"></a>兼容Hive</h6><p>Spark SQL可以使用现有的Hive Metastores和UDF</p>
-</li>
-<li><h6 id="标准的数据连接"><a href="#标准的数据连接" class="headerlink" title="标准的数据连接"></a>标准的数据连接</h6><p>通过JDBC或ODBC连接</p>
-</li>
-</ul>
-<h5 id="基本概念：DataSets和DataFrames"><a href="#基本概念：DataSets和DataFrames" class="headerlink" title="基本概念：DataSets和DataFrames"></a>基本概念：DataSets和DataFrames</h5><hr>
-<h6 id="DataFrame："><a href="#DataFrame：" class="headerlink" title="DataFrame："></a>DataFrame：</h6><ol>
-<li>是组织成命名列的数据集。</li>
-<li>可以从各种来源创建（结构化数据文件，hive表，外部数据库）</li>
-<li>支持的语言有Scala，Java，Python和R</li>
-</ol>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623208815117.png" alt=""></p>
-<p><em>从上图可知DataFrames比RDD多了数据的结构信息，即Schema。RDD是分布式的Java对象的集合，DataFrame是分布式的Row对象的集合。DataFrame除了提供了比RDD更丰富的算子以外，更重要的特点减少了数据读取，执行计划的优化并提升了执行效率。</em></p>
-<h6 id="DataSets"><a href="#DataSets" class="headerlink" title="DataSets"></a>DataSets</h6><ol>
-<li>是数据的分布式集合</li>
-<li>其API支持Scala和Java。Python不支持DataSet API</li>
-</ol>
-<h5 id="创建DataFrames"><a href="#创建DataFrames" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h5><hr>
-<h6 id="创建方式一：通过Case-Class创建DataFrames"><a href="#创建方式一：通过Case-Class创建DataFrames" class="headerlink" title="创建方式一：通过Case Class创建DataFrames"></a>创建方式一：通过Case Class创建DataFrames</h6><ol>
-<li><h6 id="定义case-class（相当于表的结构：Schema）"><a href="#定义case-class（相当于表的结构：Schema）" class="headerlink" title="定义case class（相当于表的结构：Schema）"></a>定义case class（相当于表的结构：Schema）</h6><pre><code>case classEmp（empno:Int,ename:String,job:String,mgr:String,hiredate:String,sal:int,    comm:String,deptno:Int)</code></pre></li>
-<li><h6 id="将HDFS上的数据读入RDD，并将RDD与case-class关联"><a href="#将HDFS上的数据读入RDD，并将RDD与case-class关联" class="headerlink" title="将HDFS上的数据读入RDD，并将RDD与case class关联"></a>将HDFS上的数据读入RDD，并将RDD与case class关联</h6><pre><code>val lines = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))
-val allEmp = lines.map(x =&gt; Emp(x(0).toInt,x(1)~,x(7).toInt))`   </code></pre></li>
-<li><h6 id="将RDD转换为DataFrames"><a href="#将RDD转换为DataFrames" class="headerlink" title="将RDD转换为DataFrames"></a>将RDD转换为DataFrames</h6><pre><code>val allEmpDF = allEmp.toDF</code></pre></li>
-</ol>
-<h6 id="创建方式二：使用SparkSession"><a href="#创建方式二：使用SparkSession" class="headerlink" title="创建方式二：使用SparkSession"></a>创建方式二：使用SparkSession</h6><h6 id="什么是SparkSession"><a href="#什么是SparkSession" class="headerlink" title="什么是SparkSession"></a>什么是SparkSession</h6><h6 id="创建StructType，来定义Schema结构信息"><a href="#创建StructType，来定义Schema结构信息" class="headerlink" title="创建StructType，来定义Schema结构信息"></a>创建StructType，来定义Schema结构信息</h6><p>import org.apache.spark.sql.types._<br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223213183.png" alt=""></p>
-<h6 id="读入数据并且切分数据"><a href="#读入数据并且切分数据" class="headerlink" title="读入数据并且切分数据"></a>读入数据并且切分数据</h6><pre><code>val empcsvRDD = sc.textFile(&quot;hdfs://hadoop111:9000/scott/emp.csv&quot;).map(_.split(&quot;,&quot;))</code></pre><h6 id="将RDD中的数据映射成Row"><a href="#将RDD中的数据映射成Row" class="headerlink" title="将RDD中的数据映射成Row"></a>将RDD中的数据映射成Row</h6><pre><code>val rowRDD = empcsvRDD.map(line =&gt; Row(line(0).toInt,line(1),line(2)~line(7).toInt))</code></pre><h6 id="创建DataFrames-1"><a href="#创建DataFrames-1" class="headerlink" title="创建DataFrames"></a>创建DataFrames</h6><pre><code>val df = spark.createDataFrame(rowRDD,myschema)</code></pre><h5 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h5><hr>
-<h6 id="DataFrame操作也称为无类型的DataSet操作"><a href="#DataFrame操作也称为无类型的DataSet操作" class="headerlink" title="DataFrame操作也称为无类型的DataSet操作"></a>DataFrame操作也称为无类型的DataSet操作</h6><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223789087.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223849142.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223873393.png" alt=""></p>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623223913079.png" alt=""></p>
-<h5 id="创建DataSets"><a href="#创建DataSets" class="headerlink" title="创建DataSets"></a>创建DataSets</h5><h6 id="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"><a href="#DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。" class="headerlink" title="DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。"></a>DataFrame的引入，可以让Spark更好的处理结构数据的计算，但其中一个主要的问题是：缺乏编译时的类型安全。为了解决这个问题，引入DataSet。DataSet是一个分布式的数据收集器，兼顾了RDD的优点（强类型）。</h6><ul>
-<li><h6 id="创建方式一：使用序列"><a href="#创建方式一：使用序列" class="headerlink" title="创建方式一：使用序列"></a>创建方式一：使用序列</h6><p>1.定义case class</p>
-<p>  case class MyData(a:Int,b:String)</p>
-<p>2.生成序列，并创建DataSet</p>
-<p>  val ds = Seq(MyData(1,”tom”),MyData(2,”Mary)).toDS</p>
-<p>3.查看结果</p>
-<p>   ds.show     ds.collect</p>
-</li>
-<li><h6 id="创建方式二：使用JSON数据"><a href="#创建方式二：使用JSON数据" class="headerlink" title="创建方式二：使用JSON数据"></a>创建方式二：使用JSON数据</h6><p>1.定义case class</p>
-<pre><code>case class Person(name:String, gender:String)</code></pre><p>2.通过JSON数据生成DataFrame</p>
-<p>  val df = spark.read.json(sc.parallelize(“””{“nam”:”tom”,”gender”:”male”}”””::Nil))</p>
-<p>3.将DataFrame转为DataSet</p>
-<p>   df.as[Person].show<br>   df.as[Person].collect</p>
-</li>
-<li><h6 id="创建方式三：使用HDFS数据"><a href="#创建方式三：使用HDFS数据" class="headerlink" title="创建方式三：使用HDFS数据"></a>创建方式三：使用HDFS数据</h6><p>  1.读取HDFS数据，并创建DataSet</p>
-<pre><code>val linesDS = spark.read.text(&quot;hdfs://hadoop111:9000/data/data.txt&quot;).as[String]</code></pre><p>  2.对DataSet进行操作：分词后，查询长度大于3的单词</p>
-<pre><code>val words = linesDS.flatMap(_.split(&quot;&quot;)).filter(_.length&gt;3)
-words.show
-words.collect</code></pre><p>  3.执行WordCount程序</p>
-<pre><code>val result = linesDS.flatMap(_.split(&quot;&quot;).map(_,1)).groupByKey(x = &gt; x._1).count
-result.show</code></pre><p>  排序：</p>
-<pre><code>result.orderBy($&quot;value&quot;).show</code></pre></li>
-</ul>
-<h5 id="DataSets的操作案例"><a href="#DataSets的操作案例" class="headerlink" title="DataSets的操作案例"></a>DataSets的操作案例</h5><hr>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287172797.png" alt=""></p>
-<ul>
-<li><h6 id="使用emp-json生成DataFrame"><a href="#使用emp-json生成DataFrame" class="headerlink" title="使用emp.json生成DataFrame"></a>使用emp.json生成DataFrame</h6><pre><code>val empDF = spark.read.json(&quot;/root/resources/emp.json&quot;)</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDF.whre($&quot;sal&quot;&gt;3000).show</code></pre></li>
-<li><h6 id="创建case-class"><a href="#创建case-class" class="headerlink" title="创建case class"></a>创建case class</h6><pre><code>case class Emp(empno:Long,ename:String,job:String,hiredate:String,mgr:String,sal:Long,comm:String,deptno:Long))</code></pre></li>
-<li><h6 id="生成DataSets，并查询数据"><a href="#生成DataSets，并查询数据" class="headerlink" title="生成DataSets，并查询数据"></a>生成DataSets，并查询数据</h6><pre><code>val empDS = empDF.as[Emp]</code></pre><p>查询工资大于3000的员工</p>
-<pre><code>empDS.filter(_.sal&gt;3000).show</code></pre><p>查看10号部门的员工</p>
-<pre><code>empDS.filter(_.deptno == 10).show</code></pre><p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1623287694323.png" alt="多表查询">注：查看执行计划：reslut.explain</p>
-</li>
-</ul>
-<h5 id="使用JDBC"><a href="#使用JDBC" class="headerlink" title="使用JDBC"></a>使用JDBC</h5><hr>
-<ul>
-<li><h6 id="从oracle读取数据并创建临时表"><a href="#从oracle读取数据并创建临时表" class="headerlink" title="从oracle读取数据并创建临时表"></a>从oracle读取数据并创建临时表</h6><p>  val url: String = args(0)<br>  val user: String = args(1)<br>  val password: String = args(2)<br>  val jdbcDf = spark.read.format(“jdbc”).option(“url”, s”${url}”).option(“driver”, “oracle.jdbc.driver.OracleDriver”).option(“dbtable”, “DM_GY_SWJG”).option(“user”,s”${user}” ).option(“password”, s”${password}”).load()<br>   jdbcDf.createOrReplaceTempView(“DM_GY_SWJG”)</p>
-</li>
-<li><h6 id="使用odbc创建spark-shell"><a href="#使用odbc创建spark-shell" class="headerlink" title="使用odbc创建spark shell"></a>使用odbc创建spark shell</h6><pre><code>spark-shell --master spark://spark81:7077</code></pre><p>  –jars /root/tmp/ojdbc6.jar<br>  –driver-class-path /root/tmp/ojdbc6.jar</p>
-</li>
-</ul>
-<h5 id="使用Hive-Table"><a href="#使用Hive-Table" class="headerlink" title="使用Hive Table"></a>使用Hive Table</h5><hr>
-<p>首先，搭建好Hive的环境（需要Hadoop）</p>
-<p>配置Spark SQL支持Hive</p>
-<p>将以下文件拷贝到$SPARK_HOME/conf的目录下，即可！</p>
-<p><strong>hive-site.xml</strong>  <strong>core-site.xml</strong>  <strong>hdfs-site.xml</strong></p>
-<h5 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h5><hr>
-<ul>
-<li>在内存中缓存数据</li>
-</ul>
-<p>性能调优主要是将数据放入内存中操作。通过spark.cacheTable(“tableName”)或者</p>
-]]></content>
-      <categories>
-        <category>Spark SQL</category>
-      </categories>
-      <tags>
-        <tag>Spark SQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>大数据Kafka</title>
     <url>/2021/09/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/</url>
     <content><![CDATA[<h5 id="Kafka主要功能"><a href="#Kafka主要功能" class="headerlink" title="Kafka主要功能"></a>Kafka主要功能</h5><hr>
@@ -630,6 +630,58 @@ result.show</code></pre><p>  排序：</p>
       </tags>
   </entry>
   <entry>
+    <title>行测思维</title>
+    <url>/2021/12/21/%E8%A1%8C%E6%B5%8B%E6%80%9D%E7%BB%B4/</url>
+    <content><![CDATA[<h5 id="言语一：转折关系、主题词、因果关系"><a href="#言语一：转折关系、主题词、因果关系" class="headerlink" title="言语一：转折关系、主题词、因果关系"></a>言语一：转折关系、主题词、因果关系</h5><hr>
+<pre><code>转折关系：……不过…………然而…………却……其实 / 事实上 / 实际上
+主题词：一般前有引入，后有解释说明/每句话都围绕的相同话题
+因果关系：所以、因此、因而、故而、于是、可见、看来、故、导致、致使、使得、造成</code></pre><h5 id="言语二：必要条件关系、程度词、并列关系"><a href="#言语二：必要条件关系、程度词、并列关系" class="headerlink" title="言语二：必要条件关系、程度词、并列关系"></a>言语二：必要条件关系、程度词、并列关系</h5><pre><code>必要条件关系：只有...才...
+  - 对策标志词：应该、需要、必须+做法
+             通过...方法，才能...
+             ...前提/基础/保障
+             负有...的义务/...的必由之路/...的法门之一/要领在于
+  - 文段特征：对策在结尾 提出问题+分析问题+解决问题
+            对策在中间 提出问题+解决问题+意义效果
+            对策在开头 对策+正反论证/原因论证
+  - 反面论证：如果/倘若/一旦...+不好的结果
+            前面的方法反过来，即为对策
+  - 给出问题：文段只提出问题，答案在选项中
+程度词：更、尤其、正是，特别是、真正、根本、最核心、最突出等
+并列关系：此外、另外、同时、以及</code></pre><hr>
+<h5 id="言语三：行文脉络、细节判断"><a href="#言语三：行文脉络、细节判断" class="headerlink" title="言语三：行文脉络、细节判断"></a>言语三：行文脉络、细节判断</h5><hr>
+<pre><code>行文脉络：
+  - 总-分：观点+解释说明
+  - 分-总：结论、这/此引导的尾句需关注
+细节判断：
+  - 提问方式</code></pre><h5 id="言语四：语句表达（排序、填空）"><a href="#言语四：语句表达（排序、填空）" class="headerlink" title="言语四：语句表达（排序、填空）"></a>言语四：语句表达（排序、填空）</h5><hr>
+<pre><code>排序：
+  - 确定首句：
+    - 下定义：...就是/是指
+    - 背景引入：随着、近年来、在...大背景/环境下
+  - 确定捆绑集团
+    - 指代词捆绑：这、那、他、其、该、此
+    - 关联词捆绑
+  - 确定顺序
+    - 时间顺序
+    - 逻辑顺序
+  - 确定尾句：因此、所以、看来、于是、这、应该、需要
+填空：
+  - 横线在结尾：总结前文/提出对策
+  - 横线在开头：需对后文进行概括
+  - 横线在中间：上下文联系</code></pre><h5 id="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"><a href="#言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））" class="headerlink" title="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"></a>言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））</h5><hr>
+<pre><code>接语选择题：
+  - 理论要点：重点关注文段最后一句话</code></pre><h5 id="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"><a href="#言语六：逻辑填空（并列关系、解释类对应、重点词句对应）" class="headerlink" title="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"></a>言语六：逻辑填空（并列关系、解释类对应、重点词句对应）</h5><hr>
+<h5 id="数量一：代入排除法、倍数特性法、方程法"><a href="#数量一：代入排除法、倍数特性法、方程法" class="headerlink" title="数量一：代入排除法、倍数特性法、方程法"></a>数量一：代入排除法、倍数特性法、方程法</h5><hr>
+<h5 id="数量二：工程问题、经济利润问题"><a href="#数量二：工程问题、经济利润问题" class="headerlink" title="数量二：工程问题、经济利润问题"></a>数量二：工程问题、经济利润问题</h5><hr>
+]]></content>
+      <categories>
+        <category>行测</category>
+      </categories>
+      <tags>
+        <tag>行测</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大数据ZooKeeper篇</title>
     <url>/2021/09/08/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Zookeeper/</url>
     <content><![CDATA[<h5 id="ZooKeeper是什么"><a href="#ZooKeeper是什么" class="headerlink" title="ZooKeeper是什么"></a>ZooKeeper是什么</h5><hr>
@@ -701,6 +753,35 @@ result.show</code></pre><p>  排序：</p>
       </categories>
       <tags>
         <tag>Zookeeper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
+    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p>
+<h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><hr>
+<p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
+<h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><hr>
+<p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
+<h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><hr>
+<p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
+<h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><hr>
+<p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
+<h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><hr>
+<p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
+<h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><hr>
+<p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
+<h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><hr>
+<p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
+<h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><hr>
+<p>&emsp;格式化json</p>
+]]></content>
+      <categories>
+        <category>谷歌</category>
+      </categories>
+      <tags>
+        <tag>chrome</tag>
+        <tag>makedown</tag>
       </tags>
   </entry>
   <entry>
@@ -848,87 +929,6 @@ result.show</code></pre><p>  排序：</p>
       </categories>
       <tags>
         <tag>Hadoop</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>行测思维</title>
-    <url>/2021/12/21/%E8%A1%8C%E6%B5%8B%E6%80%9D%E7%BB%B4/</url>
-    <content><![CDATA[<h5 id="言语一：转折关系、主题词、因果关系"><a href="#言语一：转折关系、主题词、因果关系" class="headerlink" title="言语一：转折关系、主题词、因果关系"></a>言语一：转折关系、主题词、因果关系</h5><hr>
-<pre><code>转折关系：……不过…………然而…………却……其实 / 事实上 / 实际上
-主题词：一般前有引入，后有解释说明/每句话都围绕的相同话题
-因果关系：所以、因此、因而、故而、于是、可见、看来、故、导致、致使、使得、造成</code></pre><h5 id="言语二：必要条件关系、程度词、并列关系"><a href="#言语二：必要条件关系、程度词、并列关系" class="headerlink" title="言语二：必要条件关系、程度词、并列关系"></a>言语二：必要条件关系、程度词、并列关系</h5><pre><code>必要条件关系：只有...才...
-  - 对策标志词：应该、需要、必须+做法
-             通过...方法，才能...
-             ...前提/基础/保障
-             负有...的义务/...的必由之路/...的法门之一/要领在于
-  - 文段特征：对策在结尾 提出问题+分析问题+解决问题
-            对策在中间 提出问题+解决问题+意义效果
-            对策在开头 对策+正反论证/原因论证
-  - 反面论证：如果/倘若/一旦...+不好的结果
-            前面的方法反过来，即为对策
-  - 给出问题：文段只提出问题，答案在选项中
-程度词：更、尤其、正是，特别是、真正、根本、最核心、最突出等
-并列关系：此外、另外、同时、以及</code></pre><hr>
-<h5 id="言语三：行文脉络、细节判断"><a href="#言语三：行文脉络、细节判断" class="headerlink" title="言语三：行文脉络、细节判断"></a>言语三：行文脉络、细节判断</h5><hr>
-<pre><code>行文脉络：
-  - 总-分：观点+解释说明
-  - 分-总：结论、这/此引导的尾句需关注
-细节判断：
-  - 提问方式</code></pre><h5 id="言语四：语句表达（排序、填空）"><a href="#言语四：语句表达（排序、填空）" class="headerlink" title="言语四：语句表达（排序、填空）"></a>言语四：语句表达（排序、填空）</h5><hr>
-<pre><code>排序：
-  - 确定首句：
-    - 下定义：...就是/是指
-    - 背景引入：随着、近年来、在...大背景/环境下
-  - 确定捆绑集团
-    - 指代词捆绑：这、那、他、其、该、此
-    - 关联词捆绑
-  - 确定顺序
-    - 时间顺序
-    - 逻辑顺序
-  - 确定尾句：因此、所以、看来、于是、这、应该、需要
-填空：
-  - 横线在结尾：总结前文/提出对策
-  - 横线在开头：需对后文进行概括
-  - 横线在中间：上下文联系</code></pre><h5 id="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"><a href="#言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））" class="headerlink" title="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"></a>言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））</h5><hr>
-<pre><code>接语选择题：
-  - 理论要点：重点关注文段最后一句话</code></pre><h5 id="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"><a href="#言语六：逻辑填空（并列关系、解释类对应、重点词句对应）" class="headerlink" title="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"></a>言语六：逻辑填空（并列关系、解释类对应、重点词句对应）</h5><hr>
-<h5 id="数量一：代入排除法、倍数特性法、方程法"><a href="#数量一：代入排除法、倍数特性法、方程法" class="headerlink" title="数量一：代入排除法、倍数特性法、方程法"></a>数量一：代入排除法、倍数特性法、方程法</h5><hr>
-<h5 id="数量二：工程问题、经济利润问题"><a href="#数量二：工程问题、经济利润问题" class="headerlink" title="数量二：工程问题、经济利润问题"></a>数量二：工程问题、经济利润问题</h5><hr>
-]]></content>
-      <categories>
-        <category>行测</category>
-      </categories>
-      <tags>
-        <tag>行测</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
-    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p>
-<h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><hr>
-<p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
-<h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><hr>
-<p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
-<h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><hr>
-<p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
-<h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><hr>
-<p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
-<h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><hr>
-<p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
-<h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><hr>
-<p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
-<h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><hr>
-<p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
-<h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><hr>
-<p>&emsp;格式化json</p>
-]]></content>
-      <categories>
-        <category>谷歌</category>
-      </categories>
-      <tags>
-        <tag>chrome</tag>
-        <tag>makedown</tag>
       </tags>
   </entry>
 </search>
