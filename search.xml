@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mysql方法记录</title>
+    <url>/2022/05/31/Mysql/</url>
+    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h5 id="sum-over-partition-by-order-by-as-temp"><a href="#sum-over-partition-by-order-by-as-temp" class="headerlink" title="sum() over (partition by order by ) as temp"></a>sum() over (partition by order by ) as temp</h5><hr>
+<p>分区排序累加🏷️</p>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spark-Sql学习记录</title>
     <url>/2021/06/07/Spark-Sql%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h5 id="为什么要学习Spark-Sql"><a href="#为什么要学习Spark-Sql" class="headerlink" title="为什么要学习Spark Sql"></a>为什么要学习Spark Sql</h5><hr>
@@ -383,76 +396,6 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
       </tags>
   </entry>
   <entry>
-    <title>大数据Kafka</title>
-    <url>/2021/09/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/</url>
-    <content><![CDATA[<h5 id="Kafka主要功能"><a href="#Kafka主要功能" class="headerlink" title="Kafka主要功能"></a>Kafka主要功能</h5><hr>
-<ul>
-<li>分布式发布和订阅消息流</li>
-<li>以容错的方式记录消息流，Kafka以文件的方式来存储消息流</li>
-<li>可以在消息发布的时候进行处理</li>
-</ul>
-<h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
-<ul>
-<li><p><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</p>
-</li>
-<li><p><strong>Consumer:</strong>消费者，从Kafka服务器读取消息</p>
-</li>
-<li><p><strong>Consumer Group：</strong>消费者组，每个消费者可以划分为一个特定的群组</p>
-</li>
-<li><p><strong>Topic：</strong>消息的身份标识，消息生产者产生消息时，会给消息贴上一个Topic标签，当消费者需要读取消息时，可以根据这个Topic读取特定的数据</p>
-</li>
-<li><p><strong>Broker：</strong>Kafka及群众包含的服务器</p>
-</li>
-</ul>
-<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
-<ul>
-<li><p>在系统或应用程序之间构建可靠的用于传输实时数据的管道：消息队列功能。</p>
-</li>
-<li><p>构建实时的流数据处理程序来处理数据流：数据处理能力。</p>
-</li>
-</ul>
-<h5 id="消息传输流程"><a href="#消息传输流程" class="headerlink" title="消息传输流程"></a>消息传输流程</h5><hr>
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="inline">
-
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="393" data-align="inline">
-
-<pre><code>生产者在向kafka集群发送消息的时候，可以通过指定分区将消息发送到指定的分区中。
-1、不指定采用默认的随机均衡策略
-2、可指定均衡策略来将消息发送到不同的分区中
-3、指定分区
-
-消费者消费消息时候，通过offset来记录消费的位置
-1、可以多个不同的group来同时消费同一个topic下的消息，并且消费记录位置offset不相同。
-2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费
-多个分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据（待优化）"><a href="#Kafka如何保证生产者及消费者不丢失数据（待优化）" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据（待优化）"></a>Kafka如何保证生产者及消费者不丢失数据（待优化）</h5><hr>
-<ul>
-<li><p>生产者</p>
-<pre><code>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。
-如果是0，不等待Kafka消息确认，认为成功。
-如果是1，发送过去，等待leader副本确认消息，认为成功首领肯定收到了消息，写入了分区文件（不一定落盘之后）。
-如果是all，不会产生数据丢失，消息发送过去，消息写入所有同步副本后，认为成功，并且会不断尝试直至成功。（可靠但是牺牲效率，可以通过增大批和异步模式，提高效率）</code></pre></li>
-<li><p>消费者</p>
-<pre><code>通过offset commit来保证数据不会丢失，Kafka每次记录自己消费的offset数值，下次继续消费的时候，从上次记录的offset位置开始消费。关闭自动更新offset，等待数据被处理后手动更新offset。在消费前先验证拿取的数据是否是接着上回消费的数据。</code></pre></li>
-<li><p>Broker端</p>
-<pre><code>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。
-设置ack= all，等待数据写入所有同步副本才算成功。</code></pre></li>
-</ul>
-<h5 id="Kafka常用操作指令大全"><a href="#Kafka常用操作指令大全" class="headerlink" title="Kafka常用操作指令大全"></a>Kafka常用操作指令大全</h5><pre><code>创建topics
-  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
-查看topic
-  bin/kafka-topics.sh --list --zookeeper localhost:2181
-创建消费者
-  bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
-创建生产者
-  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test</code></pre>]]></content>
-      <categories>
-        <category>Kafka</category>
-      </categories>
-      <tags>
-        <tag>Kafka</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>大数据记录Linux篇章</title>
     <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
     <content><![CDATA[<h5 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h5><hr>
@@ -528,6 +471,76 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大数据Kafka</title>
+    <url>/2021/09/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/</url>
+    <content><![CDATA[<h5 id="Kafka主要功能"><a href="#Kafka主要功能" class="headerlink" title="Kafka主要功能"></a>Kafka主要功能</h5><hr>
+<ul>
+<li>分布式发布和订阅消息流</li>
+<li>以容错的方式记录消息流，Kafka以文件的方式来存储消息流</li>
+<li>可以在消息发布的时候进行处理</li>
+</ul>
+<h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
+<ul>
+<li><p><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</p>
+</li>
+<li><p><strong>Consumer:</strong>消费者，从Kafka服务器读取消息</p>
+</li>
+<li><p><strong>Consumer Group：</strong>消费者组，每个消费者可以划分为一个特定的群组</p>
+</li>
+<li><p><strong>Topic：</strong>消息的身份标识，消息生产者产生消息时，会给消息贴上一个Topic标签，当消费者需要读取消息时，可以根据这个Topic读取特定的数据</p>
+</li>
+<li><p><strong>Broker：</strong>Kafka及群众包含的服务器</p>
+</li>
+</ul>
+<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
+<ul>
+<li><p>在系统或应用程序之间构建可靠的用于传输实时数据的管道：消息队列功能。</p>
+</li>
+<li><p>构建实时的流数据处理程序来处理数据流：数据处理能力。</p>
+</li>
+</ul>
+<h5 id="消息传输流程"><a href="#消息传输流程" class="headerlink" title="消息传输流程"></a>消息传输流程</h5><hr>
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="inline">
+
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="393" data-align="inline">
+
+<pre><code>生产者在向kafka集群发送消息的时候，可以通过指定分区将消息发送到指定的分区中。
+1、不指定采用默认的随机均衡策略
+2、可指定均衡策略来将消息发送到不同的分区中
+3、指定分区
+
+消费者消费消息时候，通过offset来记录消费的位置
+1、可以多个不同的group来同时消费同一个topic下的消息，并且消费记录位置offset不相同。
+2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费
+多个分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据（待优化）"><a href="#Kafka如何保证生产者及消费者不丢失数据（待优化）" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据（待优化）"></a>Kafka如何保证生产者及消费者不丢失数据（待优化）</h5><hr>
+<ul>
+<li><p>生产者</p>
+<pre><code>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。
+如果是0，不等待Kafka消息确认，认为成功。
+如果是1，发送过去，等待leader副本确认消息，认为成功首领肯定收到了消息，写入了分区文件（不一定落盘之后）。
+如果是all，不会产生数据丢失，消息发送过去，消息写入所有同步副本后，认为成功，并且会不断尝试直至成功。（可靠但是牺牲效率，可以通过增大批和异步模式，提高效率）</code></pre></li>
+<li><p>消费者</p>
+<pre><code>通过offset commit来保证数据不会丢失，Kafka每次记录自己消费的offset数值，下次继续消费的时候，从上次记录的offset位置开始消费。关闭自动更新offset，等待数据被处理后手动更新offset。在消费前先验证拿取的数据是否是接着上回消费的数据。</code></pre></li>
+<li><p>Broker端</p>
+<pre><code>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。
+设置ack= all，等待数据写入所有同步副本才算成功。</code></pre></li>
+</ul>
+<h5 id="Kafka常用操作指令大全"><a href="#Kafka常用操作指令大全" class="headerlink" title="Kafka常用操作指令大全"></a>Kafka常用操作指令大全</h5><pre><code>创建topics
+  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+查看topic
+  bin/kafka-topics.sh --list --zookeeper localhost:2181
+创建消费者
+  bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+创建生产者
+  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test</code></pre>]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
