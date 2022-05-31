@@ -376,10 +376,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h3 id=""><a href="#" class="headerlink" title=""></a></h3><hr>
-<h5 id="分区排序累加"><a href="#分区排序累加" class="headerlink" title="分区排序累加"></a>分区排序累加</h5><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">sum() <span class="hljs-keyword">over</span> ( <span class="hljs-keyword">partition</span> <span class="hljs-keyword">by</span> <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span>) <span class="hljs-keyword">as</span> <span class="hljs-keyword">temp</span><br></code></pre></td></tr></table></figure>
-
-
-
+<h5 id="分区排序累加"><a href="#分区排序累加" class="headerlink" title="分区排序累加"></a>分区排序累加</h5><pre><code>sum() over ( partition by order by) as temp</code></pre>
             </div>
             <hr/>
 
