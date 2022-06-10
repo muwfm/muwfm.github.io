@@ -16,6 +16,19 @@ TaskGroupContainer:负责执行一组Task的工作单元。</code></pre><h5 id="
       </tags>
   </entry>
   <entry>
+    <title>Mysql方法记录</title>
+    <url>/2022/05/31/Mysql/</url>
+    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h5 id="分区排序累加"><a href="#分区排序累加" class="headerlink" title="分区排序累加"></a>分区排序累加</h5><hr>
+<pre><code>sum() over (partition by order by) as temp</code></pre><h5 id="-1"><a href="#-1" class="headerlink" title=""></a></h5><hr>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hadoop集群的搭建</title>
     <url>/2020/02/16/Hadooop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h5 id="hadoop集群的搭建"><a href="#hadoop集群的搭建" class="headerlink" title="hadoop集群的搭建"></a>hadoop集群的搭建</h5><hr>
@@ -283,94 +296,73 @@ ssh-copy-id -i node2</code></pre><p>实现免密码登录到子节点。<br>验�
       </tags>
   </entry>
   <entry>
-    <title>Mysql方法记录</title>
-    <url>/2022/05/31/Mysql/</url>
-    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h5 id="分区排序累加"><a href="#分区排序累加" class="headerlink" title="分区排序累加"></a>分区排序累加</h5><hr>
-<pre><code>sum() over (partition by order by) as temp</code></pre><h5 id="-1"><a href="#-1" class="headerlink" title=""></a></h5><hr>
-]]></content>
+    <title>大数据Kafka</title>
+    <url>/2021/09/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/</url>
+    <content><![CDATA[<h5 id="Kafka主要功能"><a href="#Kafka主要功能" class="headerlink" title="Kafka主要功能"></a>Kafka主要功能</h5><hr>
+<ul>
+<li>分布式发布和订阅消息流</li>
+<li>以容错的方式记录消息流，Kafka以文件的方式来存储消息流</li>
+<li>可以在消息发布的时候进行处理</li>
+</ul>
+<h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
+<ul>
+<li><p><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</p>
+</li>
+<li><p><strong>Consumer:</strong>消费者，从Kafka服务器读取消息</p>
+</li>
+<li><p><strong>Consumer Group：</strong>消费者组，每个消费者可以划分为一个特定的群组</p>
+</li>
+<li><p><strong>Topic：</strong>消息的身份标识，消息生产者产生消息时，会给消息贴上一个Topic标签，当消费者需要读取消息时，可以根据这个Topic读取特定的数据</p>
+</li>
+<li><p><strong>Broker：</strong>Kafka及群众包含的服务器</p>
+</li>
+</ul>
+<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
+<ul>
+<li><p>在系统或应用程序之间构建可靠的用于传输实时数据的管道：消息队列功能。</p>
+</li>
+<li><p>构建实时的流数据处理程序来处理数据流：数据处理能力。</p>
+</li>
+</ul>
+<h5 id="消息传输流程"><a href="#消息传输流程" class="headerlink" title="消息传输流程"></a>消息传输流程</h5><hr>
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="inline">
+
+<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="393" data-align="inline">
+
+<pre><code>生产者在向kafka集群发送消息的时候，可以通过指定分区将消息发送到指定的分区中。
+1、不指定采用默认的随机均衡策略
+2、可指定均衡策略来将消息发送到不同的分区中
+3、指定分区
+
+消费者消费消息时候，通过offset来记录消费的位置
+1、可以多个不同的group来同时消费同一个topic下的消息，并且消费记录位置offset不相同。
+2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费
+多个分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据（待优化）"><a href="#Kafka如何保证生产者及消费者不丢失数据（待优化）" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据（待优化）"></a>Kafka如何保证生产者及消费者不丢失数据（待优化）</h5><hr>
+<ul>
+<li><p>生产者</p>
+<pre><code>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。
+如果是0，不等待Kafka消息确认，认为成功。
+如果是1，发送过去，等待leader副本确认消息，认为成功首领肯定收到了消息，写入了分区文件（不一定落盘之后）。
+如果是all，不会产生数据丢失，消息发送过去，消息写入所有同步副本后，认为成功，并且会不断尝试直至成功。（可靠但是牺牲效率，可以通过增大批和异步模式，提高效率）</code></pre></li>
+<li><p>消费者</p>
+<pre><code>通过offset commit来保证数据不会丢失，Kafka每次记录自己消费的offset数值，下次继续消费的时候，从上次记录的offset位置开始消费。关闭自动更新offset，等待数据被处理后手动更新offset。在消费前先验证拿取的数据是否是接着上回消费的数据。</code></pre></li>
+<li><p>Broker端</p>
+<pre><code>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。
+设置ack= all，等待数据写入所有同步副本才算成功。</code></pre></li>
+</ul>
+<h5 id="Kafka常用操作指令大全"><a href="#Kafka常用操作指令大全" class="headerlink" title="Kafka常用操作指令大全"></a>Kafka常用操作指令大全</h5><pre><code>创建topics
+  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+查看topic
+  bin/kafka-topics.sh --list --zookeeper localhost:2181
+创建消费者
+  bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+创建生产者
+  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test</code></pre>]]></content>
       <categories>
-        <category>Mysql</category>
+        <category>Kafka</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大数据记录Linux篇章</title>
-    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
-    <content><![CDATA[<h5 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h5><hr>
-<table>
-<thead>
-<tr>
-<th align="left">指令代码</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">df -h</td>
-<td align="left">查看磁盘存储情况</td>
-</tr>
-<tr>
-<td align="left">top</td>
-<td align="left">查看内存</td>
-</tr>
-<tr>
-<td align="left">netstat -tunlp | grep 端口号</td>
-<td align="left">查看端口占用情况</td>
-</tr>
-<tr>
-<td align="left">uptime</td>
-<td align="left">系统运行时长和平均负载</td>
-</tr>
-<tr>
-<td align="left">ps -aux</td>
-<td align="left">查看进程</td>
-</tr>
-</tbody></table>
-<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><hr>
-<p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
-<ol>
-<li>ps -ef ：是linux里查看所有进程的命令。</li>
-<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
-<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
-<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
-</ol>
-<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
-<h5 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h5><hr>
-<table>
-<thead>
-<tr>
-<th>指令代码</th>
-<th>指令输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>echo ‘$do_date’</td>
-<td>$do_date</td>
-</tr>
-<tr>
-<td>echo “$do_date”</td>
-<td>2019-02-10</td>
-</tr>
-<tr>
-<td>echo “‘$do_date’”</td>
-<td>‘2019-02-10’</td>
-</tr>
-<tr>
-<td>echo ‘“$do_date”‘</td>
-<td>“$do_date”</td>
-</tr>
-<tr>
-<td>echo <code>date</code></td>
-<td>2019年 05月 02日 星期四 21:02:08 CST</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
+        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -474,73 +466,180 @@ result.show</code></pre><p>  排序：</p>
       </tags>
   </entry>
   <entry>
-    <title>大数据Kafka</title>
-    <url>/2021/09/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Kafka/</url>
-    <content><![CDATA[<h5 id="Kafka主要功能"><a href="#Kafka主要功能" class="headerlink" title="Kafka主要功能"></a>Kafka主要功能</h5><hr>
-<ul>
-<li>分布式发布和订阅消息流</li>
-<li>以容错的方式记录消息流，Kafka以文件的方式来存储消息流</li>
-<li>可以在消息发布的时候进行处理</li>
-</ul>
-<h5 id="KafKa主要组件"><a href="#KafKa主要组件" class="headerlink" title="KafKa主要组件"></a>KafKa主要组件</h5><hr>
-<ul>
-<li><p><strong>Producer:</strong>消息生产者，负责把产生的消息发送到Kafka服务器上。</p>
-</li>
-<li><p><strong>Consumer:</strong>消费者，从Kafka服务器读取消息</p>
-</li>
-<li><p><strong>Consumer Group：</strong>消费者组，每个消费者可以划分为一个特定的群组</p>
-</li>
-<li><p><strong>Topic：</strong>消息的身份标识，消息生产者产生消息时，会给消息贴上一个Topic标签，当消费者需要读取消息时，可以根据这个Topic读取特定的数据</p>
-</li>
-<li><p><strong>Broker：</strong>Kafka及群众包含的服务器</p>
-</li>
-</ul>
-<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><hr>
-<ul>
-<li><p>在系统或应用程序之间构建可靠的用于传输实时数据的管道：消息队列功能。</p>
-</li>
-<li><p>构建实时的流数据处理程序来处理数据流：数据处理能力。</p>
-</li>
-</ul>
-<h5 id="消息传输流程"><a href="#消息传输流程" class="headerlink" title="消息传输流程"></a>消息传输流程</h5><hr>
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639118450508.png" alt="" width="280" data-align="inline">
-
-<img title="" src="https://wyzm.oss-cn-beijing.aliyuncs.com/1639121743950.png" alt="" width="393" data-align="inline">
-
-<pre><code>生产者在向kafka集群发送消息的时候，可以通过指定分区将消息发送到指定的分区中。
-1、不指定采用默认的随机均衡策略
-2、可指定均衡策略来将消息发送到不同的分区中
-3、指定分区
-
-消费者消费消息时候，通过offset来记录消费的位置
-1、可以多个不同的group来同时消费同一个topic下的消息，并且消费记录位置offset不相同。
-2、对于一个group而言，消费者的数量不应该多于分区的数量，每个group中，一个消费者可以消费
-多个分区，一个分区只能给一个消费者消费。</code></pre><h5 id="Kafka如何保证生产者及消费者不丢失数据（待优化）"><a href="#Kafka如何保证生产者及消费者不丢失数据（待优化）" class="headerlink" title="Kafka如何保证生产者及消费者不丢失数据（待优化）"></a>Kafka如何保证生产者及消费者不丢失数据（待优化）</h5><hr>
-<ul>
-<li><p>生产者</p>
-<pre><code>Kafka的ack机制：每次发送消息都会有一个确认反馈机制，确保消息正常的能够被收到，状态为0/1/-1。
-如果是0，不等待Kafka消息确认，认为成功。
-如果是1，发送过去，等待leader副本确认消息，认为成功首领肯定收到了消息，写入了分区文件（不一定落盘之后）。
-如果是all，不会产生数据丢失，消息发送过去，消息写入所有同步副本后，认为成功，并且会不断尝试直至成功。（可靠但是牺牲效率，可以通过增大批和异步模式，提高效率）</code></pre></li>
-<li><p>消费者</p>
-<pre><code>通过offset commit来保证数据不会丢失，Kafka每次记录自己消费的offset数值，下次继续消费的时候，从上次记录的offset位置开始消费。关闭自动更新offset，等待数据被处理后手动更新offset。在消费前先验证拿取的数据是否是接着上回消费的数据。</code></pre></li>
-<li><p>Broker端</p>
-<pre><code>设置unclean.leader.election.enable为false，禁止ISR列表中的副本参与分区首领副本选举。
-设置ack= all，等待数据写入所有同步副本才算成功。</code></pre></li>
-</ul>
-<h5 id="Kafka常用操作指令大全"><a href="#Kafka常用操作指令大全" class="headerlink" title="Kafka常用操作指令大全"></a>Kafka常用操作指令大全</h5><pre><code>创建topics
-  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
-查看topic
-  bin/kafka-topics.sh --list --zookeeper localhost:2181
-创建消费者
-  bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
-创建生产者
-  bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test</code></pre>]]></content>
+    <title>大数据记录Linux篇章</title>
+    <url>/2021/05/31/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Linux/</url>
+    <content><![CDATA[<h5 id="Linux常用高级指令"><a href="#Linux常用高级指令" class="headerlink" title="Linux常用高级指令"></a>Linux常用高级指令</h5><hr>
+<table>
+<thead>
+<tr>
+<th align="left">指令代码</th>
+<th align="left">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">df -h</td>
+<td align="left">查看磁盘存储情况</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">查看内存</td>
+</tr>
+<tr>
+<td align="left">netstat -tunlp | grep 端口号</td>
+<td align="left">查看端口占用情况</td>
+</tr>
+<tr>
+<td align="left">uptime</td>
+<td align="left">系统运行时长和平均负载</td>
+</tr>
+<tr>
+<td align="left">ps -aux</td>
+<td align="left">查看进程</td>
+</tr>
+</tbody></table>
+<h5 id="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作"><a href="#Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作" class="headerlink" title="Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?"></a>Shell中提交了一个脚本，进程号已经不知道了，但是需要kill掉这个进程，怎么操作?</h5><hr>
+<p><code>ssh $i &quot;ps -ef | grep XXX | grep -v grep |awk &#39;{print $2}&#39; | xargs kill&quot;</code></p>
+<ol>
+<li>ps -ef ：是linux里查看所有进程的命令。</li>
+<li>grep -v grep ：是列出的进程中去除含有关键字grep的进程</li>
+<li>awk ‘{print $2}’：是打印过滤后的行的第二列，正好是进程hao</li>
+<li>Xargs kill -9：xargs命令是用来把前面命令的输出结果（pid）作为kill -9命令的参数，并执行该命令。</li>
+</ol>
+<p>👉：cut -c 9-15 &lt;=&gt; awk ‘{print $2}’</p>
+<h5 id="shell中单引号双引号"><a href="#shell中单引号双引号" class="headerlink" title="shell中单引号双引号"></a>shell中单引号双引号</h5><hr>
+<table>
+<thead>
+<tr>
+<th>指令代码</th>
+<th>指令输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>echo ‘$do_date’</td>
+<td>$do_date</td>
+</tr>
+<tr>
+<td>echo “$do_date”</td>
+<td>2019-02-10</td>
+</tr>
+<tr>
+<td>echo “‘$do_date’”</td>
+<td>‘2019-02-10’</td>
+</tr>
+<tr>
+<td>echo ‘“$do_date”‘</td>
+<td>“$do_date”</td>
+</tr>
+<tr>
+<td>echo <code>date</code></td>
+<td>2019年 05月 02日 星期四 21:02:08 CST</td>
+</tr>
+</tbody></table>
+]]></content>
       <categories>
-        <category>Kafka</category>
+        <category>Hadoop</category>
       </categories>
       <tags>
-        <tag>Kafka</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大数据Spark篇</title>
+    <url>/2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/</url>
+    <content><![CDATA[<h5 id="Spark执行流程"><a href="#Spark执行流程" class="headerlink" title="Spark执行流程"></a>Spark执行流程</h5><hr>
+<ul>
+<li><p>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</p>
+</li>
+<li><p>在申请到了作业执行所需的资源之后，Driver进程就会开始调度和执行我们编写的作业代码了。Driver进程会将我们编写的Spark作业代码分拆为多个stage，每个stage执行一部分代码片段，并为每个stage创建一批task，然后将这些task分配到各个Executor进程中执行。task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地<img src="/Users/muwfm/Library/Application%20Support/marktext/images/2021-09-10-09-27-33-image.png" alt="">的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。如此循环往复，直到将我们自己编写的代码逻辑全部执行完，并且计算完所有的数据，得到我们想要的结果为止。</p>
+</li>
+</ul>
+<h5 id="Spark-Shuffle过程"><a href="#Spark-Shuffle过程" class="headerlink" title="Spark Shuffle过程"></a>Spark Shuffle过程</h5><hr>
+<ul>
+<li>Spark是根据shuffle类算子来进行stage的划分。如果我们的代码中执行了某个shuffle类算子（比如reduceByKey、join等），那么就会在该算子处，划分出一个stage界限来。可以大致理解为，shuffle算子执行之前的代码会被划分为一个stage，shuffle算子执行以及之后的代码会被划分为下一个stage。因此一个stage刚开始执行的时候，它的每个task可能都会从上一个stage的task所在的节点，去通过网络传输拉取需要自己处理的所有key，然后对拉取到的所有相同的key使用我们自己编写的算子函数执行聚合操作（比如reduceByKey()算子接收的函数）。这个过程就是shuffle。</li>
+</ul>
+<h5 id="Spark-Executor"><a href="#Spark-Executor" class="headerlink" title="Spark Executor"></a>Spark Executor</h5><hr>
+<ul>
+<li>Executor的内存分为三块：第一块是让task执行我们自己编写的代码（20%），第二块让shuffle过程拉取上一个stage的task输出后，进行聚合等操作（20%），第三块让RDD持久化使用（60%）</li>
+<li>task的执行速度是跟每个Executor进程的CPU core数量有直接关系的。一个CPU core同一时间只能执行一个线程。而每个Executor进程上分配到的多个task，都是以每个task一条线程的方式，多线程并发运行的。如果CPU core数量比较充足，而且分配到的task数量比较合理，那么通常来说，可以比较快速和高效地执行完这些task线程。</li>
+</ul>
+<h5 id="Spark调优"><a href="#Spark调优" class="headerlink" title="Spark调优:"></a>Spark调优:</h5><hr>
+<h5 id="开发调优"><a href="#开发调优" class="headerlink" title="开发调优"></a>开发调优</h5><ul>
+<li>避免创建重复的RDD</li>
+<li>尽可能复用同一个RDD</li>
+<li>对于多次使用的RDD进行持久化（.cache()/.persist(StorageLevel.memory_and_disk_ser)）</li>
+<li>尽量避免使用shuffle算子</li>
+<li>使用高性能算子（使用reduceByKey/aggregateByKey替代groupByKey/使用mapPartitions替代普通map/使用foreachPartitions替代foreach/使用filter之后进行coalesce操作/使用repartitionAndSortWithinPartitions替代repartition与sort类操作）</li>
+<li>广播大变量</li>
+</ul>
+<h5 id="资源调优"><a href="#资源调优" class="headerlink" title="资源调优"></a>资源调优</h5><ul>
+<li>num-executors（建议50～100）</li>
+<li>executor-memory(4~8G)</li>
+<li>executor-cores(2~4)</li>
+<li>driver-memory(1G/不设置，使用collect算子将RDD数据全部拉到Driver上执行时需要保证内存比较大)</li>
+<li>spark.default.parallelism每个stage默认task数量（cpu核数的3倍）</li>
+<li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li>
+<li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li>
+</ul>
+<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
+<ul>
+<li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p>
+</li>
+<li><p>过滤少数导致数据倾斜的key，个别对计算不影响的可以通过where或者RDD的filter过滤。</p>
+</li>
+<li><p>提高Shuffle操作的并行度，设置Shuffle算子执行时Shuffle read task 数量reduceByKey(100),设置spark.sql.shuffle.partitions(group by、join…)</p>
+</li>
+</ul>
+<h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5><hr>
+<ul>
+<li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p>
+</li>
+<li><p>独立任务，HDFS READ，HDFS WRITE</p>
+</li>
+</ul>
+<h5 id="RDD特性"><a href="#RDD特性" class="headerlink" title="RDD特性"></a>RDD特性</h5><hr>
+<ul>
+<li><p>一系列依赖关系</p>
+</li>
+<li><p>函数作用在每一个partition或者分片上（计算移动，数据不移动）</p>
+</li>
+<li><p>一系列partition</p>
+</li>
+<li><p>分区器作用在k v格式的RDD上</p>
+</li>
+<li><p>最佳计算位置</p>
+</li>
+</ul>
+<h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><hr>
+<ul>
+<li><p>local</p>
+</li>
+<li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p>
+</li>
+<li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p>
+</li>
+<li><p>Mesos</p>
+</li>
+</ul>
+<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p>
+<h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><hr>
+<ul>
+<li><p>Job：根据action算子划分，一个行动算子划分一个Job。</p>
+</li>
+<li><p>Stage：spark根据宽依赖将job划分成一个个stage。</p>
+</li>
+<li><p>task：一个stage是一个taskset，根据分区划分task。</p>
+</li>
+</ul>
+<h5 id="Spark懒加载的意义"><a href="#Spark懒加载的意义" class="headerlink" title="Spark懒加载的意义"></a>Spark懒加载的意义</h5><hr>
+<ul>
+<li>避免了大量的中间计算，避免了大量的中间结果产生即避免了大量的磁盘I/O及网络传输。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Spark</category>
+      </categories>
+      <tags>
+        <tag>Spark</tag>
       </tags>
   </entry>
   <entry>
@@ -615,87 +714,6 @@ result.show</code></pre><p>  排序：</p>
       </categories>
       <tags>
         <tag>Zookeeper</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>行测思维</title>
-    <url>/2021/12/21/%E8%A1%8C%E6%B5%8B%E6%80%9D%E7%BB%B4/</url>
-    <content><![CDATA[<h5 id="言语一：转折关系、主题词、因果关系"><a href="#言语一：转折关系、主题词、因果关系" class="headerlink" title="言语一：转折关系、主题词、因果关系"></a>言语一：转折关系、主题词、因果关系</h5><hr>
-<pre><code>转折关系：……不过…………然而…………却……其实 / 事实上 / 实际上
-主题词：一般前有引入，后有解释说明/每句话都围绕的相同话题
-因果关系：所以、因此、因而、故而、于是、可见、看来、故、导致、致使、使得、造成</code></pre><h5 id="言语二：必要条件关系、程度词、并列关系"><a href="#言语二：必要条件关系、程度词、并列关系" class="headerlink" title="言语二：必要条件关系、程度词、并列关系"></a>言语二：必要条件关系、程度词、并列关系</h5><pre><code>必要条件关系：只有...才...
-  - 对策标志词：应该、需要、必须+做法
-             通过...方法，才能...
-             ...前提/基础/保障
-             负有...的义务/...的必由之路/...的法门之一/要领在于
-  - 文段特征：对策在结尾 提出问题+分析问题+解决问题
-            对策在中间 提出问题+解决问题+意义效果
-            对策在开头 对策+正反论证/原因论证
-  - 反面论证：如果/倘若/一旦...+不好的结果
-            前面的方法反过来，即为对策
-  - 给出问题：文段只提出问题，答案在选项中
-程度词：更、尤其、正是，特别是、真正、根本、最核心、最突出等
-并列关系：此外、另外、同时、以及</code></pre><hr>
-<h5 id="言语三：行文脉络、细节判断"><a href="#言语三：行文脉络、细节判断" class="headerlink" title="言语三：行文脉络、细节判断"></a>言语三：行文脉络、细节判断</h5><hr>
-<pre><code>行文脉络：
-  - 总-分：观点+解释说明
-  - 分-总：结论、这/此引导的尾句需关注
-细节判断：
-  - 提问方式</code></pre><h5 id="言语四：语句表达（排序、填空）"><a href="#言语四：语句表达（排序、填空）" class="headerlink" title="言语四：语句表达（排序、填空）"></a>言语四：语句表达（排序、填空）</h5><hr>
-<pre><code>排序：
-  - 确定首句：
-    - 下定义：...就是/是指
-    - 背景引入：随着、近年来、在...大背景/环境下
-  - 确定捆绑集团
-    - 指代词捆绑：这、那、他、其、该、此
-    - 关联词捆绑
-  - 确定顺序
-    - 时间顺序
-    - 逻辑顺序
-  - 确定尾句：因此、所以、看来、于是、这、应该、需要
-填空：
-  - 横线在结尾：总结前文/提出对策
-  - 横线在开头：需对后文进行概括
-  - 横线在中间：上下文联系</code></pre><h5 id="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"><a href="#言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））" class="headerlink" title="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"></a>言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））</h5><hr>
-<pre><code>接语选择题：
-  - 理论要点：重点关注文段最后一句话</code></pre><h5 id="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"><a href="#言语六：逻辑填空（并列关系、解释类对应、重点词句对应）" class="headerlink" title="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"></a>言语六：逻辑填空（并列关系、解释类对应、重点词句对应）</h5><hr>
-<h5 id="数量一：代入排除法、倍数特性法、方程法"><a href="#数量一：代入排除法、倍数特性法、方程法" class="headerlink" title="数量一：代入排除法、倍数特性法、方程法"></a>数量一：代入排除法、倍数特性法、方程法</h5><hr>
-<h5 id="数量二：工程问题、经济利润问题"><a href="#数量二：工程问题、经济利润问题" class="headerlink" title="数量二：工程问题、经济利润问题"></a>数量二：工程问题、经济利润问题</h5><hr>
-]]></content>
-      <categories>
-        <category>行测</category>
-      </categories>
-      <tags>
-        <tag>行测</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
-    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
-    <content><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p>
-<h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><hr>
-<p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
-<h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><hr>
-<p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
-<h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><hr>
-<p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
-<h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><hr>
-<p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
-<h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><hr>
-<p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
-<h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><hr>
-<p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
-<h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><hr>
-<p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
-<h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><hr>
-<p>&emsp;格式化json</p>
-]]></content>
-      <categories>
-        <category>谷歌</category>
-      </categories>
-      <tags>
-        <tag>chrome</tag>
-        <tag>makedown</tag>
       </tags>
   </entry>
   <entry>
@@ -846,102 +864,84 @@ result.show</code></pre><p>  排序：</p>
       </tags>
   </entry>
   <entry>
-    <title>大数据Spark篇</title>
-    <url>/2021/08/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BB%93Spark%E7%AF%87/</url>
-    <content><![CDATA[<h5 id="Spark执行流程"><a href="#Spark执行流程" class="headerlink" title="Spark执行流程"></a>Spark执行流程</h5><hr>
-<ul>
-<li><p>我们使用spark-submit提交一个Spark作业之后，这个作业就会启动一个对应的Driver进程。根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器（可以是Spark Standalone集群，也可以是其他的资源管理集群，美团•大众点评使用的是YARN作为资源管理集群）申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。</p>
-</li>
-<li><p>在申请到了作业执行所需的资源之后，Driver进程就会开始调度和执行我们编写的作业代码了。Driver进程会将我们编写的Spark作业代码分拆为多个stage，每个stage执行一部分代码片段，并为每个stage创建一批task，然后将这些task分配到各个Executor进程中执行。task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地<img src="/Users/muwfm/Library/Application%20Support/marktext/images/2021-09-10-09-27-33-image.png" alt="">的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。如此循环往复，直到将我们自己编写的代码逻辑全部执行完，并且计算完所有的数据，得到我们想要的结果为止。</p>
-</li>
-</ul>
-<h5 id="Spark-Shuffle过程"><a href="#Spark-Shuffle过程" class="headerlink" title="Spark Shuffle过程"></a>Spark Shuffle过程</h5><hr>
-<ul>
-<li>Spark是根据shuffle类算子来进行stage的划分。如果我们的代码中执行了某个shuffle类算子（比如reduceByKey、join等），那么就会在该算子处，划分出一个stage界限来。可以大致理解为，shuffle算子执行之前的代码会被划分为一个stage，shuffle算子执行以及之后的代码会被划分为下一个stage。因此一个stage刚开始执行的时候，它的每个task可能都会从上一个stage的task所在的节点，去通过网络传输拉取需要自己处理的所有key，然后对拉取到的所有相同的key使用我们自己编写的算子函数执行聚合操作（比如reduceByKey()算子接收的函数）。这个过程就是shuffle。</li>
-</ul>
-<h5 id="Spark-Executor"><a href="#Spark-Executor" class="headerlink" title="Spark Executor"></a>Spark Executor</h5><hr>
-<ul>
-<li>Executor的内存分为三块：第一块是让task执行我们自己编写的代码（20%），第二块让shuffle过程拉取上一个stage的task输出后，进行聚合等操作（20%），第三块让RDD持久化使用（60%）</li>
-<li>task的执行速度是跟每个Executor进程的CPU core数量有直接关系的。一个CPU core同一时间只能执行一个线程。而每个Executor进程上分配到的多个task，都是以每个task一条线程的方式，多线程并发运行的。如果CPU core数量比较充足，而且分配到的task数量比较合理，那么通常来说，可以比较快速和高效地执行完这些task线程。</li>
-</ul>
-<h5 id="Spark调优"><a href="#Spark调优" class="headerlink" title="Spark调优:"></a>Spark调优:</h5><hr>
-<h5 id="开发调优"><a href="#开发调优" class="headerlink" title="开发调优"></a>开发调优</h5><ul>
-<li>避免创建重复的RDD</li>
-<li>尽可能复用同一个RDD</li>
-<li>对于多次使用的RDD进行持久化（.cache()/.persist(StorageLevel.memory_and_disk_ser)）</li>
-<li>尽量避免使用shuffle算子</li>
-<li>使用高性能算子（使用reduceByKey/aggregateByKey替代groupByKey/使用mapPartitions替代普通map/使用foreachPartitions替代foreach/使用filter之后进行coalesce操作/使用repartitionAndSortWithinPartitions替代repartition与sort类操作）</li>
-<li>广播大变量</li>
-</ul>
-<h5 id="资源调优"><a href="#资源调优" class="headerlink" title="资源调优"></a>资源调优</h5><ul>
-<li>num-executors（建议50～100）</li>
-<li>executor-memory(4~8G)</li>
-<li>executor-cores(2~4)</li>
-<li>driver-memory(1G/不设置，使用collect算子将RDD数据全部拉到Driver上执行时需要保证内存比较大)</li>
-<li>spark.default.parallelism每个stage默认task数量（cpu核数的3倍）</li>
-<li>spark.storage.memoryFraction（RDD持久化在Executor上的内存比例，默认0.6）</li>
-<li>spark.shuffle.memoryFraction（shuffle中一个task拉取上一个stage的task输出后，进行聚合操作使用的Executor内存比例）</li>
-</ul>
-<h5 id="数据倾斜调优"><a href="#数据倾斜调优" class="headerlink" title="数据倾斜调优"></a>数据倾斜调优</h5><p><font color=red size=4>注意：</font>个别task执行时间过长。Shuffle时，task将各个节点相同的key拉到某个节点的一个task上执行，当聚合或join操作发生时，该key对应的数据量极大。数据倾斜只会发生在Shuffle的过程中，能触发shuffle的算子有：distinct、groupByKey、reduceByKey、join、cogroup、repartition等。（不一定内存溢出就是数据倾斜，有可能是代码bug）</p>
-<ul>
-<li><p>使用Hive ETL预处理数据，对某个数据量很大的key进行聚合或者预先进行join操作。</p>
-</li>
-<li><p>过滤少数导致数据倾斜的key，个别对计算不影响的可以通过where或者RDD的filter过滤。</p>
-</li>
-<li><p>提高Shuffle操作的并行度，设置Shuffle算子执行时Shuffle read task 数量reduceByKey(100),设置spark.sql.shuffle.partitions(group by、join…)</p>
-</li>
-</ul>
-<h5 id="Shuffle调优"><a href="#Shuffle调优" class="headerlink" title="Shuffle调优"></a><a href="https://blog.csdn.net/u012102306/article/details/51637732" target="_blank" rel="noopener">Shuffle调优</a></h5><h5 id="MR与Spark计算的区别"><a href="#MR与Spark计算的区别" class="headerlink" title="MR与Spark计算的区别"></a>MR与Spark计算的区别</h5><hr>
-<ul>
-<li><p>DAG有向无环图，基于内存，不用落盘，中间结果，任务分为上半段和下半段</p>
-</li>
-<li><p>独立任务，HDFS READ，HDFS WRITE</p>
-</li>
-</ul>
-<h5 id="RDD特性"><a href="#RDD特性" class="headerlink" title="RDD特性"></a>RDD特性</h5><hr>
-<ul>
-<li><p>一系列依赖关系</p>
-</li>
-<li><p>函数作用在每一个partition或者分片上（计算移动，数据不移动）</p>
-</li>
-<li><p>一系列partition</p>
-</li>
-<li><p>分区器作用在k v格式的RDD上</p>
-</li>
-<li><p>最佳计算位置</p>
-</li>
-</ul>
-<h5 id="Spark部署模式"><a href="#Spark部署模式" class="headerlink" title="Spark部署模式"></a>Spark部署模式</h5><hr>
-<ul>
-<li><p>local</p>
-</li>
-<li><p>standalone（基于master和slaves的资源管理集群，spark任务提交给master执行，是spark自身的调度系统）</p>
-</li>
-<li><p>yarn（yarn client和yarn cluster的区别在于Driver的运行节点）</p>
-</li>
-<li><p>Mesos</p>
-</li>
-</ul>
-<p><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785384194.png" alt="Yarn Client"><br><img src="https://wyzm.oss-cn-beijing.aliyuncs.com/1629785521525.png" alt="Yarn Cluster"></p>
-<h5 id="Spark划分宽依赖"><a href="#Spark划分宽依赖" class="headerlink" title="Spark划分宽依赖"></a>Spark划分宽依赖</h5><hr>
-<ul>
-<li><p>Job：根据action算子划分，一个行动算子划分一个Job。</p>
-</li>
-<li><p>Stage：spark根据宽依赖将job划分成一个个stage。</p>
-</li>
-<li><p>task：一个stage是一个taskset，根据分区划分task。</p>
-</li>
-</ul>
-<h5 id="Spark懒加载的意义"><a href="#Spark懒加载的意义" class="headerlink" title="Spark懒加载的意义"></a>Spark懒加载的意义</h5><hr>
-<ul>
-<li>避免了大量的中间计算，避免了大量的中间结果产生即避免了大量的磁盘I/O及网络传输。</li>
-</ul>
+    <title>行测思维</title>
+    <url>/2021/12/21/%E8%A1%8C%E6%B5%8B%E6%80%9D%E7%BB%B4/</url>
+    <content><![CDATA[<h5 id="言语一：转折关系、主题词、因果关系"><a href="#言语一：转折关系、主题词、因果关系" class="headerlink" title="言语一：转折关系、主题词、因果关系"></a>言语一：转折关系、主题词、因果关系</h5><hr>
+<pre><code>转折关系：……不过…………然而…………却……其实 / 事实上 / 实际上
+主题词：一般前有引入，后有解释说明/每句话都围绕的相同话题
+因果关系：所以、因此、因而、故而、于是、可见、看来、故、导致、致使、使得、造成</code></pre><h5 id="言语二：必要条件关系、程度词、并列关系"><a href="#言语二：必要条件关系、程度词、并列关系" class="headerlink" title="言语二：必要条件关系、程度词、并列关系"></a>言语二：必要条件关系、程度词、并列关系</h5><pre><code>必要条件关系：只有...才...
+  - 对策标志词：应该、需要、必须+做法
+             通过...方法，才能...
+             ...前提/基础/保障
+             负有...的义务/...的必由之路/...的法门之一/要领在于
+  - 文段特征：对策在结尾 提出问题+分析问题+解决问题
+            对策在中间 提出问题+解决问题+意义效果
+            对策在开头 对策+正反论证/原因论证
+  - 反面论证：如果/倘若/一旦...+不好的结果
+            前面的方法反过来，即为对策
+  - 给出问题：文段只提出问题，答案在选项中
+程度词：更、尤其、正是，特别是、真正、根本、最核心、最突出等
+并列关系：此外、另外、同时、以及</code></pre><hr>
+<h5 id="言语三：行文脉络、细节判断"><a href="#言语三：行文脉络、细节判断" class="headerlink" title="言语三：行文脉络、细节判断"></a>言语三：行文脉络、细节判断</h5><hr>
+<pre><code>行文脉络：
+  - 总-分：观点+解释说明
+  - 分-总：结论、这/此引导的尾句需关注
+细节判断：
+  - 提问方式</code></pre><h5 id="言语四：语句表达（排序、填空）"><a href="#言语四：语句表达（排序、填空）" class="headerlink" title="言语四：语句表达（排序、填空）"></a>言语四：语句表达（排序、填空）</h5><hr>
+<pre><code>排序：
+  - 确定首句：
+    - 下定义：...就是/是指
+    - 背景引入：随着、近年来、在...大背景/环境下
+  - 确定捆绑集团
+    - 指代词捆绑：这、那、他、其、该、此
+    - 关联词捆绑
+  - 确定顺序
+    - 时间顺序
+    - 逻辑顺序
+  - 确定尾句：因此、所以、看来、于是、这、应该、需要
+填空：
+  - 横线在结尾：总结前文/提出对策
+  - 横线在开头：需对后文进行概括
+  - 横线在中间：上下文联系</code></pre><h5 id="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"><a href="#言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））" class="headerlink" title="言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））"></a>言语五：语句表达（接语选择、逻辑填空（词的辨析、转折关系、因果关系））</h5><hr>
+<pre><code>接语选择题：
+  - 理论要点：重点关注文段最后一句话</code></pre><h5 id="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"><a href="#言语六：逻辑填空（并列关系、解释类对应、重点词句对应）" class="headerlink" title="言语六：逻辑填空（并列关系、解释类对应、重点词句对应）"></a>言语六：逻辑填空（并列关系、解释类对应、重点词句对应）</h5><hr>
+<h5 id="数量一：代入排除法、倍数特性法、方程法"><a href="#数量一：代入排除法、倍数特性法、方程法" class="headerlink" title="数量一：代入排除法、倍数特性法、方程法"></a>数量一：代入排除法、倍数特性法、方程法</h5><hr>
+<h5 id="数量二：工程问题、经济利润问题"><a href="#数量二：工程问题、经济利润问题" class="headerlink" title="数量二：工程问题、经济利润问题"></a>数量二：工程问题、经济利润问题</h5><hr>
 ]]></content>
       <categories>
-        <category>Spark</category>
+        <category>行测</category>
       </categories>
       <tags>
-        <tag>Spark</tag>
+        <tag>行测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>谷歌浏览器Chrome必装的几款神级实用插件</title>
+    <url>/2020/02/16/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8chrome%E5%BF%85%E8%A3%85%E7%9A%84%E5%87%A0%E6%AC%BE%E7%A5%9E%E7%BA%A7%E5%AE%9E%E7%94%A8%E6%8F%92%E4%BB%B6/</url>
+    <content><![CDATA[<p>&emsp;<em>首先给大家推荐三款使用最多的浏览器：谷歌、360极速、Edge。其中首推谷歌浏览器，当然谷歌浏览器强大之处在于它的强大的插件，没有插件你的浏览器就相当于一台没有装系统的裸机。接下来推荐几款chrome必备的神级实用插件</em></p>
+<h5 id="1-下载与安装谷歌浏览器"><a href="#1-下载与安装谷歌浏览器" class="headerlink" title="1.下载与安装谷歌浏览器"></a>1.下载与安装谷歌浏览器</h5><hr>
+<p>&emsp;直接百度搜索chrome，第一个就是他的官网，进入官网进行下载。但是很多人进不去官网。这只是单纯的网络问题，不需要科学上网，你可以更换更流畅的网络。或者直接在我的公众号回复<strong>谷歌</strong>，获取Chrome下载链接。注意它的安装路径只默认的也就是C盘不可以更改。</p>
+<h5 id="2-安装插件"><a href="#2-安装插件" class="headerlink" title="2.安装插件"></a>2.安装插件</h5><hr>
+<p>&emsp;如果你没有翻墙软件，你就不可以进入谷歌商店，你只能在其他地方获取下载插件然后再安装到你的谷歌浏览器，在这里推荐一款插件“谷歌商店助手”，安装这个插件之后你就可以不用翻墙就能进入chrome商店，也不需要在别处获取插件，但仅限于进入商店，像YouTube这样的网页是做不到的。在我的公众号回复<strong>谷歌助手</strong>进行下载，下载好后再解压压缩包。将解压好后的整个文件夹拖拽到谷歌扩展插件界面即可。</p>
+<h5 id="3-infinity新标签页（pro）-插件1"><a href="#3-infinity新标签页（pro）-插件1" class="headerlink" title="3.infinity新标签页（pro）-插件1"></a>3.infinity新标签页（pro）-插件1</h5><hr>
+<p>&emsp;由于谷歌浏览器是老外使用的，所以在浏览器打开新标页总是会覆盖原网页，而不是在新的标签页打开。而且没有很好的方法解决。所以安装infinity新标签页（pro）就可以完美的解决这一问题。而且infinity新标签页（pro）的快速导航和美观界面让其成为chrome应用商店最后欢迎的插件之一。</p>
+<h5 id="4-Tampermonkey-插件2"><a href="#4-Tampermonkey-插件2" class="headerlink" title="4.Tampermonkey-插件2"></a>4.Tampermonkey-插件2</h5><hr>
+<p>&emsp;tampermonkey插件是一个免费的浏览器扩展和最为流行的用户脚本管理器，拥有适用于 Chrome, Microsoft Edge, Safari, Opera Next、Firefox等多个浏览器的不同版本，能够方便管理不同的脚本。虽然有些受支持的浏览器拥有原生的用户脚本支持，但 tampermonkey脚本将在您的用户脚本管理方面提供更多的便利，它可以提供了诸如便捷脚本安装、自动更新检查、标签中的脚本运行状况速览、内置的编辑器等众多功能，同时tampermonkey还有可能正常运行原本并不兼容的脚本，是浏览器最好的辅助插件，需要的朋友可以下载。</p>
+<h5 id="5-AdGuard广告拦截器-插件3"><a href="#5-AdGuard广告拦截器-插件3" class="headerlink" title="5.AdGuard广告拦截器-插件3"></a>5.AdGuard广告拦截器-插件3</h5><hr>
+<p>&emsp;一款无与伦比的广告拦截扩展，用以对抗各式广告与弹窗。可以拦截 Facebook、YouTube 和其它所有网站的广告。你在爱奇艺、腾讯、优酷看视频的所有广告都可去出掉。功能很强大，谁用谁知道。</p>
+<h5 id="6-bilibili哔哩哔哩下载助手-插件4"><a href="#6-bilibili哔哩哔哩下载助手-插件4" class="headerlink" title="6.bilibili哔哩哔哩下载助手-插件4"></a>6.bilibili哔哩哔哩下载助手-插件4</h5><hr>
+<p>&emsp;bilibili 哔哩哔哩 B站 下载助手 帮你下载版权受限（能看不能缓存）的 番剧 视频。再也不用找第三方软件去下载B站的视频了。</p>
+<h5 id="7-IDM-Integration-Module-插件5"><a href="#7-IDM-Integration-Module-插件5" class="headerlink" title="7.IDM Integration Module-插件5"></a>7.IDM Integration Module-插件5</h5><hr>
+<p>&emsp;谷歌浏览器非常好用，但是下载任务管理一直不行。即使升级了无数次版本，Chrome的自带下载器功能依然十分鸡肋，还会限制文件下载速度和数量，底部的状态栏也很不友好。推荐的就是IDM integration module，也就是传说中的IDM下载管理器。下载知乎、微博视频或者网页视频都不在话下。根据IDM官网的回应：现在Chrome官方商店中可以找到的所有IDM扩展程序都是假的，不应使用。我们的扩展程序隐藏在谷歌商店中，也无法进行搜索。所以在我的公众号号回复<strong>IDM</strong>。下载的是一个.exe可执行文件。安装即可。之后默认会安装到你的谷歌浏览器。</p>
+<h5 id="8-JSONView-options"><a href="#8-JSONView-options" class="headerlink" title="8.JSONView options"></a>8.JSONView options</h5><hr>
+<p>&emsp;格式化json</p>
+]]></content>
+      <categories>
+        <category>谷歌</category>
+      </categories>
+      <tags>
+        <tag>chrome</tag>
+        <tag>makedown</tag>
       </tags>
   </entry>
 </search>
